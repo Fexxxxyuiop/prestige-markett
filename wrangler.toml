@@ -16,3 +16,7 @@ database_id = "90760258-d192-41e4-ab1a-f54aadb5bf78"
 # [[r2_buckets]]
 # binding = "MEDIA"
 # bucket_name = "prestige-market-media"
+[assets]
+directory = "./frontend"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/telegram/*", "/health"]
