@@ -14,10 +14,9 @@ jobs:
   import:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Extract project ZIP safely
+      - name: Extract ZIP
         run: |
           python - <<'PY'
           import zipfile
@@ -25,25 +24,38 @@ jobs:
 
           archive = Path("project-upload.zip")
           if not archive.exists():
-              raise SystemExit("project-upload.zip not found")
-
-          root = Path(".").resolve()
+              raise SystemExit("ZIP not found")
 
           with zipfile.ZipFile(archive) as z:
-              for item in z.infolist():
-                  target = (root / item.filename).resolve()
-                  if target != root and root not in target.parents:
-                      raise SystemExit("Unsafe ZIP path detected")
-              z.extractall(root)
+              files = [n for n in z.namelist() if not n.endswith("/")]
+              if not files:
+                  raise SystemExit("ZIP is empty")
+
+              for name in files:
+                  parts = Path(name).parts
+                  if not parts or ".." in parts or name.startswith("/"):
+                      raise SystemExit("Unsafe ZIP path")
+
+              prefixes = {Path(n).parts[0] for n in files}
+              strip = len(prefixes) == 1 and all(
+                  len(Path(n).parts) > 1 for n in files
+              )
+
+              for name in files:
+                  parts = Path(name).parts
+                  relative = Path(*parts[1:]) if strip else Path(name)
+                  target = Path.cwd() / relative
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(z.read(name))
 
           archive.unlink()
-          print("Project extracted successfully")
+          print("Import completed")
           PY
 
-      - name: Commit imported project
+      - name: Save files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --cached --quiet || git commit -m "Import Prestige Market project"
+          git diff --cached --quiet || git commit -m "Import Prestige Market"
           git push
