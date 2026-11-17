@@ -452,7 +452,69 @@ async function handle(request, env) {
   if (path.startsWith("/api/admin/")) {
     const admin = await requireAdmin(request, env);
     if (!admin) return fail("Admin access required", 403);
+    // ADMIN MEDIA UPLOAD
+    if (path === "/api/admin/upload" && method === "POST") {
+      if (!env.BOT_TOKEN) {
+        return fail("BOT_TOKEN is missing", 500);
+      }
 
+      const form = await request.formData();
+      const file = form.get("file");
+
+      if (!file || typeof file === "string") {
+        return fail("Файл не выбран", 400);
+      }
+
+      if (file.size > 20 * 1024 * 1024) {
+        return fail("Максимальный размер файла — 20 МБ", 400);
+      }
+
+      const type = file.type || "";
+      let telegramMethod;
+      let fieldName;
+
+      if (type === "image/gif") {
+        telegramMethod = "sendAnimation";
+        fieldName = "animation";
+      } else if (type.startsWith("video/")) {
+        telegramMethod = "sendVideo";
+        fieldName = "video";
+      } else if (type.startsWith("image/")) {
+        telegramMethod = "sendPhoto";
+        fieldName = "photo";
+      } else {
+        return fail("Поддерживаются фото, видео и GIF", 400);
+      }
+
+      const telegramForm = new FormData();
+      telegramForm.append("chat_id", String(admin.telegram_id));
+      telegramForm.append(fieldName, file, file.name || "upload");
+
+      const tgResponse = await fetch(
+        `https://api.telegram.org/bot${env.BOT_TOKEN}/${telegramMethod}`,
+        { method: "POST", body: telegramForm }
+      );
+
+      const tg = await tgResponse.json();
+
+      if (!tg.ok) {
+        return fail("Telegram не принял файл: " + (tg.description || "ошибка"), 400);
+      }
+
+      const media = tg.result[fieldName];
+      const fileId = Array.isArray(media)
+        ? media[media.length - 1].file_id
+        : media.file_id;
+
+      return json({
+        ok: true,
+        media: {
+          file_id: fileId,
+          kind: type === "image/gif" ? "animation" :
+                type.startsWith("video/") ? "video" : "photo"
+        }
+      });
+    }
     // DASHBOARD STATS
 
     if (path === "/api/admin/stats" && method === "GET") {
