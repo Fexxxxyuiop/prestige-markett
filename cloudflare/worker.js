@@ -129,6 +129,57 @@ async function audit(env, admin, action, type, id, details = {}) {
   ).run();
 }
 
+async function telegramCall(env, method, data) {
+  const response = await fetch(
+    `https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }
+  );
+  return response.json();
+}
+
+async function handleTelegramUpdate(update, env) {
+  const message = update?.message;
+  if (!message?.text || !message?.chat?.id) return;
+
+  const chatId = message.chat.id;
+  const text = message.text.trim();
+
+  if (text === "/start" || text.startsWith("/start ")) {
+    const keyboard = {
+      inline_keyboard: [
+        [
+          {
+            text: "✦ Открыть Prestige Market",
+            web_app: {
+              url: "https://prestige-markett.rtmzakarin.workers.dev/"
+            }
+          }
+        ],
+        [
+          {
+            text: "✉ Связаться с менеджером",
+            url: "https://t.me/PrestigeMarketSupport"
+          }
+        ]
+      ]
+    };
+
+    await telegramCall(env, "sendMessage", {
+      chat_id: chatId,
+      text:
+        "✦ PRESTIGE MARKET\n\n" +
+        "Добро пожаловать!\n\n" +
+        "Здесь представлены цифровые товары и коллекции.\n" +
+        "Откройте каталог или свяжитесь с менеджером.",
+      reply_markup: keyboard
+    });
+  }
+}
+
 async function handle(request, env) {
   if (request.method === "OPTIONS") {
     return new Response(null, { headers: CORS });
@@ -137,6 +188,32 @@ async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
   const method = request.method;
+  
+  // TELEGRAM BOT WEBHOOK
+  if (path === "/telegram/webhook" && method === "POST") {
+    if (!env.BOT_TOKEN) {
+      return json({ ok: false, error: "BOT_TOKEN is missing" }, 500);
+    }
+
+    if (env.WEBHOOK_SECRET) {
+      const secret = request.headers.get(
+        "X-Telegram-Bot-Api-Secret-Token"
+      );
+
+      if (secret !== env.WEBHOOK_SECRET) {
+        return json({ ok: false, error: "Unauthorized" }, 401);
+      }
+    }
+
+    try {
+      const update = await request.json();
+      await handleTelegramUpdate(update, env);
+      return json({ ok: true });
+    } catch (error) {
+      return json({ ok: false, error: "Telegram update failed" }, 500);
+    }
+  }
+
 
   if (!env.DB) return fail("D1 binding DB is missing", 500);
 
