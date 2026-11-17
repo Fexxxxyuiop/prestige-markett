@@ -331,41 +331,106 @@ async function adminProducts(){
 function adminAdd(){
  document.getElementById("adminContent").innerHTML=`
  <h3>Новое предложение</h3>
- <label>Категория</label><select class="field" id="aCategory"><option value="gifts">NFT Gifts</option><option value="usernames">Usernames</option><option value="numbers">Numbers</option></select>
- <label>Название</label><input class="field" id="aTitle" placeholder="Название товара">
- <label>Описание</label><textarea class="field" id="aDescription" placeholder="Описание"></textarea>
- <label>Цена</label><input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
- <label>Валюта</label><select class="field" id="aCurrency"><option>USD</option><option>EUR</option><option>RUB</option></select>
- <label>Ссылка на изображение или видео</label><input class="field" id="aImage" placeholder="https://...">
- <label>Коллекционный идентификатор (необязательно)</label><input class="field" id="aIdentifier" placeholder="@username">
+
+ <label>Категория</label>
+ <select class="field" id="aCategory">
+  <option value="gifts">NFT Gifts</option>
+  <option value="usernames">Usernames</option>
+  <option value="numbers">Numbers</option>
+ </select>
+
+ <label>Название</label>
+ <input class="field" id="aTitle" placeholder="Название товара">
+
+ <label>Описание</label>
+ <textarea class="field" id="aDescription" placeholder="Описание"></textarea>
+
+ <label>Цена</label>
+ <input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
+
+ <label>Валюта</label>
+ <select class="field" id="aCurrency">
+  <option>USD</option>
+  <option>EUR</option>
+  <option>RUB</option>
+ </select>
+
+ <label>Фото, видео или GIF из галереи</label>
+ <input class="field" id="aMedia" type="file" accept="image/*,video/*">
+
+ <div id="mediaPreview" class="panel notice">Медиа пока не выбрано</div>
+
+ <label>Коллекционный идентификатор</label>
+ <input class="field" id="aIdentifier" placeholder="@username">
+
  <button class="full" onclick="saveNewListing()">Опубликовать товар</button>
- <p class="notice">Для медиа пока используется ссылка на файл. Загрузка из галереи появится после подключения хранилища.</p>`;
+ `;
+ document.getElementById("aMedia").addEventListener("change",previewAdminMedia);
+}
+ function previewAdminMedia(){
+ const file=document.getElementById("aMedia").files[0];
+ const preview=document.getElementById("mediaPreview");
+
+ if(!file){
+  preview.textContent="Медиа пока не выбрано";
+  return;
+ }
+
+ const url=URL.createObjectURL(file);
+
+ if(file.type.startsWith("video/")){
+  preview.innerHTML=`<video src="${url}" controls style="width:100%;border-radius:12px"></video>`;
+ }else{
+  preview.innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
+ }
 }
 async function saveNewListing(){
+ const file=document.getElementById("aMedia").files[0];
+
  const body={
- category:document.getElementById("aCategory").value,
- title:document.getElementById("aTitle").value.trim(),
- description:document.getElementById("aDescription").value,
- price:Number(document.getElementById("aPrice").value),
- currency:document.getElementById("aCurrency").value,
- image_url:document.getElementById("aImage").value.trim(),
- public_identifier:document.getElementById("aIdentifier").value.trim()
+  category:document.getElementById("aCategory").value,
+  title:document.getElementById("aTitle").value.trim(),
+  description:document.getElementById("aDescription").value,
+  price:Number(document.getElementById("aPrice").value),
+  currency:document.getElementById("aCurrency").value,
+  image_url:"",
+  public_identifier:document.getElementById("aIdentifier").value.trim()
  };
+
  if(!body.title)return toast("Введите название");
- try{await api("/api/admin/listings",{method:"POST",body:JSON.stringify(body)});toast("Товар добавлен");adminProducts();loadAdminStats();}
- catch(e){toast(e.message);}
-}
-async function editListing(id){
- const item=listings.find(x=>Number(x.id)===id);
- let source=item;
- if(!source){try{const d=await api("/api/admin/listings");source=d.listings.find(x=>Number(x.id)===id);}catch(e){return toast(e.message)}}
- if(!source)return;
- openModal("Редактировать товар",`
- <label>Название</label><input class="field" id="eTitle" value="${attr(source.title)}">
- <label>Описание</label><textarea class="field" id="eDescription">${esc(source.description||"")}</textarea>
- <label>Цена</label><input class="field" id="ePrice" type="number" value="${Number(source.price||0)}">
- <label>Ссылка на изображение</label><input class="field" id="eImage" value="${attr(source.image_url||"")}">
- <button class="full" onclick="saveEdit(${id})">Сохранить</button>`);
+ if(!file)return toast("Выберите фото, видео или GIF");
+
+ try{
+  const form=new FormData();
+  form.append("file",file);
+
+  const uploaded=await fetch(API+"/api/admin/upload",{
+   method:"POST",
+   headers:{"X-Telegram-Init-Data":initData},
+   body:form
+  });
+
+  const mediaData=await uploaded.json();
+
+  if(!uploaded.ok||!mediaData.ok){
+   throw new Error(mediaData.error||"Ошибка загрузки файла");
+  }
+
+  body.media=[mediaData.media];
+
+  await api("/api/admin/listings",{
+   method:"POST",
+   body:JSON.stringify(body)
+  });
+
+  toast("Товар успешно опубликован");
+  adminProducts();
+  loadListings();
+  loadAdminStats();
+
+ }catch(e){
+  toast(e.message);
+ }
 }
 async function saveEdit(id){
  try{
