@@ -3,211 +3,435 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#101010">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101114">
 <title>Prestige Market</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+:root{--bg:#101114;--panel:#191a20;--panel2:#202128;--line:#30313a;--text:#f5f5f7;--muted:#92939e;--gold:#d9b979;--gold2:#f0d9a6;--green:#70c99a;--red:#e47d83}
 *{box-sizing:border-box}
-body{margin:0;background:#101010;color:#f5f3ef;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button{font:inherit;cursor:pointer}
-.app{max-width:600px;margin:auto;padding:22px 17px 100px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-.logo{font-size:22px;font-weight:800;letter-spacing:1.5px}
-.logo span{color:#c8b58c}
-.profile{background:#222;border:1px solid #333;color:#eee;border-radius:50%;width:42px;height:42px;font-size:19px}
-.hero{padding:25px 22px;border:1px solid #3a3428;border-radius:22px;background:linear-gradient(135deg,#29251e,#171614 65%,#111);margin-bottom:27px}
-.eyebrow{font-size:10px;letter-spacing:2px;color:#c8b58c;font-weight:700}
-.hero h1{font-size:27px;line-height:1.2;margin:13px 0 9px}
-.hero p{font-size:13px;color:#aaa;line-height:1.5;margin:0}
-.section-title{font-size:19px;font-weight:750;margin:27px 0 15px}
-.categories{display:flex;gap:9px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
-.categories::-webkit-scrollbar{display:none}
-.cat{white-space:nowrap;border:1px solid #333;background:#1a1a1a;color:#aaa;border-radius:30px;padding:11px 15px;font-size:12px}
-.cat.active{background:#c8b58c;color:#15130f;border-color:#c8b58c;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:#191919;border:1px solid #292929;border-radius:17px;overflow:hidden;min-width:0}
-.cover{height:130px;background:linear-gradient(145deg,#302b22,#171717);display:grid;place-items:center;font-size:42px}
-.info{padding:13px}
-.name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.desc{font-size:11px;color:#888;margin-top:6px;min-height:28px;line-height:1.4}
-.price{font-size:15px;font-weight:750;margin-top:12px;color:#d6c49a}
-.buy{width:100%;border:0;border-radius:10px;background:#c8b58c;color:#17140e;padding:10px;margin-top:11px;font-size:12px;font-weight:800}
-.empty{grid-column:1/-1;text-align:center;padding:35px 15px;color:#888;background:#191919;border:1px solid #292929;border-radius:16px;font-size:13px;line-height:1.6}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#141414ee;border-top:1px solid #292929;padding:12px 15px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center}
-.bottom-inner{width:100%;max-width:560px;display:flex;justify-content:space-around}
-.nav{background:none;border:0;color:#888;font-size:11px;display:grid;gap:5px;justify-items:center}
-.nav b{font-size:20px;font-weight:400}
-.nav.active{color:#d6c49a}
-.notice{position:fixed;left:20px;right:20px;bottom:85px;background:#29251e;border:1px solid #5c5039;border-radius:12px;padding:14px;text-align:center;font-size:13px;display:none;z-index:5}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.top{padding:20px 18px 12px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:17px;font-weight:900;letter-spacing:2px}
+.brand span{color:var(--gold)}
+.subbrand{font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:4px}
+.avatar{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,#ddc28a,#80643a);color:#171717;display:grid;place-items:center;font-size:20px;font-weight:900}
+.hero{margin:12px 16px 20px;padding:23px 20px;border-radius:22px;background:linear-gradient(120deg,#34302a,#191a20 70%);border:1px solid #65563d;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;right:20px;top:12px;font-size:90px;color:#d9b97920}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--gold)}
+.hero h1{font-size:25px;line-height:1.15;margin:12px 0 8px;max-width:260px}
+.hero p{font-size:12px;color:#b9b8b5;margin:0 0 18px}
+.goldbtn{background:linear-gradient(110deg,#e8d19c,#b89458);border:0;color:#171717;padding:12px 17px;border-radius:12px;font-weight:800}
+.section{padding:0 16px;margin:22px 0}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.sectionhead h2{font-size:17px;margin:0}
+.muted{color:var(--muted);font-size:12px}
+.search{margin:0 16px 18px;display:flex;gap:9px}
+.search input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;color:white;outline:none}
+.chips{display:flex;gap:8px;overflow:auto;padding:0 16px 8px;scrollbar-width:none}
+.chip{white-space:nowrap;background:var(--panel);border:1px solid var(--line);color:#bcbcc5;padding:10px 14px;border-radius:30px;font-size:12px}
+.chip.active{background:#d9b979;color:#171717;border-color:#d9b979;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;overflow:hidden;min-width:0}
+.cover{height:125px;background:linear-gradient(135deg,#292a31,#191a20);display:grid;place-items:center;font-size:42px;overflow:hidden}
+.cover img,.cover video{width:100%;height:100%;object-fit:cover}
+.cardbody{padding:12px}
+.cardtitle{font-weight:750;font-size:13px;line-height:1.3;overflow-wrap:anywhere}
+.carddesc{font-size:11px;color:var(--muted);margin-top:6px;min-height:27px}
+.price{color:var(--gold2);font-weight:850;font-size:15px;margin:10px 0}
+.cardactions{display:flex;gap:7px}
+.smallbtn{border:0;background:var(--gold);color:#171717;border-radius:9px;padding:9px 8px;font-size:11px;font-weight:800;flex:1}
+.iconbtn{background:var(--panel2);border:1px solid var(--line);color:white;border-radius:9px;padding:8px}
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:16px;text-align:center;padding:28px 14px;color:var(--muted);font-size:13px;grid-column:1/-1}
+.pricecard{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.pricecard strong{font-size:16px}
+.pricecard small{display:block;color:var(--muted);margin-top:4px}
+.pricecard button{background:var(--gold);border:0;border-radius:10px;padding:10px 13px;font-weight:800}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#15161bee;backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 5px calc(10px + env(safe-area-inset-bottom));z-index:10}
+.nav button{background:none;border:0;color:var(--muted);font-size:10px;display:flex;flex-direction:column;gap:5px;align-items:center;min-width:55px}
+.nav button b{font-size:19px;font-weight:400}
+.nav button.active{color:var(--gold2)}
+.page{display:none}.page.active{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:12px}
+.field{display:block;width:100%;margin:8px 0 12px;padding:13px;background:#111216;border:1px solid var(--line);border-radius:11px;color:white;outline:none}
+textarea.field{min-height:85px;resize:vertical}
+label{font-size:12px;color:#b9b9c1}
+.full{width:100%;padding:13px;border:0;border-radius:11px;background:var(--gold);color:#171717;font-weight:850}
+.secondary{background:var(--panel2);color:white;border:1px solid var(--line)}
+.danger{background:#48272b;color:#ffb9bd}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.itemrow{padding:13px 0;border-bottom:1px solid var(--line)}
+.itemrow:last-child{border:0}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--panel2);border-radius:13px;padding:14px}
+.stat strong{font-size:23px;color:var(--gold2);display:block}
+.stat small{color:var(--muted)}
+.notice{font-size:12px;color:var(--muted);line-height:1.5}
+.modal{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:flex-end}
+.modal.open{display:flex}
+.modalbox{background:#191a20;border:1px solid var(--line);border-radius:23px 23px 0 0;padding:20px;width:100%;max-height:85vh;overflow:auto}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.modalhead h3{margin:0}
+.close{background:var(--panel2);border:0;color:white;border-radius:9px;padding:8px 12px}
+.toast{position:fixed;z-index:30;bottom:95px;left:16px;right:16px;background:#292a31;border:1px solid var(--line);padding:13px;border-radius:12px;text-align:center;display:none;font-size:13px}
+hr{border:0;border-top:1px solid var(--line);margin:15px 0}
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="top">
-    <div class="logo">PRESTIGE <span>MARKET</span></div>
-    <button class="profile" onclick="showNotice('Личный кабинет скоро появится')">♙</button>
-  </header>
+<header class="top">
+ <div><div class="brand">PRESTIGE <span>MARKET</span></div><div class="subbrand">DIGITAL GOODS • PREMIUM SERVICE</div></div>
+ <div class="avatar">P</div>
+</header>
 
-  <section class="hero">
-    <div class="eyebrow">EXCLUSIVE DIGITAL MARKETPLACE</div>
-    <h1>Цифровая роскошь.<br>В одном месте.</h1>
-    <p>NFT-подарки, коллекционные юзернеймы, Stars и Premium.</p>
-  </section>
-
-  <div class="section-title">Каталог</div>
-  <div class="categories" id="categories">
-    <button class="cat active" data-id="all">Все</button>
-    <button class="cat" data-id="gifts">🎁 NFT Gifts</button>
-    <button class="cat" data-id="usernames">👤 Usernames</button>
-    <button class="cat" data-id="numbers">📱 Numbers</button>
-    <button class="cat" data-id="stars">⭐ Stars</button>
-    <button class="cat" data-id="premium">💎 Premium</button>
+<main>
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="eyebrow">PREMIUM DIGITAL MARKETPLACE</div>
+  <h1>Твой мир цифровых возможностей</h1>
+  <p>NFT-подарки, коллекции, Stars и Premium в одном месте.</p>
+  <button class="goldbtn" onclick="showPage('catalog')">Открыть каталог →</button>
+ </div>
+ <div class="search"><input id="searchHome" placeholder="⌕ Поиск товаров..." oninput="searchListings(this.value)"></div>
+ <div class="section">
+  <div class="sectionhead"><h2>Категории</h2><span class="muted">PRESTIGE</span></div>
+  <div class="grid">
+   <div class="panel" onclick="selectCategory('gifts')">🎁 <b>NFT Gifts</b><div class="muted">Коллекционные подарки</div></div>
+   <div class="panel" onclick="selectCategory('usernames')">👤 <b>Usernames</b><div class="muted">Редкие юзернеймы</div></div>
+   <div class="panel" onclick="selectCategory('numbers')">📱 <b>Numbers</b><div class="muted">Коллекционные номера</div></div>
+   <div class="panel" onclick="selectCategory('stars')">⭐ <b>Stars</b><div class="muted">Пакеты Telegram Stars</div></div>
+   <div class="panel" onclick="selectCategory('premium')">💎 <b>Premium</b><div class="muted">Подписки Telegram</div></div>
+   <div class="panel" onclick="showPage('favorites')">♡ <b>Избранное</b><div class="muted">Сохранённые товары</div></div>
   </div>
+ </div>
+ <div class="section">
+  <div class="sectionhead"><h2>Популярное</h2><span class="muted" onclick="showPage('catalog')">Все →</span></div>
+  <div id="homeListings" class="grid"><div class="empty">Загружаем предложения…</div></div>
+ </div>
+</section>
 
-  <div class="section-title" id="catalogTitle">Популярное</div>
-  <div class="grid" id="listings">
-    <div class="empty">Загружаем каталог…</div>
+<section id="catalog" class="page">
+ <div class="sectionhead section"><h2>Каталог</h2><span class="muted">PRESTIGE MARKET</span></div>
+ <div class="search"><input id="searchCatalog" placeholder="⌕ Найти предложение..." oninput="searchListings(this.value)"></div>
+ <div class="chips" id="chips">
+  <button class="chip active" onclick="selectCategory('all')">Все</button>
+  <button class="chip" onclick="selectCategory('gifts')">🎁 Gifts</button>
+  <button class="chip" onclick="selectCategory('usernames')">👤 Usernames</button>
+  <button class="chip" onclick="selectCategory('numbers')">📱 Numbers</button>
+  <button class="chip" onclick="selectCategory('stars')">⭐ Stars</button>
+  <button class="chip" onclick="selectCategory('premium')">💎 Premium</button>
+ </div>
+ <div class="section"><div id="catalogContent" class="grid"><div class="empty">Загружаем каталог…</div></div></div>
+</section>
+
+<section id="favorites" class="page">
+ <div class="section"><div class="sectionhead"><h2>Избранное</h2></div><div id="favoritesContent" class="grid"><div class="empty">Загрузка…</div></div></div>
+</section>
+
+<section id="orders" class="page">
+ <div class="section"><div class="sectionhead"><h2>Мои заказы</h2></div><div id="ordersContent"><div class="empty">Загрузка…</div></div></div>
+</section>
+
+<section id="profile" class="page">
+ <div class="section">
+  <div class="sectionhead"><h2>Профиль</h2></div>
+  <div class="panel"><div class="eyebrow">PRESTIGE MEMBER</div><h2 id="profileName">Пользователь</h2><div class="muted" id="profileUsername">Telegram Mini App</div></div>
+  <div class="panel"><div class="itemrow" onclick="showPage('orders')">📦 Мои заказы <span style="float:right">→</span></div><div class="itemrow" onclick="showPage('favorites')">♡ Избранное <span style="float:right">→</span></div><div class="itemrow" onclick="support()">✉ Поддержка <span style="float:right">→</span></div><div class="itemrow" onclick="rules()">📜 Правила <span style="float:right">→</span></div></div>
+  <div id="adminEntry" class="panel" style="display:none"><button class="full" onclick="showPage('admin')">⚙ Админ-панель</button></div>
+ </div>
+</section>
+
+<section id="admin" class="page">
+ <div class="section">
+  <div class="sectionhead"><h2>Панель управления</h2><span class="eyebrow">ADMIN</span></div>
+  <div id="adminStats" class="statgrid"><div class="empty">Загрузка статистики…</div></div>
+  <hr>
+  <div class="row">
+   <button class="full" onclick="adminTab('products')">Товары</button>
+   <button class="full secondary" onclick="adminTab('orders')">Заказы</button>
   </div>
-</div>
-
-<div class="notice" id="notice"></div>
-
-<nav class="bottom">
-  <div class="bottom-inner">
-    <button class="nav active" onclick="goHome(this)"><b>⌂</b>Главная</button>
-    <button class="nav" onclick="showNotice('Избранное подключим следующим этапом')"><b>♡</b>Избранное</button>
-    <button class="nav" onclick="showNotice('Ваши заказы появятся здесь')"><b>▤</b>Заказы</button>
-    <button class="nav" onclick="showNotice('Профиль скоро появится')"><b>♙</b>Профиль</button>
+  <div class="row" style="margin-top:8px">
+   <button class="full secondary" onclick="adminTab('prices')">Цены</button>
+   <button class="full secondary" onclick="adminTab('add')">+ Добавить</button>
   </div>
+  <div id="adminContent" style="margin-top:16px"></div>
+ </div>
+</section>
+</main>
+
+<nav class="nav">
+ <button class="active" data-page="home" onclick="showPage('home')"><b>⌂</b>Главная</button>
+ <button data-page="catalog" onclick="showPage('catalog')"><b>▦</b>Каталог</button>
+ <button data-page="favorites" onclick="showPage('favorites')"><b>♡</b>Избранное</button>
+ <button data-page="orders" onclick="showPage('orders')"><b>▤</b>Заказы</button>
+ <button data-page="profile" onclick="showPage('profile')"><b>◉</b>Профиль</button>
 </nav>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modalbox"><div class="modalhead"><h3 id="modalTitle">Prestige Market</h3><button class="close" onclick="closeModal()">✕</button></div><div id="modalContent"></div></div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>
 const API = "https://prestige-markett.rtmzakarin.workers.dev";
 const tg = window.Telegram?.WebApp;
-if (tg) {
-  tg.ready();
-  tg.expand();
-  tg.setHeaderColor("#101010");
-  tg.setBackgroundColor("#101010");
+if(tg){tg.ready();tg.expand();}
+
+let listings=[],starsPrices=[],premiumPrices=[],currentCategory="all",isAdmin=false;
+let currentAdminTab="products";
+const initData = tg?.initData || "";
+const headers = {"Content-Type":"application/json","X-Telegram-Init-Data":initData};
+
+async function api(path,options={}){
+ const response=await fetch(API+path,{...options,headers:{...headers,...(options.headers||{})}});
+ const data=await response.json().catch(()=>({ok:false,error:"Ошибка ответа сервера"}));
+ if(!response.ok||data.ok===false)throw new Error(data.error||"Ошибка запроса");
+ return data;
 }
-
-let selectedCategory = "all";
-let allListings = [];
-
-const icons = {
-  gifts:"🎁",
-  usernames:"👤",
-  numbers:"📱",
-  stars:"⭐",
-  premium:"💎"
-};
-
-function showNotice(message) {
-  const el = document.getElementById("notice");
-  el.textContent = message;
-  el.style.display = "block";
-  clearTimeout(window.noticeTimer);
-  window.noticeTimer = setTimeout(() => el.style.display = "none", 2600);
+function toast(message){
+ const el=document.getElementById("toast");el.textContent=message;el.style.display="block";
+ clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",2600);
 }
-
-function money(price, currency) {
-  return `${Number(price || 0).toLocaleString("ru-RU")} ${currency || "USD"}`;
+function showPage(page){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(page)?.classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+ if(page==="favorites")loadFavorites();
+ if(page==="orders")loadOrders();
+ if(page==="profile")loadProfile();
+ if(page==="admin"){if(!isAdmin){toast("Нет доступа");return showPage("profile")}loadAdminStats();adminTab(currentAdminTab);}
+ window.scrollTo(0,0);
 }
-
-function renderListings() {
-  const container = document.getElementById("listings");
-  const items = selectedCategory === "all"
-    ? allListings
-    : allListings.filter(x => x.category_id === selectedCategory);
-
-  document.getElementById("catalogTitle").textContent =
-    selectedCategory === "all" ? "Популярное" : "Каталог";
-
-  if (!items.length) {
-    container.innerHTML = `<div class="empty">Пока здесь нет товаров.<br>Новые предложения скоро появятся.</div>`;
-    return;
-  }
-
-  container.innerHTML = items.map(item => `
-    <article class="card">
-      <div class="cover">
-        ${item.image_url
-          ? `<img src="${escapeAttr(item.image_url)}" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">`
-          : (icons[item.category_id] || "✦")}
-      </div>
-      <div class="info">
-        <div class="name">${escapeHtml(item.title)}</div>
-        <div class="desc">${escapeHtml(item.description || "Эксклюзивное предложение")}</div>
-        <div class="price">${money(item.price, item.currency)}</div>
-        <button class="buy" onclick="createOrder(${Number(item.id)})">Подробнее / Заказать</button>
-      </div>
-    </article>
-  `).join("");
+function selectCategory(category){
+ currentCategory=category;
+ showPage("catalog");
+ document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.textContent.toLowerCase().includes(category==="all"?"все":category==="gifts"?"gifts":category)));
+ if(category==="stars")return loadPrices("stars");
+ if(category==="premium")return loadPrices("premium");
+ renderListings();
 }
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function searchListings(value){
+ const id=document.activeElement?.id;
+ ["searchHome","searchCatalog"].forEach(x=>{if(x!==id)document.getElementById(x).value=value});
+ renderListings(value);
 }
-function escapeAttr(value) {
-  return escapeHtml(value);
+function mediaFor(item){
+ let media=[];
+ try{media=JSON.parse(item.media_json||"[]")}catch{}
+ return media[0]?.url||item.image_url||"";
 }
-
-async function loadListings() {
-  const container = document.getElementById("listings");
-  try {
-    const response = await fetch(API + "/api/listings");
-    const data = await response.json();
-    if (!response.ok || !data.ok) throw new Error("Не удалось загрузить каталог");
-    allListings = data.listings || [];
-    renderListings();
-  } catch (error) {
-    container.innerHTML = `<div class="empty">Не удалось загрузить каталог.<br>Попробуйте обновить страницу.</div>`;
-  }
+function card(item){
+ const media=mediaFor(item);
+ const image=media?`<img src="${esc(media)}" onerror="this.parentElement.textContent='🎁'">`:"🎁";
+ return `<article class="card">
+ <div class="cover">${image}</div>
+ <div class="cardbody">
+ <div class="cardtitle">${esc(item.title)}</div>
+ <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
+ <div class="price">${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}</div>
+ <div class="cardactions"><button class="smallbtn" onclick="createOrder(${Number(item.id)})">Заказать</button><button class="iconbtn" onclick="favorite(${Number(item.id)})">♡</button></div>
+ </div></article>`;
 }
-
-async function createOrder(id) {
-  if (!tg?.initData) {
-    showNotice("Оформление заказа доступно внутри Telegram");
-    return;
-  }
-
-  try {
-    const response = await fetch(API + "/api/orders", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "X-Telegram-Init-Data":tg.initData
-      },
-      body:JSON.stringify({listing_id:id})
-    });
-    const data = await response.json();
-    if (!response.ok || !data.ok) throw new Error(data.error || "Ошибка заказа");
-    showNotice("Заявка №" + data.public_id + " создана!");
-    tg.HapticFeedback?.notificationOccurred("success");
-  } catch (error) {
-    showNotice(error.message || "Не удалось оформить заказ");
-  }
+function renderListings(search=""){
+ let filtered=listings.filter(x=>(currentCategory==="all"||x.category_id===currentCategory||x.category===currentCategory)&&(!search||(`${x.title} ${x.description}`).toLowerCase().includes(search.toLowerCase())));
+ const html=filtered.length?filtered.map(card).join(""):`<div class="empty">Пока нет предложений в этой категории</div>`;
+ document.getElementById("catalogContent").innerHTML=html;
+ document.getElementById("homeListings").innerHTML=listings.slice(0,4).map(card).join("")||`<div class="empty">Новые предложения скоро появятся</div>`;
 }
-
-document.getElementById("categories").addEventListener("click", event => {
-  const button = event.target.closest(".cat");
-  if (!button) return;
-  document.querySelectorAll(".cat").forEach(x => x.classList.remove("active"));
-  button.classList.add("active");
-  selectedCategory = button.dataset.id;
-  renderListings();
-});
-
-function goHome(button) {
-  document.querySelectorAll(".nav").forEach(x => x.classList.remove("active"));
-  button.classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
+async function loadListings(){
+ try{const d=await api("/api/listings");listings=d.listings||[];renderListings();}
+ catch(e){document.getElementById("catalogContent").innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
 }
+async function loadPrices(type){
+ const target=document.getElementById("catalogContent");
+ target.innerHTML=`<div class="empty">Загружаем цены…</div>`;
+ try{
+  const d=await api(type==="stars"?"/api/prices/stars":"/api/prices/premium");
+  const prices=d.prices||[];
+  if(type==="stars")starsPrices=prices;else premiumPrices=prices;
+  target.innerHTML=prices.length?prices.map(p=>`
+   <div class="pricecard">
+    <div><strong>${type==="stars"?Number(p.stars_amount).toLocaleString("ru-RU")+" ⭐":p.duration_months+" месяца 💎"}</strong><small>${Number(p.price_usd).toFixed(2)} USD</small></div>
+    <button onclick="priceRequest('${type}',${Number(p.id)})">Заявка</button>
+   </div>`).join(""):`<div class="empty">Тарифы пока не добавлены</div>`;
+ }catch(e){target.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+}
+async function priceRequest(type,id){
+ const item=(type==="stars"?starsPrices:premiumPrices).find(x=>Number(x.id)===id);
+ if(!item)return;
+ const name=type==="stars"?`${item.stars_amount} Telegram Stars`:`Telegram Premium на ${item.duration_months} месяцев`;
+ const price=Number(item.price_usd).toFixed(2);
+ openModal("Оставить заявку",`<p>${esc(name)}</p><h2 style="color:var(--gold2)">${price} USD</h2><p class="notice">Это заявка, не оплата. Менеджер уточнит детали.</p><button class="full" onclick="sendSupportRequest('${esc(name)}','${price}')">Связаться с менеджером</button>`);
+}
+function sendSupportRequest(name,price){
+ const text=`Здравствуйте! Хочу оформить заявку: ${name}, цена ${price} USD.`;
+ const url="https://t.me/PrestigeMarkets_Bot?start="+encodeURIComponent("request");
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+ closeModal();toast("Откройте бота и отправьте заявку менеджеру");
+}
+async function createOrder(id){
+ const item=listings.find(x=>Number(x.id)===id);if(!item)return;
+ openModal("Подтвердить заявку",`<p><b>${esc(item.title)}</b></p><p class="muted">${Number(item.price||0)} ${esc(item.currency||"USD")}</p><p class="notice">Оплата не списывается. Будет создана заявка для дальнейшего согласования.</p><button class="full" onclick="confirmOrder(${id})">Создать заявку</button>`);
+}
+async function confirmOrder(id){
+ try{const d=await api("/api/orders",{method:"POST",body:JSON.stringify({listing_id:id,term_days:1})});closeModal();toast("Заявка "+d.public_id+" создана");}
+ catch(e){toast(e.message);}
+}
+async function favorite(id){
+ try{await api("/api/favorites",{method:"POST",body:JSON.stringify({listing_id:id})});toast("Добавлено в избранное");}
+ catch(e){toast(e.message);}
+}
+async function loadFavorites(){
+ const el=document.getElementById("favoritesContent");
+ try{const d=await api("/api/favorites");el.innerHTML=d.favorites?.length?d.favorites.map(card).join(""):`<div class="empty">В избранном пока пусто</div>`;}
+ catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+}
+async function loadOrders(){
+ const el=document.getElementById("ordersContent");
+ try{
+ const d=await api("/api/orders");
+ el.innerHTML=d.orders?.length?d.orders.map(o=>`<div class="panel"><b>${esc(o.listing_title||"Заказ")}</b><div class="muted">${esc(o.public_id||("#"+o.id))}</div><div class="price">${Number(o.amount||0)} ${esc(o.currency||"USD")}</div><span class="muted">Статус: ${esc(o.status)}</span></div>`).join(""):`<div class="empty">У вас пока нет заказов</div>`;
+ }catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+}
+async function loadProfile(){
+ try{
+ const d=await api("/api/me");const u=d.user||{};
+ document.getElementById("profileName").textContent=u.first_name||"Пользователь";
+ document.getElementById("profileUsername").textContent=u.username?"@"+u.username:"Telegram ID: "+u.telegram_id;
+ isAdmin=!!u.is_admin;document.getElementById("adminEntry").style.display=isAdmin?"block":"none";
+ }catch(e){document.getElementById("profileName").textContent="Откройте приложение через Telegram";}
+}
+async function loadAdminStats(){
+ try{
+ const d=await api("/api/admin/stats"),s=d.stats;
+ document.getElementById("adminStats").innerHTML=`
+ <div class="stat"><strong>${s.users}</strong><small>Пользователи</small></div>
+ <div class="stat"><strong>${s.listings}</strong><small>Товары</small></div>
+ <div class="stat"><strong>${s.orders}</strong><small>Заказы</small></div>
+ <div class="stat"><strong>${s.pending_orders}</strong><small>Ожидают</small></div>`;
+ }catch(e){document.getElementById("adminStats").innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+}
+function adminTab(tab){
+ currentAdminTab=tab;
+ if(!isAdmin)return toast("Нет доступа");
+ if(tab==="products")adminProducts();
+ if(tab==="orders")adminOrders();
+ if(tab==="add")adminAdd();
+ if(tab==="prices")adminPrices();
+}
+async function adminProducts(){
+ const el=document.getElementById("adminContent");el.innerHTML="Загрузка товаров…";
+ try{
+ const d=await api("/api/admin/listings");
+ el.innerHTML=(d.listings||[]).map(x=>`<div class="itemrow"><b>${esc(x.title)}</b><div class="muted">${esc(x.category_id)} · ${x.price} ${esc(x.currency||"USD")} · ${x.status}</div><div class="row" style="margin-top:8px"><button class="smallbtn" onclick="editListing(${x.id})">Изменить</button><button class="smallbtn danger" onclick="deleteListing(${x.id})">Скрыть</button></div></div>`).join("")||`<div class="empty">Товаров пока нет</div>`;
+ }catch(e){el.textContent=e.message;}
+}
+function adminAdd(){
+ document.getElementById("adminContent").innerHTML=`
+ <h3>Новое предложение</h3>
+ <label>Категория</label><select class="field" id="aCategory"><option value="gifts">NFT Gifts</option><option value="usernames">Usernames</option><option value="numbers">Numbers</option></select>
+ <label>Название</label><input class="field" id="aTitle" placeholder="Название товара">
+ <label>Описание</label><textarea class="field" id="aDescription" placeholder="Описание"></textarea>
+ <label>Цена</label><input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
+ <label>Валюта</label><select class="field" id="aCurrency"><option>USD</option><option>EUR</option><option>RUB</option></select>
+ <label>Ссылка на изображение или видео</label><input class="field" id="aImage" placeholder="https://...">
+ <label>Коллекционный идентификатор (необязательно)</label><input class="field" id="aIdentifier" placeholder="@username">
+ <button class="full" onclick="saveNewListing()">Опубликовать товар</button>
+ <p class="notice">Для медиа пока используется ссылка на файл. Загрузка из галереи появится после подключения хранилища.</p>`;
+}
+async function saveNewListing(){
+ const body={
+ category:document.getElementById("aCategory").value,
+ title:document.getElementById("aTitle").value.trim(),
+ description:document.getElementById("aDescription").value,
+ price:Number(document.getElementById("aPrice").value),
+ currency:document.getElementById("aCurrency").value,
+ image_url:document.getElementById("aImage").value.trim(),
+ public_identifier:document.getElementById("aIdentifier").value.trim()
+ };
+ if(!body.title)return toast("Введите название");
+ try{await api("/api/admin/listings",{method:"POST",body:JSON.stringify(body)});toast("Товар добавлен");adminProducts();loadAdminStats();}
+ catch(e){toast(e.message);}
+}
+async function editListing(id){
+ const item=listings.find(x=>Number(x.id)===id);
+ let source=item;
+ if(!source){try{const d=await api("/api/admin/listings");source=d.listings.find(x=>Number(x.id)===id);}catch(e){return toast(e.message)}}
+ if(!source)return;
+ openModal("Редактировать товар",`
+ <label>Название</label><input class="field" id="eTitle" value="${attr(source.title)}">
+ <label>Описание</label><textarea class="field" id="eDescription">${esc(source.description||"")}</textarea>
+ <label>Цена</label><input class="field" id="ePrice" type="number" value="${Number(source.price||0)}">
+ <label>Ссылка на изображение</label><input class="field" id="eImage" value="${attr(source.image_url||"")}">
+ <button class="full" onclick="saveEdit(${id})">Сохранить</button>`);
+}
+async function saveEdit(id){
+ try{
+ await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({
+ title:document.getElementById("eTitle").value,
+ description:document.getElementById("eDescription").value,
+ price:Number(document.getElementById("ePrice").value),
+ image_url:document.getElementById("eImage").value
+ })});
+ closeModal();toast("Изменения сохранены");adminProducts();loadListings();
+ }catch(e){toast(e.message);}
+}
+async function deleteListing(id){
+ if(!confirm("Скрыть это предложение?"))return;
+ try{await api("/api/admin/listings/"+id,{method:"DELETE"});toast("Товар скрыт");adminProducts();loadListings();loadAdminStats();}
+ catch(e){toast(e.message);}
+}
+async function adminOrders(){
+ const el=document.getElementById("adminContent");el.innerHTML="Загрузка заказов…";
+ try{
+ const d=await api("/api/admin/orders");
+ el.innerHTML=(d.orders||[]).map(o=>`<div class="panel"><b>${esc(o.listing_title||"Заказ")}</b><div class="muted">${esc(o.public_id||("#"+o.id))} · ${esc(o.username||o.telegram_id||"")}</div><div class="price">${o.amount} ${esc(o.currency||"USD")}</div><select class="field" id="status${o.id}"><option value="pending">Ожидает</option><option value="processing">В работе</option><option value="completed">Выполнен</option><option value="cancelled">Отменён</option></select><button class="full" onclick="updateOrder(${o.id})">Сохранить статус</button></div>`).join("")||`<div class="empty">Заказов пока нет</div>`;
+ (d.orders||[]).forEach(o=>{const x=document.getElementById("status"+o.id);if(x)x.value=o.status;});
+ }catch(e){el.textContent=e.message;}
+}
+async function updateOrder(id){
+ try{await api("/api/admin/orders/"+id+"/status",{method:"PATCH",body:JSON.stringify({status:document.getElementById("status"+id).value})});toast("Статус обновлён");loadAdminStats();}
+ catch(e){toast(e.message);}
+}
+async function adminPrices(){
+ const el=document.getElementById("adminContent");el.innerHTML="Загрузка тарифов…";
+ try{
+ const [s,p]=await Promise.all([api("/api/prices/stars"),api("/api/prices/premium")]);
+ const stars=s.prices.map(x=>priceAdminRow("stars",x.id,x.stars_amount+" Stars",x.price_usd)).join("");
+ const prem=p.prices.map(x=>priceAdminRow("premium",x.id,x.duration_months+" месяца Premium",x.price_usd)).join("");
+ el.innerHTML="<h3>Telegram Stars</h3>"+stars+"<hr><h3>Telegram Premium</h3>"+prem;
+ }catch(e){el.textContent=e.message;}
+}
+function priceAdminRow(type,id,title,price){
+ return `<div class="itemrow"><b>${esc(title)}</b><div class="row"><input class="field" id="price${type}${id}" type="number" min="0" step="0.01" value="${Number(price)}"><button class="smallbtn" onclick="savePrice('${type}',${id})">Сохранить</button></div></div>`;
+}
+async function savePrice(type,id){
+ const price=Number(document.getElementById("price"+type+id).value);
+ if(!Number.isFinite(price)||price<0)return toast("Неверная цена");
+ try{await api("/api/admin/prices/"+type+"/"+id,{method:"PATCH",body:JSON.stringify({price_usd:price})});toast("Цена обновлена");}
+ catch(e){toast(e.message);}
+}
+function openModal(title,content){
+ document.getElementById("modalTitle").textContent=title;
+ document.getElementById("modalContent").innerHTML=content;
+ document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+function support(){
+ const url="https://t.me/PrestigeMarkets_Bot";
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+}
+function rules(){openModal("Правила Prestige Market",`<p class="notice">Все заявки подтверждаются отдельно. Создание заявки не означает оплату или автоматическую передачу товара. Проверяйте описание и условия предложения перед оформлением. Не отправляйте пароли, коды входа и данные аккаунта.</p>`);}
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function attr(value){return esc(value).replace(/"/g,"&quot;");}
 
-loadListings();
+(async function init(){
+ await loadListings();
+ if(tg?.initData){await loadProfile();}
+ else{document.getElementById("profileName").textContent="Откройте приложение через Telegram";}
+})();
 </script>
 </body>
 </html>
