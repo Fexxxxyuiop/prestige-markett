@@ -129,6 +129,64 @@ async function requireAdmin(request, env) {
 function makePublicId() {
   return "PM-" + crypto.randomUUID().slice(0, 8).toUpperCase();
 }
+async function telegramRequest(token, method, payload) {
+  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  return response.json();
+}
+
+async function handleTelegramWebhook(request, env) {
+  const suppliedSecret = request.headers.get("X-Telegram-Bot-Api-Secret-Token") || "";
+
+  if (!env.WEBHOOK_SECRET || suppliedSecret !== env.WEBHOOK_SECRET) {
+    return fail("Unauthorized webhook", 401);
+  }
+
+  if (!env.BOT_TOKEN) {
+    return fail("BOT_TOKEN is missing", 500);
+  }
+
+  const update = await request.json();
+  const message = update.message;
+
+  if (!message?.chat?.id) return json({ ok: true });
+
+  const chatId = message.chat.id;
+  const senderId = String(message.from?.id || "");
+  const admins = (env.ADMIN_IDS || "")
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+  const isAdmin = admins.includes(senderId);
+  const text = String(message.text || "").trim();
+
+  let reply;
+
+  if (text === "/start" || text.startsWith("/start ")) {
+    reply = isAdmin
+      ? "Добро пожаловать в Prestige Market! Вы распознаны как администратор."
+      : "Добро пожаловать в Prestige Market! Каталог готовится к запуску.";
+  } else if (text === "/admin") {
+    reply = isAdmin
+      ? "Доступ администратора подтверждён. Панель управления подключим следующим этапом."
+      : "У вас нет доступа к админ-панели.";
+  } else if (isAdmin && (message.photo || message.video || message.animation)) {
+    reply = "Файл получен. Приём медиа для карточек товаров подключим следующим этапом.";
+  } else {
+    reply = "Prestige Market. Используйте /start для начала.";
+  }
+
+  await telegramRequest(env.BOT_TOKEN, "sendMessage", {
+    chat_id: chatId,
+    text: reply
+  });
+
+  return json({ ok: true });
+}
 
 async function handle(request, env) {
   if (request.method === "OPTIONS") {
@@ -138,6 +196,9 @@ async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
   const method = request.method;
+  if (path === "/telegram/webhook" && method === "POST") {
+  return handleTelegramWebhook(request, env);
+}
 
   if (!env.DB) return fail("D1 binding DB is missing", 500);
 
