@@ -7,7 +7,303 @@
 <meta name="theme-color" content="#101114">
 <title>Prestige Market</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
+ 
+/* ===== PRESTIGE FUTURE 3D HOME ===== */
+.home-hero{
+ position:relative;
+ isolation:isolate;
+ overflow:hidden;
+ min-height:365px;
+ margin:12px 16px 23px;
+ padding:22px;
+ border-radius:27px;
+ border:1px solid #9860d477;
+ background:
+ radial-gradient(ellipse at 85% 30%,#873bce55,transparent 42%),
+ radial-gradient(ellipse at 10% 100%,#54258a55,transparent 45%),
+ linear-gradient(145deg,#241637,#100d1a 65%,#090711);
+ box-shadow:0 18px 45px #0009,0 0 30px #923dff22,inset 0 1px #ffffff22;
+}
+.home-hero:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ z-index:-1;
+ opacity:.16;
+ background-image:
+ linear-gradient(#bd8aff22 1px,transparent 1px),
+ linear-gradient(90deg,#bd8aff22 1px,transparent 1px);
+ background-size:28px 28px;
+ mask-image:linear-gradient(120deg,black,transparent 85%);
+}
+.home-hero-head{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+}
+.home-pill{
+ display:inline-flex;
+ align-items:center;
+ gap:7px;
+ padding:8px 11px;
+ border-radius:30px;
+ background:#a15aff20;
+ border:1px solid #b77aff55;
+ color:#d9baff;
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:1.5px;
+}
+.home-live-dot{
+ width:7px;height:7px;
+ border-radius:50%;
+ background:#bd8aff;
+ box-shadow:0 0 12px #bd8aff;
+}
+.home-index{
+ color:#82718f;
+ font-size:10px;
+ letter-spacing:2px;
+}
+.home-hero-content{
+ position:relative;
+ z-index:2;
+ margin-top:28px;
+ max-width:78%;
+}
+.home-kicker{
+ color:#c28cff;
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:2px;
+}
+.home-hero h1{
+ font-size:32px;
+ line-height:1.12;
+ letter-spacing:-1px;
+ margin:13px 0;
+ font-weight:950;
+}
+.home-hero h1 span{
+ background:linear-gradient(100deg,#fff,#c69aff 45%,#984cff);
+ -webkit-background-clip:text;
+ color:transparent;
+ filter:drop-shadow(0 0 13px #a45aff55);
+}
+.home-hero-content p{
+ color:#b5a8c8;
+ font-size:12px;
+ line-height:1.65;
+ max-width:235px;
+ margin:0 0 20px;
+}
+.home-primary{
+ display:inline-flex;
+ align-items:center;
+ gap:15px;
+ padding:14px 17px;
+ border-radius:13px;
+ color:white;
+ font-size:12px;
+ font-weight:900;
+ border:1px solid #e0c0ff99;
+ background:linear-gradient(120deg,#c18aff,#8d43e5 55%,#6125ac);
+ box-shadow:0 6px 0 #40176f,0 12px 25px #8e3de955,inset 0 1px #ffffff80;
+}
+.home-primary span{font-size:17px}
+.home-primary:active{
+ transform:translateY(4px);
+ box-shadow:0 2px 0 #40176f,0 6px 12px #8e3de955;
+}
+.home-art{
+ position:absolute;
+ width:165px;
+ height:165px;
+ right:-13px;
+ top:115px;
+ z-index:1;
+ pointer-events:none;
+}
+.home-orbit{
+ position:absolute;
+ inset:9px;
+ border:1px solid #c28aff66;
+ border-radius:50%;
+ transform:rotateX(65deg) rotate(-25deg);
+ box-shadow:0 0 25px #a24cff33;
+}
+.home-orbit.two{
+ inset:23px -7px;
+ transform:rotateX(65deg) rotate(55deg);
+ border-color:#e08aff66;
+}
+.home-orbit-dot{
+ position:absolute;
+ top:14px;
+ right:20px;
+ color:#e4c5ff;
+ font-size:22px;
+ text-shadow:0 0 18px #c47aff;
+}
+.home-core{
+ position:absolute;
+ left:43px;
+ top:39px;
+ width:80px;
+ height:80px;
+ display:grid;
+ place-items:center;
+ border-radius:24px;
+ font-size:34px;
+ font-weight:950;
+ color:white;
+ background:linear-gradient(145deg,#d4aaff,#8a42d8 48%,#3c1768);
+ border:1px solid #e7caff;
+ box-shadow:0 15px 30px #0008,0 0 35px #a44dff88,inset 0 3px 9px #ffffff88,inset 0 -8px 15px #35105e;
+ transform:rotate(-12deg);
+}
+.home-core:after{
+ content:"";
+ position:absolute;
+ inset:7px;
+ border:1px solid #ffffff55;
+ border-radius:18px;
+}
+.home-art-label{
+ position:absolute;
+ bottom:8px;
+ right:4px;
+ padding:7px 10px;
+ background:#211332dd;
+ border:1px solid #a56bd577;
+ border-radius:9px;
+ color:#e0c8ff;
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:1px;
+ box-shadow:0 5px 15px #0008;
+}
+.home-hero-bottom{
+ position:absolute;
+ bottom:17px;
+ left:22px;
+ right:22px;
+ padding-top:12px;
+ border-top:1px solid #ffffff1b;
+ display:flex;
+ justify-content:space-between;
+ color:#9988ac;
+ font-size:9px;
+ letter-spacing:1.3px;
+}
+.home-section{padding:0 16px;margin:25px 0}
+.home-section-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:14px;
+}
+.home-section-title h2{
+ font-size:18px;
+ margin:0;
+ font-weight:900;
+}
+.home-link{
+ color:#c49aff;
+ font-size:11px;
+ font-weight:800;
+}
+.home-category-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:11px;
+}
+.home-category{
+ position:relative;
+ min-width:0;
+ min-height:105px;
+ padding:14px;
+ text-align:left;
+ color:white;
+ border-radius:17px;
+ border:1px solid #65418a;
+ background:
+ radial-gradient(circle at 100% 0%,#a14eff25,transparent 55%),
+ linear-gradient(145deg,#241a35,#12101c);
+ box-shadow:0 6px 0 #090710,0 11px 19px #0006,inset 0 1px #ffffff18;
+ overflow:hidden;
+}
+.home-category:after{
+ content:"";
+ position:absolute;
+ width:65px;height:65px;
+ right:-25px;bottom:-29px;
+ border:1px solid #b77aff33;
+ border-radius:50%;
+ box-shadow:0 0 0 9px #a45aff0a,0 0 0 18px #a45aff08;
+}
+.home-category:active{
+ transform:translateY(4px);
+ box-shadow:0 2px 0 #090710,0 5px 10px #0006;
+}
+.home-category-icon{
+ display:block;
+ font-size:25px;
+ margin-bottom:10px;
+ filter:drop-shadow(0 0 9px #a45aff77);
+}
+.home-category b{
+ display:block;
+ font-size:13px;
+ font-weight:900;
+}
+.home-category small{
+ display:block;
+ color:#a99bb9;
+ font-size:10px;
+ margin-top:5px;
+}
+.home-category-arrow{
+ position:absolute;
+ right:13px;
+ top:13px;
+ color:#b98bff;
+ font-size:15px;
+}
+.home-note{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ margin:22px 16px;
+ padding:15px;
+ border-radius:16px;
+ background:linear-gradient(110deg,#28183b,#15101f);
+ border:1px solid #67418b;
+ box-shadow:0 7px 20px #0005;
+}
+.home-note-icon{
+ width:39px;height:39px;
+ display:grid;place-items:center;
+ flex-shrink:0;
+ border-radius:12px;
+ background:linear-gradient(145deg,#bd8aff,#7133bd);
+ box-shadow:0 4px 0 #421d79,0 0 15px #9d4cff55;
+ font-size:19px;
+}
+.home-note b{display:block;font-size:12px}
+.home-note small{
+ display:block;
+ color:#a99bb9;
+ font-size:10px;
+ margin-top:5px;
+ line-height:1.5;
+}
+@media(max-width:360px){
+ .home-hero{padding:18px;min-height:370px}
+ .home-hero h1{font-size:28px}
+ .home-art{right:-28px;opacity:.85}
+ .home-hero-content{max-width:82%}
+}
 <style>
 :root{
  --bg:#08070e;
