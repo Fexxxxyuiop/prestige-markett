@@ -20,6 +20,10 @@ const categories = [
   { id: "premium", name: "Telegram Premium", icon: "💎" }
 ];
 
+const ADMIN_STATUSES = [
+  "pending", "processing", "completed", "cancelled"
+];
+
 async function verifyTelegram(initData, token) {
   if (!initData || !token) return null;
 
@@ -38,31 +42,21 @@ async function verifyTelegram(initData, token) {
     const encoder = new TextEncoder();
 
     const secretKey = await crypto.subtle.importKey(
-      "raw",
-      encoder.encode("WebAppData"),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"]
+      "raw", encoder.encode("WebAppData"),
+      { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
     );
 
     const secret = await crypto.subtle.sign(
-      "HMAC",
-      secretKey,
-      encoder.encode(token)
+      "HMAC", secretKey, encoder.encode(token)
     );
 
     const key = await crypto.subtle.importKey(
-      "raw",
-      secret,
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"]
+      "raw", secret,
+      { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
     );
 
     const signature = await crypto.subtle.sign(
-      "HMAC",
-      key,
-      encoder.encode(dataCheck)
+      "HMAC", key, encoder.encode(dataCheck)
     );
 
     const calculated = [...new Uint8Array(signature)]
@@ -71,13 +65,11 @@ async function verifyTelegram(initData, token) {
 
     if (calculated !== hash) return null;
 
-    const user = JSON.parse(params.get("user") || "null");
-    if (!user?.id) return null;
-
     const authDate = Number(params.get("auth_date") || 0);
     if (!authDate || Date.now() / 1000 - authDate > 86400) return null;
 
-    return user;
+    const user = JSON.parse(params.get("user") || "null");
+    return user?.id ? user : null;
   } catch {
     return null;
   }
@@ -109,19 +101,15 @@ async function getUser(request, env) {
     "SELECT * FROM users WHERE telegram_id = ?"
   ).bind(String(telegramUser.id)).first();
 
-  if (!user || user.is_blocked) return null;
-
-  return user;
+  return user && !user.is_blocked ? user : null;
 }
 
 async function requireAdmin(request, env) {
   const user = await getUser(request, env);
   if (!user) return null;
 
-  const admins = (env.ADMIN_IDS || "")
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean);
+  const admins = String(env.ADMIN_IDS || "")
+    .split(",").map(x => x.trim()).filter(Boolean);
 
   return admins.includes(String(user.telegram_id)) ? user : null;
 }
@@ -129,63 +117,16 @@ async function requireAdmin(request, env) {
 function makePublicId() {
   return "PM-" + crypto.randomUUID().slice(0, 8).toUpperCase();
 }
-async function telegramRequest(token, method, payload) {
-  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-  return response.json();
-}
 
-async function handleTelegramWebhook(request, env) {
-  const suppliedSecret = request.headers.get("X-Telegram-Bot-Api-Secret-Token") || "";
-
-  if (!env.WEBHOOK_SECRET || suppliedSecret !== env.WEBHOOK_SECRET) {
-    return fail("Unauthorized webhook", 401);
-  }
-
-  if (!env.BOT_TOKEN) {
-    return fail("BOT_TOKEN is missing", 500);
-  }
-
-  const update = await request.json();
-  const message = update.message;
-
-  if (!message?.chat?.id) return json({ ok: true });
-
-  const chatId = message.chat.id;
-  const senderId = String(message.from?.id || "");
-  const admins = (env.ADMIN_IDS || "")
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean);
-
-  const isAdmin = admins.includes(senderId);
-  const text = String(message.text || "").trim();
-
-  let reply;
-
-  if (text === "/start" || text.startsWith("/start ")) {
-    reply = isAdmin
-      ? "Добро пожаловать в Prestige Market! Вы распознаны как администратор."
-      : "Добро пожаловать в Prestige Market! Каталог готовится к запуску.";
-  } else if (text === "/admin") {
-    reply = isAdmin
-      ? "Доступ администратора подтверждён. Панель управления подключим следующим этапом."
-      : "У вас нет доступа к админ-панели.";
-  } else if (isAdmin && (message.photo || message.video || message.animation)) {
-    reply = "Файл получен. Приём медиа для карточек товаров подключим следующим этапом.";
-  } else {
-    reply = "Prestige Market. Используйте /start для начала.";
-  }
-
-  await telegramRequest(env.BOT_TOKEN, "sendMessage", {
-    chat_id: chatId,
-    text: reply
-  });
-
-  return json({ ok: true });
+async function audit(env, admin, action, type, id, details = {}) {
+  await env.DB.prepare(`
+    INSERT INTO admin_audit
+      (admin_telegram_id, action, entity_type, entity_id, details_json)
+    VALUES (?, ?, ?, ?, ?)
+  `).bind(
+    String(admin.telegram_id), action, type,
+    String(id || ""), JSON.stringify(details)
+  ).run();
 }
 
 async function handle(request, env) {
@@ -196,9 +137,6 @@ async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
   const method = request.method;
-  if (path === "/telegram/webhook" && method === "POST") {
-  return handleTelegramWebhook(request, env);
-}
 
   if (!env.DB) return fail("D1 binding DB is missing", 500);
 
@@ -210,77 +148,75 @@ async function handle(request, env) {
     });
   }
 
+  // PUBLIC CATALOG
+
   if (path === "/api/categories" && method === "GET") {
     return json({ ok: true, categories });
   }
 
   if (path === "/api/listings" && method === "GET") {
-    try {
-      const category = url.searchParams.get("category");
-      const search = url.searchParams.get("q");
+    const category = url.searchParams.get("category");
+    const search = url.searchParams.get("q");
 
-      let sql = `
-        SELECT id, category, category_id, title, description,
-               price, currency, image_url, media_json,
-               price_day, price_week, price_month, fixed_price,
-               min_days, max_days, fulfillment_mode,
-               public_identifier, is_featured, created_at
-        FROM listings
-        WHERE is_active = 1 AND status = 'active'
-      `;
+    let sql = `
+      SELECT id, category, category_id, title, description,
+        price, currency, image_url, media_json,
+        price_day, price_week, price_month, fixed_price,
+        min_days, max_days, fulfillment_mode,
+        public_identifier, is_featured, created_at
+      FROM listings
+      WHERE is_active = 1 AND status = 'active'
+    `;
 
-      const values = [];
+    const values = [];
 
-      if (category) {
-        sql += " AND (category = ? OR category_id = ?)";
-        values.push(category, category);
-      }
-
-      if (search) {
-        sql += " AND (title LIKE ? OR description LIKE ?)";
-        values.push(`%${search}%`, `%${search}%`);
-      }
-
-      sql += " ORDER BY is_featured DESC, id DESC LIMIT 100";
-
-      const result = await env.DB.prepare(sql).bind(...values).all();
-
-      return json({
-        ok: true,
-        listings: result.results || []
-      });
-    } catch (e) {
-      return fail("Could not load listings: " + e.message, 500);
+    if (category) {
+      sql += " AND (category = ? OR category_id = ?)";
+      values.push(category, category);
     }
+
+    if (search) {
+      sql += " AND (title LIKE ? OR description LIKE ?)";
+      values.push(`%${search}%`, `%${search}%`);
+    }
+
+    sql += " ORDER BY is_featured DESC, id DESC LIMIT 100";
+
+    const result = await env.DB.prepare(sql).bind(...values).all();
+
+    return json({ ok: true, listings: result.results || [] });
   }
 
-  if (path === "/api/prices/stars" && method === "GET") {
-    try {
-      const result = await env.DB.prepare(
-        "SELECT * FROM stars_prices ORDER BY stars_amount ASC"
-      ).all();
+  // STARS AND PREMIUM PRICES
 
-      return json({ ok: true, prices: result.results || [] });
-    } catch (e) {
-      return fail("Stars prices unavailable: " + e.message, 500);
-    }
+  if (path === "/api/prices/stars" && method === "GET") {
+    const result = await env.DB.prepare(`
+      SELECT * FROM stars_prices
+      WHERE is_active = 1
+      ORDER BY stars_amount ASC
+    `).all();
+
+    return json({ ok: true, prices: result.results || [] });
   }
 
   if (path === "/api/prices/premium" && method === "GET") {
-    try {
-      const result = await env.DB.prepare(
-        "SELECT * FROM premium_prices ORDER BY duration_months ASC"
-      ).all();
+    const result = await env.DB.prepare(`
+      SELECT * FROM premium_prices
+      WHERE is_active = 1
+      ORDER BY duration_months ASC
+    `).all();
 
-      return json({ ok: true, prices: result.results || [] });
-    } catch (e) {
-      return fail("Premium prices unavailable: " + e.message, 500);
-    }
+    return json({ ok: true, prices: result.results || [] });
   }
+
+  // USER PROFILE
 
   if (path === "/api/me" && method === "GET") {
     const user = await getUser(request, env);
     if (!user) return fail("Telegram authorization required", 401);
+
+    const admins = String(env.ADMIN_IDS || "")
+      .split(",").map(x => x.trim());
 
     return json({
       ok: true,
@@ -288,10 +224,13 @@ async function handle(request, env) {
         id: user.id,
         telegram_id: user.telegram_id,
         username: user.username,
-        first_name: user.first_name
+        first_name: user.first_name,
+        is_admin: admins.includes(String(user.telegram_id))
       }
     });
   }
+
+  // FAVORITES
 
   if (path === "/api/favorites" && method === "GET") {
     const user = await getUser(request, env);
@@ -301,7 +240,8 @@ async function handle(request, env) {
       SELECT l.*
       FROM favorites f
       JOIN listings l ON l.id = f.listing_id
-      WHERE f.user_id = ? OR f.telegram_id = ?
+      WHERE (f.user_id = ? OR f.telegram_id = ?)
+        AND l.is_active = 1
       ORDER BY f.id DESC
     `).bind(user.id, user.telegram_id).all();
 
@@ -313,22 +253,22 @@ async function handle(request, env) {
     if (!user) return fail("Unauthorized", 401);
 
     const body = await request.json();
-    const listingId = Number(body.listing_id);
+    const id = Number(body.listing_id);
 
-    if (!Number.isInteger(listingId) || listingId < 1) {
+    if (!Number.isInteger(id) || id < 1) {
       return fail("Invalid listing_id");
     }
 
     const listing = await env.DB.prepare(
       "SELECT id FROM listings WHERE id = ? AND is_active = 1"
-    ).bind(listingId).first();
+    ).bind(id).first();
 
     if (!listing) return fail("Listing not found", 404);
 
     await env.DB.prepare(`
       INSERT OR IGNORE INTO favorites (telegram_id, user_id, listing_id)
       VALUES (?, ?, ?)
-    `).bind(user.telegram_id, user.id, listingId).run();
+    `).bind(user.telegram_id, user.id, id).run();
 
     return json({ ok: true });
   }
@@ -337,16 +277,18 @@ async function handle(request, env) {
     const user = await getUser(request, env);
     if (!user) return fail("Unauthorized", 401);
 
-    const listingId = Number(url.searchParams.get("listing_id"));
-    if (!Number.isInteger(listingId)) return fail("Invalid listing_id");
+    const id = Number(url.searchParams.get("listing_id"));
+    if (!Number.isInteger(id) || id < 1) return fail("Invalid listing_id");
 
     await env.DB.prepare(`
       DELETE FROM favorites
       WHERE listing_id = ? AND (user_id = ? OR telegram_id = ?)
-    `).bind(listingId, user.id, user.telegram_id).run();
+    `).bind(id, user.id, user.telegram_id).run();
 
     return json({ ok: true });
   }
+
+  // USER ORDERS
 
   if (path === "/api/orders" && method === "GET") {
     const user = await getUser(request, env);
@@ -368,243 +310,301 @@ async function handle(request, env) {
     if (!user) return fail("Unauthorized", 401);
 
     const body = await request.json();
-    const listingId = Number(body.listing_id);
-    const termDays = Math.max(1, Math.min(365, Number(body.term_days || 1)));
+    const id = Number(body.listing_id);
+    const term = Math.max(1, Math.min(365, Number(body.term_days || 1)));
 
-    if (!Number.isInteger(listingId) || listingId < 1) {
+    if (!Number.isInteger(id) || id < 1) {
       return fail("Invalid listing_id");
     }
 
     const listing = await env.DB.prepare(`
       SELECT * FROM listings
       WHERE id = ? AND is_active = 1 AND status = 'active'
-    `).bind(listingId).first();
+    `).bind(id).first();
 
     if (!listing) return fail("Listing unavailable", 404);
 
-    if (termDays < Number(listing.min_days || 1) ||
-        termDays > Number(listing.max_days || 365)) {
+    if (term < Number(listing.min_days || 1) ||
+        term > Number(listing.max_days || 365)) {
       return fail("Invalid rental term");
     }
 
     let amount = Number(listing.fixed_price ?? listing.price ?? 0);
 
     if (listing.price_day != null) {
-      amount = Number(listing.price_day) * termDays;
-    } else if (listing.price_week != null && termDays >= 7) {
-      amount = Number(listing.price_week) * Math.ceil(termDays / 7);
-    } else if (listing.price_month != null && termDays >= 30) {
-      amount = Number(listing.price_month) * Math.ceil(termDays / 30);
+      amount = Number(listing.price_day) * term;
+    } else if (listing.price_week != null && term >= 7) {
+      amount = Number(listing.price_week) * Math.ceil(term / 7);
+    } else if (listing.price_month != null && term >= 30) {
+      amount = Number(listing.price_month) * Math.ceil(term / 30);
     }
 
     if (!Number.isFinite(amount) || amount < 0) {
-      return fail("Invalid listing price", 400);
+      return fail("Invalid listing price");
     }
 
     const publicId = makePublicId();
-    const idempotency = String(body.idempotency_key || crypto.randomUUID());
-
-    try {
-      const result = await env.DB.prepare(`
-        INSERT INTO orders (
-          public_id, user_id, telegram_id, listing_id,
-          category, term_days, amount, currency, status,
-          fulfillment_mode, idempotency_key, created_at, updated_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-      `).bind(
-        publicId,
-        user.id,
-        user.telegram_id,
-        listingId,
-        listing.category || listing.category_id,
-        termDays,
-        amount,
-        listing.currency || "USD",
-        listing.fulfillment_mode || "manual",
-        idempotency
-      ).run();
-
-      return json({
-        ok: true,
-        order_id: result.meta?.last_row_id,
-        public_id: publicId,
-        amount,
-        currency: listing.currency || "USD",
-        status: "pending"
-      }, 201);
-    } catch (e) {
-      return fail("Could not create order: " + e.message, 500);
-    }
-  }
-
-  if (path === "/api/admin/stats" && method === "GET") {
-    const admin = await requireAdmin(request, env);
-    if (!admin) return fail("Admin access required", 403);
-
-    const [users, listings, orders, pending] = await Promise.all([
-      env.DB.prepare("SELECT COUNT(*) AS n FROM users").first(),
-      env.DB.prepare("SELECT COUNT(*) AS n FROM listings").first(),
-      env.DB.prepare("SELECT COUNT(*) AS n FROM orders").first(),
-      env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE status = 'pending'").first()
-    ]);
-
-    return json({
-      ok: true,
-      stats: {
-        users: users?.n || 0,
-        listings: listings?.n || 0,
-        orders: orders?.n || 0,
-        pending_orders: pending?.n || 0
-      }
-    });
-  }
-
-  if (path === "/api/admin/listings" && method === "POST") {
-    const admin = await requireAdmin(request, env);
-    if (!admin) return fail("Admin access required", 403);
-
-    const body = await request.json();
-    const allowed = categories.map(x => x.id);
-
-    const category = String(body.category || "");
-    const title = String(body.title || "").trim();
-
-    if (!allowed.includes(category)) return fail("Invalid category");
-    if (!title || title.length > 150) return fail("Invalid title");
-
-    const price = Number(body.price || 0);
-    if (!Number.isFinite(price) || price < 0) return fail("Invalid price");
 
     const result = await env.DB.prepare(`
-      INSERT INTO listings (
-        category_id, category, title, description, price,
-        currency, image_url, status, is_active, is_featured,
-        media_json, price_day, price_week, price_month,
-        fixed_price, min_days, max_days, fulfillment_mode,
-        public_identifier
+      INSERT INTO orders (
+        public_id, user_id, telegram_id, listing_id,
+        category, term_days, amount, currency, status,
+        fulfillment_mode, idempotency_key, created_at, updated_at
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'active', 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `).bind(
-      category,
-      category,
-      title,
-      String(body.description || ""),
-      price,
-      String(body.currency || "USD"),
-      String(body.image_url || ""),
-      body.is_featured ? 1 : 0,
-      JSON.stringify(Array.isArray(body.media) ? body.media : []),
-      body.price_day == null ? null : Number(body.price_day),
-      body.price_week == null ? null : Number(body.price_week),
-      body.price_month == null ? null : Number(body.price_month),
-      body.fixed_price == null ? null : Number(body.fixed_price),
-      Math.max(1, Number(body.min_days || 1)),
-      Math.max(1, Number(body.max_days || 365)),
-      String(body.fulfillment_mode || "manual"),
-      body.public_identifier ? String(body.public_identifier) : null
-    ).run();
-
-    await env.DB.prepare(`
-      INSERT INTO admin_audit
-        (admin_telegram_id, action, entity_type, entity_id, details_json)
-      VALUES (?, 'create', 'listing', ?, ?)
-    `).bind(
-      admin.telegram_id,
-      String(result.meta?.last_row_id || ""),
-      JSON.stringify({ title, category })
+      publicId, user.id, user.telegram_id, id,
+      listing.category || listing.category_id, term,
+      amount, listing.currency || "USD",
+      listing.fulfillment_mode || "manual",
+      String(body.idempotency_key || crypto.randomUUID())
     ).run();
 
     return json({
       ok: true,
-      listing_id: result.meta?.last_row_id
+      order_id: result.meta?.last_row_id,
+      public_id: publicId,
+      amount,
+      currency: listing.currency || "USD",
+      status: "pending"
     }, 201);
   }
 
-  if (path.startsWith("/api/admin/listings/") && method === "PATCH") {
+  // ADMIN AUTHORIZATION
+
+  if (path.startsWith("/api/admin/")) {
     const admin = await requireAdmin(request, env);
     if (!admin) return fail("Admin access required", 403);
 
-    const id = Number(path.split("/").pop());
-    if (!Number.isInteger(id)) return fail("Invalid listing ID");
+    // DASHBOARD STATS
 
-    const body = await request.json();
+    if (path === "/api/admin/stats" && method === "GET") {
+      const [users, listings, orders, pending] = await Promise.all([
+        env.DB.prepare("SELECT COUNT(*) AS n FROM users").first(),
+        env.DB.prepare("SELECT COUNT(*) AS n FROM listings").first(),
+        env.DB.prepare("SELECT COUNT(*) AS n FROM orders").first(),
+        env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE status = 'pending'").first()
+      ]);
 
-    const result = await env.DB.prepare(`
-      UPDATE listings SET
-        title = COALESCE(?, title),
-        description = COALESCE(?, description),
-        price = COALESCE(?, price),
-        image_url = COALESCE(?, image_url),
-        is_active = COALESCE(?, is_active),
-        is_featured = COALESCE(?, is_featured),
-        status = COALESCE(?, status)
-      WHERE id = ?
-    `).bind(
-      body.title ?? null,
-      body.description ?? null,
-      body.price == null ? null : Number(body.price),
-      body.image_url ?? null,
-      body.is_active == null ? null : (body.is_active ? 1 : 0),
-      body.is_featured == null ? null : (body.is_featured ? 1 : 0),
-      body.status ?? null,
-      id
-    ).run();
-
-    return json({ ok: true, changes: result.meta?.changes || 0 });
-  }
-
-  if (path === "/api/admin/orders" && method === "GET") {
-    const admin = await requireAdmin(request, env);
-    if (!admin) return fail("Admin access required", 403);
-
-    const result = await env.DB.prepare(`
-      SELECT o.*, u.username, u.first_name,
-             l.title AS listing_title
-      FROM orders o
-      LEFT JOIN users u ON u.id = o.user_id
-      LEFT JOIN listings l ON l.id = o.listing_id
-      ORDER BY o.id DESC
-      LIMIT 200
-    `).all();
-
-    return json({ ok: true, orders: result.results || [] });
-  }
-
-  if (path.startsWith("/api/admin/orders/") && path.endsWith("/status") && method === "PATCH") {
-    const admin = await requireAdmin(request, env);
-    if (!admin) return fail("Admin access required", 403);
-
-    const parts = path.split("/");
-    const id = Number(parts[4]);
-    const body = await request.json();
-
-    const allowed = ["pending", "processing", "completed", "cancelled"];
-    if (!Number.isInteger(id) || !allowed.includes(body.status)) {
-      return fail("Invalid order or status");
+      return json({
+        ok: true,
+        stats: {
+          users: users?.n || 0,
+          listings: listings?.n || 0,
+          orders: orders?.n || 0,
+          pending_orders: pending?.n || 0
+        }
+      });
     }
 
-    await env.DB.prepare(`
-      UPDATE orders
-      SET status = ?, admin_note = ?, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).bind(
-      body.status,
-      String(body.admin_note || ""),
-      id
-    ).run();
+    // ALL LISTINGS FOR ADMIN
 
-    await env.DB.prepare(`
-      INSERT INTO admin_audit
-        (admin_telegram_id, action, entity_type, entity_id, details_json)
-      VALUES (?, 'update_status', 'order', ?, ?)
-    `).bind(
-      admin.telegram_id,
-      String(id),
-      JSON.stringify({ status: body.status })
-    ).run();
+    if (path === "/api/admin/listings" && method === "GET") {
+      const result = await env.DB.prepare(
+        "SELECT * FROM listings ORDER BY id DESC LIMIT 300"
+      ).all();
 
-    return json({ ok: true });
+      return json({ ok: true, listings: result.results || [] });
+    }
+
+    // CREATE LISTING
+
+    if (path === "/api/admin/listings" && method === "POST") {
+      const body = await request.json();
+      const category = String(body.category || body.category_id || "");
+      const title = String(body.title || "").trim();
+
+      if (!categories.some(x => x.id === category)) {
+        return fail("Invalid category");
+      }
+
+      if (!title || title.length > 150) return fail("Invalid title");
+
+      const price = Number(body.price || 0);
+      if (!Number.isFinite(price) || price < 0) return fail("Invalid price");
+
+      const result = await env.DB.prepare(`
+        INSERT INTO listings (
+          category_id, category, title, description, price,
+          currency, image_url, status, is_active, is_featured,
+          media_json, price_day, price_week, price_month,
+          fixed_price, min_days, max_days, fulfillment_mode,
+          public_identifier
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'active', 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        category, category, title,
+        String(body.description || ""),
+        price,
+        String(body.currency || "USD"),
+        String(body.image_url || ""),
+        body.is_featured ? 1 : 0,
+        JSON.stringify(Array.isArray(body.media) ? body.media : []),
+        body.price_day == null ? null : Number(body.price_day),
+        body.price_week == null ? null : Number(body.price_week),
+        body.price_month == null ? null : Number(body.price_month),
+        body.fixed_price == null ? null : Number(body.fixed_price),
+        Math.max(1, Number(body.min_days || 1)),
+        Math.max(1, Number(body.max_days || 365)),
+        String(body.fulfillment_mode || "manual"),
+        body.public_identifier ? String(body.public_identifier) : null
+      ).run();
+
+      const id = result.meta?.last_row_id;
+
+      await audit(env, admin, "create", "listing", id, { title, category });
+
+      return json({ ok: true, listing_id: id }, 201);
+    }
+
+    // UPDATE LISTING
+
+    const listingMatch = path.match(/^\/api\/admin\/listings\/(\d+)$/);
+
+    if (listingMatch && method === "PATCH") {
+      const id = Number(listingMatch[1]);
+      const body = await request.json();
+
+      const fields = {
+        title: body.title,
+        description: body.description,
+        price: body.price,
+        currency: body.currency,
+        image_url: body.image_url,
+        is_active: body.is_active == null ? null : (body.is_active ? 1 : 0),
+        is_featured: body.is_featured == null ? null : (body.is_featured ? 1 : 0),
+        status: body.status,
+        public_identifier: body.public_identifier
+      };
+
+      const allowedFields = Object.entries(fields)
+        .filter(([, value]) => value !== undefined && value !== null);
+
+      if (!allowedFields.length) return fail("No fields to update");
+
+      const assignments = allowedFields.map(([key]) => `${key} = ?`).join(", ");
+      const values = allowedFields.map(([, value]) => value);
+
+      await env.DB.prepare(
+        `UPDATE listings SET ${assignments} WHERE id = ?`
+      ).bind(...values, id).run();
+
+      await audit(env, admin, "update", "listing", id, body);
+
+      return json({ ok: true });
+    }
+
+    // DELETE LISTING (SOFT DELETE)
+
+    if (listingMatch && method === "DELETE") {
+      const id = Number(listingMatch[1]);
+
+      await env.DB.prepare(`
+        UPDATE listings
+        SET is_active = 0, status = 'deleted'
+        WHERE id = ?
+      `).bind(id).run();
+
+      await audit(env, admin, "delete", "listing", id);
+
+      return json({ ok: true });
+    }
+
+    // ADMIN ORDERS
+
+    if (path === "/api/admin/orders" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT o.*, u.username, u.first_name,
+               l.title AS listing_title
+        FROM orders o
+        LEFT JOIN users u ON u.id = o.user_id
+        LEFT JOIN listings l ON l.id = o.listing_id
+        ORDER BY o.id DESC LIMIT 300
+      `).all();
+
+      return json({ ok: true, orders: result.results || [] });
+    }
+
+    const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)\/status$/);
+
+    if (orderMatch && method === "PATCH") {
+      const id = Number(orderMatch[1]);
+      const body = await request.json();
+
+      if (!ADMIN_STATUSES.includes(body.status)) {
+        return fail("Invalid status");
+      }
+
+      await env.DB.prepare(`
+        UPDATE orders
+        SET status = ?, admin_note = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).bind(
+        body.status,
+        String(body.admin_note || ""),
+        id
+      ).run();
+
+      await audit(env, admin, "update_status", "order", id, {
+        status: body.status
+      });
+
+      return json({ ok: true });
+    }
+
+    // UPDATE STARS PRICE
+
+    const starsMatch = path.match(/^\/api\/admin\/prices\/stars\/(\d+)$/);
+
+    if (starsMatch && method === "PATCH") {
+      const id = Number(starsMatch[1]);
+      const body = await request.json();
+
+      const price = Number(body.price_usd);
+      if (!Number.isFinite(price) || price < 0) return fail("Invalid price");
+
+      await env.DB.prepare(`
+        UPDATE stars_prices
+        SET price_usd = ?, is_active = ?
+        WHERE id = ?
+      `).bind(
+        price,
+        body.is_active === false ? 0 : 1,
+        id
+      ).run();
+
+      await audit(env, admin, "update_price", "stars", id, body);
+
+      return json({ ok: true });
+    }
+
+    // UPDATE PREMIUM PRICE
+
+    const premiumMatch = path.match(/^\/api\/admin\/prices\/premium\/(\d+)$/);
+
+    if (premiumMatch && method === "PATCH") {
+      const id = Number(premiumMatch[1]);
+      const body = await request.json();
+
+      const price = Number(body.price_usd);
+      if (!Number.isFinite(price) || price < 0) return fail("Invalid price");
+
+      await env.DB.prepare(`
+        UPDATE premium_prices
+        SET price_usd = ?, is_active = ?
+        WHERE id = ?
+      `).bind(
+        price,
+        body.is_active === false ? 0 : 1,
+        id
+      ).run();
+
+      await audit(env, admin, "update_price", "premium", id, body);
+
+      return json({ ok: true });
+    }
+
+    return fail("Admin route not found", 404);
   }
 
   return fail("Not found", 404);
