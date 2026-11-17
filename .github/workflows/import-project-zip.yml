@@ -1,0 +1,49 @@
+
+name: Import Prestige Market ZIP
+
+on:
+  push:
+    paths:
+      - "project-upload.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP safely
+        run: |
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+
+          archive = Path("project-upload.zip")
+          if not archive.exists():
+              raise SystemExit("project-upload.zip not found")
+
+          root = Path(".").resolve()
+
+          with zipfile.ZipFile(archive) as z:
+              for item in z.infolist():
+                  target = (root / item.filename).resolve()
+                  if target != root and root not in target.parents:
+                      raise SystemExit("Unsafe ZIP path detected")
+              z.extractall(root)
+
+          archive.unlink()
+          print("Project extracted successfully")
+          PY
+
+      - name: Commit imported project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Import Prestige Market project"
+          git push
