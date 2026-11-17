@@ -8,8 +8,8 @@ APP_NAME = "Prestige Market"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "prestige-market-db"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_name = "prestige-markett-db"
+database_id = "90760258-d192-41e4-ab1a-f54aadb5bf78"
 
 # Optional media bucket. Create it with:
 # npx wrangler r2 bucket create prestige-market-media
