@@ -4,317 +4,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#101114">
+<meta name="theme-color" content="#090711">
 <title>Prestige Market</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
- 
-/* ===== PRESTIGE FUTURE 3D HOME ===== */
-.home-hero{
- position:relative;
- isolation:isolate;
- overflow:hidden;
- min-height:365px;
- margin:12px 16px 23px;
- padding:22px;
- border-radius:27px;
- border:1px solid #9860d477;
- background:
- radial-gradient(ellipse at 85% 30%,#873bce55,transparent 42%),
- radial-gradient(ellipse at 10% 100%,#54258a55,transparent 45%),
- linear-gradient(145deg,#241637,#100d1a 65%,#090711);
- box-shadow:0 18px 45px #0009,0 0 30px #923dff22,inset 0 1px #ffffff22;
-}
-.home-hero:before{
- content:"";
- position:absolute;
- inset:0;
- z-index:-1;
- opacity:.16;
- background-image:
- linear-gradient(#bd8aff22 1px,transparent 1px),
- linear-gradient(90deg,#bd8aff22 1px,transparent 1px);
- background-size:28px 28px;
- mask-image:linear-gradient(120deg,black,transparent 85%);
-}
-.home-hero-head{
- display:flex;
- align-items:center;
- justify-content:space-between;
-}
-.home-pill{
- display:inline-flex;
- align-items:center;
- gap:7px;
- padding:8px 11px;
- border-radius:30px;
- background:#a15aff20;
- border:1px solid #b77aff55;
- color:#d9baff;
- font-size:9px;
- font-weight:900;
- letter-spacing:1.5px;
-}
-.home-live-dot{
- width:7px;height:7px;
- border-radius:50%;
- background:#bd8aff;
- box-shadow:0 0 12px #bd8aff;
-}
-.home-index{
- color:#82718f;
- font-size:10px;
- letter-spacing:2px;
-}
-.home-hero-content{
- position:relative;
- z-index:2;
- margin-top:28px;
- max-width:78%;
-}
-.home-kicker{
- color:#c28cff;
- font-size:10px;
- font-weight:900;
- letter-spacing:2px;
-}
-.home-hero h1{
- font-size:32px;
- line-height:1.12;
- letter-spacing:-1px;
- margin:13px 0;
- font-weight:950;
-}
-.home-hero h1 span{
- background:linear-gradient(100deg,#fff,#c69aff 45%,#984cff);
- -webkit-background-clip:text;
- color:transparent;
- filter:drop-shadow(0 0 13px #a45aff55);
-}
-.home-hero-content p{
- color:#b5a8c8;
- font-size:12px;
- line-height:1.65;
- max-width:235px;
- margin:0 0 20px;
-}
-.home-primary{
- display:inline-flex;
- align-items:center;
- gap:15px;
- padding:14px 17px;
- border-radius:13px;
- color:white;
- font-size:12px;
- font-weight:900;
- border:1px solid #e0c0ff99;
- background:linear-gradient(120deg,#c18aff,#8d43e5 55%,#6125ac);
- box-shadow:0 6px 0 #40176f,0 12px 25px #8e3de955,inset 0 1px #ffffff80;
-}
-.home-primary span{font-size:17px}
-.home-primary:active{
- transform:translateY(4px);
- box-shadow:0 2px 0 #40176f,0 6px 12px #8e3de955;
-}
-.home-art{
- position:absolute;
- width:165px;
- height:165px;
- right:-13px;
- top:115px;
- z-index:1;
- pointer-events:none;
-}
-.home-orbit{
- position:absolute;
- inset:9px;
- border:1px solid #c28aff66;
- border-radius:50%;
- transform:rotateX(65deg) rotate(-25deg);
- box-shadow:0 0 25px #a24cff33;
-}
-.home-orbit.two{
- inset:23px -7px;
- transform:rotateX(65deg) rotate(55deg);
- border-color:#e08aff66;
-}
-.home-orbit-dot{
- position:absolute;
- top:14px;
- right:20px;
- color:#e4c5ff;
- font-size:22px;
- text-shadow:0 0 18px #c47aff;
-}
-.home-core{
- position:absolute;
- left:43px;
- top:39px;
- width:80px;
- height:80px;
- display:grid;
- place-items:center;
- border-radius:24px;
- font-size:34px;
- font-weight:950;
- color:white;
- background:linear-gradient(145deg,#d4aaff,#8a42d8 48%,#3c1768);
- border:1px solid #e7caff;
- box-shadow:0 15px 30px #0008,0 0 35px #a44dff88,inset 0 3px 9px #ffffff88,inset 0 -8px 15px #35105e;
- transform:rotate(-12deg);
-}
-.home-core:after{
- content:"";
- position:absolute;
- inset:7px;
- border:1px solid #ffffff55;
- border-radius:18px;
-}
-.home-art-label{
- position:absolute;
- bottom:8px;
- right:4px;
- padding:7px 10px;
- background:#211332dd;
- border:1px solid #a56bd577;
- border-radius:9px;
- color:#e0c8ff;
- font-size:9px;
- font-weight:900;
- letter-spacing:1px;
- box-shadow:0 5px 15px #0008;
-}
-.home-hero-bottom{
- position:absolute;
- bottom:17px;
- left:22px;
- right:22px;
- padding-top:12px;
- border-top:1px solid #ffffff1b;
- display:flex;
- justify-content:space-between;
- color:#9988ac;
- font-size:9px;
- letter-spacing:1.3px;
-}
-.home-section{padding:0 16px;margin:25px 0}
-.home-section-title{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:14px;
-}
-.home-section-title h2{
- font-size:18px;
- margin:0;
- font-weight:900;
-}
-.home-link{
- color:#c49aff;
- font-size:11px;
- font-weight:800;
-}
-.home-category-grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:11px;
-}
-.home-category{
- position:relative;
- min-width:0;
- min-height:105px;
- padding:14px;
- text-align:left;
- color:white;
- border-radius:17px;
- border:1px solid #65418a;
- background:
- radial-gradient(circle at 100% 0%,#a14eff25,transparent 55%),
- linear-gradient(145deg,#241a35,#12101c);
- box-shadow:0 6px 0 #090710,0 11px 19px #0006,inset 0 1px #ffffff18;
- overflow:hidden;
-}
-.home-category:after{
- content:"";
- position:absolute;
- width:65px;height:65px;
- right:-25px;bottom:-29px;
- border:1px solid #b77aff33;
- border-radius:50%;
- box-shadow:0 0 0 9px #a45aff0a,0 0 0 18px #a45aff08;
-}
-.home-category:active{
- transform:translateY(4px);
- box-shadow:0 2px 0 #090710,0 5px 10px #0006;
-}
-.home-category-icon{
- display:block;
- font-size:25px;
- margin-bottom:10px;
- filter:drop-shadow(0 0 9px #a45aff77);
-}
-.home-category b{
- display:block;
- font-size:13px;
- font-weight:900;
-}
-.home-category small{
- display:block;
- color:#a99bb9;
- font-size:10px;
- margin-top:5px;
-}
-.home-category-arrow{
- position:absolute;
- right:13px;
- top:13px;
- color:#b98bff;
- font-size:15px;
-}
-.home-note{
- display:flex;
- align-items:center;
- gap:12px;
- margin:22px 16px;
- padding:15px;
- border-radius:16px;
- background:linear-gradient(110deg,#28183b,#15101f);
- border:1px solid #67418b;
- box-shadow:0 7px 20px #0005;
-}
-.home-note-icon{
- width:39px;height:39px;
- display:grid;place-items:center;
- flex-shrink:0;
- border-radius:12px;
- background:linear-gradient(145deg,#bd8aff,#7133bd);
- box-shadow:0 4px 0 #421d79,0 0 15px #9d4cff55;
- font-size:19px;
-}
-.home-note b{display:block;font-size:12px}
-.home-note small{
- display:block;
- color:#a99bb9;
- font-size:10px;
- margin-top:5px;
- line-height:1.5;
-}
-@media(max-width:360px){
- .home-hero{padding:18px;min-height:370px}
- .home-hero h1{font-size:28px}
- .home-art{right:-28px;opacity:.85}
- .home-hero-content{max-width:82%}
-}
+
 <style>
 :root{
- --bg:#08070e;
- --panel:#11101b;
- --panel2:#191629;
- --line:#29233e;
- --text:#f8f5ff;
- --muted:#9690aa;
+ --bg:#090711;
+ --panel:#151020;
+ --panel2:#20152e;
+ --line:#493365;
+ --text:#faf7ff;
+ --muted:#a69ab7;
  --purple:#985cff;
  --purple2:#c49aff;
- --pink:#e05bff;
+ --pink:#df76ff;
  --green:#70e0b0;
  --red:#ff718c;
  --glow:0 0 28px #963dff35;
@@ -329,335 +33,362 @@ body{
  var(--bg);
  color:var(--text);
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- padding-bottom:100px;
+ padding-bottom:calc(100px + env(safe-area-inset-bottom));
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer;transition:transform .2s,filter .2s,box-shadow .2s}
-button:active{transform:scale(.96)}
+button:active{transform:scale(.97)}
 .top{
- padding:21px 18px 15px;
- display:flex;
- justify-content:space-between;
- align-items:center;
+ padding:calc(18px + env(safe-area-inset-top)) 18px 15px;
+ display:flex;justify-content:space-between;align-items:center;
 }
-.brand{
- font-size:18px;
- font-weight:950;
- letter-spacing:2px;
- text-shadow:0 0 22px #a45aff70;
-}
+.brand{font-size:18px;font-weight:950;letter-spacing:2px;text-shadow:0 0 22px #a45aff70}
 .brand span{
  background:linear-gradient(110deg,#c49aff,#873cff,#ed8bff);
- -webkit-background-clip:text;
- color:transparent;
+ -webkit-background-clip:text;color:transparent;
 }
-.subbrand{
- font-size:9px;
- letter-spacing:3px;
- color:var(--muted);
- margin-top:5px;
-}
+.subbrand{font-size:9px;letter-spacing:2.5px;color:var(--muted);margin-top:5px}
 .avatar{
- width:46px;height:46px;
- border-radius:16px;
- display:grid;place-items:center;
- font-size:21px;font-weight:950;
- color:white;
- background:linear-gradient(145deg,#b77aff,#6325b8 55%,#32115e);
+ width:46px;height:46px;border-radius:16px;
+ display:grid;place-items:center;font-size:21px;font-weight:950;
+ color:white;background:linear-gradient(145deg,#b77aff,#6325b8 55%,#32115e);
  border:1px solid #d1a5ff80;
  box-shadow:0 7px 22px #8a39ff55,inset 0 2px 5px #ffffff55;
 }
-.hero{
- margin:12px 16px 22px;
- padding:26px 21px;
- border-radius:25px;
+.page{display:none}
+.page.active{display:block}
+
+/* HOME FUTURE 3D */
+.home-hero{
+ position:relative;isolation:isolate;overflow:hidden;
+ min-height:365px;margin:12px 16px 23px;padding:22px;
+ border-radius:27px;border:1px solid #9860d477;
  background:
- radial-gradient(circle at 90% 10%,#b04bff55,transparent 35%),
- linear-gradient(145deg,#29203e,#151020 65%,#100d19);
- border:1px solid #8c55c766;
- box-shadow:0 15px 40px #0008,inset 0 1px #ffffff18,var(--glow);
- position:relative;
- overflow:hidden;
+ radial-gradient(ellipse at 85% 30%,#873bce55,transparent 42%),
+ radial-gradient(ellipse at 10% 100%,#54258a55,transparent 45%),
+ linear-gradient(145deg,#241637,#100d1a 65%,#090711);
+ box-shadow:0 18px 45px #0009,0 0 30px #923dff22,inset 0 1px #ffffff22;
 }
-.hero:after{
- content:"✦";
- position:absolute;
- right:17px;top:17px;
- font-size:105px;
- color:#c18aff20;
- text-shadow:0 0 45px #bd65ff55;
+.home-hero:before{
+ content:"";position:absolute;inset:0;z-index:-1;opacity:.16;
+ background-image:linear-gradient(#bd8aff22 1px,transparent 1px),linear-gradient(90deg,#bd8aff22 1px,transparent 1px);
+ background-size:28px 28px;
+ mask-image:linear-gradient(120deg,black,transparent 85%);
 }
-.eyebrow{
- font-size:10px;
- letter-spacing:2.5px;
- color:#c69aff;
- font-weight:800;
+.home-hero-head{display:flex;align-items:center;justify-content:space-between}
+.home-pill{
+ display:inline-flex;align-items:center;gap:7px;padding:8px 11px;
+ border-radius:30px;background:#a15aff20;border:1px solid #b77aff55;
+ color:#d9baff;font-size:9px;font-weight:900;letter-spacing:1.5px;
 }
-.hero h1{
- font-size:27px;
- line-height:1.15;
- margin:14px 0 9px;
- max-width:270px;
+.home-live-dot{width:7px;height:7px;border-radius:50%;background:#bd8aff;box-shadow:0 0 12px #bd8aff}
+.home-index{color:#82718f;font-size:10px;letter-spacing:2px}
+.home-hero-content{position:relative;z-index:2;margin-top:28px;max-width:78%}
+.home-kicker{color:#c28cff;font-size:10px;font-weight:900;letter-spacing:2px}
+.home-hero h1{font-size:32px;line-height:1.12;letter-spacing:-1px;margin:13px 0;font-weight:950}
+.home-hero h1 span{
+ background:linear-gradient(100deg,#fff,#c69aff 45%,#984cff);
+ -webkit-background-clip:text;color:transparent;
+ filter:drop-shadow(0 0 13px #a45aff55);
 }
-.hero p{
- font-size:12px;
- line-height:1.6;
- color:#c0b6d1;
- margin:0 0 20px;
+.home-hero-content p{color:#b5a8c8;font-size:12px;line-height:1.65;max-width:235px;margin:0 0 20px}
+.home-primary{
+ display:inline-flex;align-items:center;gap:15px;padding:14px 17px;
+ border-radius:13px;color:white;font-size:12px;font-weight:900;
+ border:1px solid #e0c0ff99;
+ background:linear-gradient(120deg,#c18aff,#8d43e5 55%,#6125ac);
+ box-shadow:0 6px 0 #40176f,0 12px 25px #8e3de955,inset 0 1px #ffffff80;
 }
-.goldbtn,.full{
- background:linear-gradient(115deg,#d3a5ff,#9850ff 48%,#7130d2);
- border:1px solid #e0c2ff75;
- color:white;
- padding:13px 18px;
- border-radius:13px;
- font-weight:850;
- box-shadow:0 7px 0 #421c7a,0 12px 25px #913cff55,inset 0 1px #ffffff75;
- text-shadow:0 1px 3px #35105c;
+.home-primary span{font-size:17px}
+.home-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #40176f,0 6px 12px #8e3de955}
+.home-art{position:absolute;width:165px;height:165px;right:-13px;top:115px;z-index:1;pointer-events:none}
+.home-orbit{
+ position:absolute;inset:9px;border:1px solid #c28aff66;border-radius:50%;
+ transform:rotateX(65deg) rotate(-25deg);box-shadow:0 0 25px #a24cff33;
 }
-.goldbtn:active,.full:active{
- transform:translateY(4px);
- box-shadow:0 3px 0 #421c7a,0 7px 14px #913cff44;
+.home-orbit.two{inset:23px -7px;transform:rotateX(65deg) rotate(55deg);border-color:#e08aff66}
+.home-orbit-dot{position:absolute;top:14px;right:20px;color:#e4c5ff;font-size:22px;text-shadow:0 0 18px #c47aff}
+.home-core{
+ position:absolute;left:43px;top:39px;width:80px;height:80px;
+ display:grid;place-items:center;border-radius:24px;font-size:34px;font-weight:950;color:white;
+ background:linear-gradient(145deg,#d4aaff,#8a42d8 48%,#3c1768);
+ border:1px solid #e7caff;
+ box-shadow:0 15px 30px #0008,0 0 35px #a44dff88,inset 0 3px 9px #ffffff88,inset 0 -8px 15px #35105e;
+ transform:rotate(-12deg);
 }
+.home-core:after{content:"";position:absolute;inset:7px;border:1px solid #ffffff55;border-radius:18px}
+.home-art-label{
+ position:absolute;bottom:8px;right:4px;padding:7px 10px;
+ background:#211332dd;border:1px solid #a56bd577;border-radius:9px;
+ color:#e0c8ff;font-size:9px;font-weight:900;letter-spacing:1px;box-shadow:0 5px 15px #0008;
+}
+.home-hero-bottom{
+ position:absolute;bottom:17px;left:22px;right:22px;padding-top:12px;
+ border-top:1px solid #ffffff1b;display:flex;justify-content:space-between;
+ color:#9988ac;font-size:9px;letter-spacing:1.3px;
+}
+.home-section{padding:0 16px;margin:25px 0}
+.home-section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.home-section-title h2{font-size:18px;margin:0;font-weight:900}
+.home-link{color:#c49aff;font-size:11px;font-weight:800}
+.home-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.home-category{
+ position:relative;min-width:0;min-height:105px;padding:14px;text-align:left;color:white;
+ border-radius:17px;border:1px solid #65418a;
+ background:radial-gradient(circle at 100% 0%,#a14eff25,transparent 55%),linear-gradient(145deg,#241a35,#12101c);
+ box-shadow:0 6px 0 #090710,0 11px 19px #0006,inset 0 1px #ffffff18;overflow:hidden;
+}
+.home-category:after{
+ content:"";position:absolute;width:65px;height:65px;right:-25px;bottom:-29px;
+ border:1px solid #b77aff33;border-radius:50%;
+ box-shadow:0 0 0 9px #a45aff0a,0 0 0 18px #a45aff08;
+}
+.home-category:active{transform:translateY(4px);box-shadow:0 2px 0 #090710,0 5px 10px #0006}
+.home-category-icon{display:block;font-size:25px;margin-bottom:10px;filter:drop-shadow(0 0 9px #a45aff77)}
+.home-category b{display:block;font-size:13px;font-weight:900}
+.home-category small{display:block;color:#a99bb9;font-size:10px;margin-top:5px}
+.home-category-arrow{position:absolute;right:13px;top:13px;color:#b98bff;font-size:15px}
+.home-note{
+ display:flex;align-items:center;gap:12px;margin:22px 16px;padding:15px;
+ border-radius:16px;background:linear-gradient(110deg,#28183b,#15101f);
+ border:1px solid #67418b;box-shadow:0 7px 20px #0005;
+}
+.home-note-icon{
+ width:39px;height:39px;display:grid;place-items:center;flex-shrink:0;
+ border-radius:12px;background:linear-gradient(145deg,#bd8aff,#7133bd);
+ box-shadow:0 4px 0 #421d79,0 0 15px #9d4cff55;font-size:19px;
+}
+.home-note b{display:block;font-size:12px}
+.home-note small{display:block;color:#a99bb9;font-size:10px;margin-top:5px;line-height:1.5}
+
+/* GENERAL UI */
 .section{padding:0 16px;margin:23px 0}
-.sectionhead{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:14px;
-}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .sectionhead h2{font-size:18px;margin:0;font-weight:850}
 .muted{color:var(--muted);font-size:12px}
+.eyebrow{font-size:10px;letter-spacing:2.5px;color:#c69aff;font-weight:800}
 .search{margin:0 16px 18px;display:flex;gap:9px}
 .search input{
- width:100%;
- background:#151221;
- border:1px solid #493367;
- border-radius:15px;
- padding:15px;
- color:white;
- outline:none;
+ width:100%;background:#151221;border:1px solid #493367;border-radius:15px;
+ padding:15px;color:white;outline:none;
  box-shadow:inset 0 3px 10px #0008,0 4px 16px #0003;
 }
-.search input:focus,.field:focus{
- border-color:var(--purple);
- box-shadow:0 0 0 3px #9c55ff22,0 0 20px #913cff20;
-}
-.chips{
- display:flex;gap:9px;overflow:auto;
- padding:0 16px 10px;scrollbar-width:none;
-}
+.search input:focus,.field:focus{border-color:var(--purple);box-shadow:0 0 0 3px #9c55ff22,0 0 20px #913cff20}
+.chips{display:flex;gap:9px;overflow:auto;padding:0 16px 10px;scrollbar-width:none}
 .chip{
- white-space:nowrap;
- background:linear-gradient(145deg,#211a32,#12101c);
- border:1px solid #493367;
- color:#c6b9da;
- padding:11px 15px;
- border-radius:13px;
- font-size:12px;
- box-shadow:0 4px 0 #090710,0 7px 14px #0005;
+ white-space:nowrap;background:linear-gradient(145deg,#211a32,#12101c);
+ border:1px solid #493367;color:#c6b9da;padding:11px 15px;border-radius:13px;
+ font-size:12px;box-shadow:0 4px 0 #090710,0 7px 14px #0005;
 }
 .chip.active{
- background:linear-gradient(120deg,#bd8aff,#7835d1);
- color:white;border-color:#d7b7ff;
- box-shadow:0 4px 0 #421d79,0 0 20px #9d4cff55;
- font-weight:850;
+ background:linear-gradient(120deg,#bd8aff,#7835d1);color:white;border-color:#d7b7ff;
+ box-shadow:0 4px 0 #421d79,0 0 20px #9d4cff55;font-weight:850;
 }
-.grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:12px;
-}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .card{
- background:linear-gradient(145deg,#1b1729,#100f19);
- border:1px solid #493365;
- border-radius:19px;
- overflow:hidden;
- min-width:0;
+ background:linear-gradient(145deg,#1b1729,#100f19);border:1px solid #493365;
+ border-radius:19px;overflow:hidden;min-width:0;
  box-shadow:0 9px 24px #0007,inset 0 1px #ffffff0b;
  transition:transform .2s,border-color .2s;
 }
 .card:active{transform:scale(.98);border-color:#a66aff}
 .cover{
- height:135px;
- background:radial-gradient(circle,#39215d,#171222 70%);
- display:grid;place-items:center;
- font-size:43px;overflow:hidden;
+ height:135px;background:radial-gradient(circle,#39215d,#171222 70%);
+ display:grid;place-items:center;font-size:43px;overflow:hidden;
 }
 .cover img,.cover video{width:100%;height:100%;object-fit:cover}
 .cardbody{padding:13px}
 .cardtitle{font-weight:850;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
 .carddesc{font-size:11px;color:var(--muted);margin-top:7px;min-height:27px}
-.price{
- color:#d7b5ff;
- font-weight:900;
- font-size:16px;
- margin:11px 0;
- text-shadow:0 0 15px #a451ff55;
-}
+.price{color:#d7b5ff;font-weight:900;font-size:16px;margin:11px 0;text-shadow:0 0 15px #a451ff55}
 .cardactions{display:flex;gap:8px}
 .smallbtn{
- border:1px solid #d4b3ff66;
- background:linear-gradient(120deg,#b77aff,#7734ce);
- color:white;border-radius:10px;
- padding:10px 8px;font-size:11px;font-weight:850;flex:1;
+ border:1px solid #d4b3ff66;background:linear-gradient(120deg,#b77aff,#7734ce);
+ color:white;border-radius:10px;padding:10px 8px;font-size:11px;font-weight:850;flex:1;
  box-shadow:0 4px 0 #401b73,0 7px 13px #0005;
 }
-.iconbtn{
- background:#211a31;
- border:1px solid #533875;
- color:#e6d6ff;border-radius:10px;padding:8px 11px;
-}
+.iconbtn{background:#211a31;border:1px solid #533875;color:#e6d6ff;border-radius:10px;padding:8px 11px}
 .empty{
- background:linear-gradient(145deg,#191526,#100e18);
- border:1px dashed #614487;
- border-radius:17px;
- text-align:center;padding:29px 14px;
- color:var(--muted);font-size:13px;grid-column:1/-1;
+ background:linear-gradient(145deg,#191526,#100e18);border:1px dashed #614487;
+ border-radius:17px;text-align:center;padding:29px 14px;color:var(--muted);
+ font-size:13px;grid-column:1/-1;
 }
 .pricecard{
- background:linear-gradient(145deg,#211832,#13101e);
- border:1px solid #563b78;
- border-radius:16px;padding:16px;
- display:flex;align-items:center;
+ background:linear-gradient(145deg,#211832,#13101e);border:1px solid #563b78;
+ border-radius:16px;padding:16px;display:flex;align-items:center;
  justify-content:space-between;margin-bottom:11px;
  box-shadow:0 7px 18px #0005,inset 0 1px #ffffff12;
 }
 .pricecard strong{font-size:16px}
 .pricecard small{display:block;color:var(--muted);margin-top:5px}
 .pricecard button{
- background:linear-gradient(120deg,#bd8aff,#7935d0);
- color:white;border:0;border-radius:11px;
- padding:11px 14px;font-weight:850;
- box-shadow:0 4px 0 #421d79;
+ background:linear-gradient(120deg,#bd8aff,#7935d0);color:white;border:0;
+ border-radius:11px;padding:11px 14px;font-weight:850;box-shadow:0 4px 0 #421d79;
 }
 .nav{
- position:fixed;bottom:0;left:0;right:0;
- background:#100d1bed;
- backdrop-filter:blur(20px);
- border-top:1px solid #50366d;
+ position:fixed;bottom:0;left:0;right:0;background:#100d1bed;
+ backdrop-filter:blur(20px);border-top:1px solid #50366d;
  display:flex;justify-content:space-around;
  padding:11px 5px calc(11px + env(safe-area-inset-bottom));
- z-index:10;
- box-shadow:0 -8px 30px #0008;
+ z-index:10;box-shadow:0 -8px 30px #0008;
 }
 .nav button{
- background:none;border:0;color:#8e849f;
- font-size:10px;display:flex;flex-direction:column;
- gap:5px;align-items:center;min-width:55px;
+ background:none;border:0;color:#8e849f;font-size:10px;
+ display:flex;flex-direction:column;gap:5px;align-items:center;min-width:55px;
 }
 .nav button b{font-size:21px;font-weight:400}
-.nav button.active{
- color:#d5aaff;
- text-shadow:0 0 15px #b56aff;
-}
-.page{display:none}
-.page.active{display:block}
+.nav button.active{color:#d5aaff;text-shadow:0 0 15px #b56aff}
 .panel{
- background:linear-gradient(145deg,#1c172a,#12101c);
- border:1px solid #493365;
+ background:linear-gradient(145deg,#1c172a,#12101c);border:1px solid #493365;
  border-radius:17px;padding:15px;margin-bottom:12px;
  box-shadow:0 8px 22px #0005,inset 0 1px #ffffff0c;
 }
 .field{
- display:block;width:100%;margin:8px 0 13px;
- padding:14px;background:#0d0b14;
- border:1px solid #493365;border-radius:12px;
- color:white;outline:none;
+ display:block;width:100%;margin:8px 0 13px;padding:14px;
+ background:#0d0b14;border:1px solid #493365;border-radius:12px;color:white;outline:none;
 }
 textarea.field{min-height:90px;resize:vertical}
 label{font-size:12px;color:#c9b8df}
+.full{
+ background:linear-gradient(115deg,#d3a5ff,#9850ff 48%,#7130d2);
+ border:1px solid #e0c2ff75;color:white;padding:13px 18px;
+ border-radius:13px;font-weight:850;box-shadow:0 7px 0 #421c7a,0 12px 25px #913cff55,inset 0 1px #ffffff75;
+ text-shadow:0 1px 3px #35105c;
+}
 .full{width:100%;padding:14px}
-.secondary{
- background:linear-gradient(145deg,#282039,#171322);
- color:#e6d8f9;border:1px solid #614486;
- box-shadow:0 4px 0 #090710,0 8px 15px #0005;
- text-shadow:none;
-}
-.danger{
- background:linear-gradient(120deg,#a63860,#641e3c);
- color:white;border:1px solid #e879a0;
- box-shadow:0 4px 0 #391025;
-}
+.full:active{transform:translateY(4px);box-shadow:0 3px 0 #421c7a,0 7px 14px #913cff44}
+.secondary{background:linear-gradient(145deg,#282039,#171322);color:#e6d8f9;border:1px solid #614486;box-shadow:0 4px 0 #090710,0 8px 15px #0005;text-shadow:none}
+.danger{background:linear-gradient(120deg,#a63860,#641e3c);color:white;border:1px solid #e879a0;box-shadow:0 4px 0 #391025}
 .row{display:flex;gap:9px;align-items:center}
 .row>*{flex:1;min-width:0}
 .itemrow{padding:14px 0;border-bottom:1px solid #352745}
 .itemrow:last-child{border:0}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .stat{
- background:linear-gradient(145deg,#29203d,#15111f);
- border:1px solid #65438a;
- border-radius:16px;padding:15px;
- box-shadow:0 7px 0 #090710,0 12px 20px #0005,inset 0 1px #ffffff18;
+ background:linear-gradient(145deg,#29203d,#15111f);border:1px solid #65438a;
+ border-radius:16px;padding:15px;box-shadow:0 7px 0 #090710,0 12px 20px #0005,inset 0 1px #ffffff18;
 }
-.stat strong{
- font-size:25px;color:#d3a5ff;display:block;
- text-shadow:0 0 17px #a451ff77;
-}
+.stat strong{font-size:25px;color:#d3a5ff;display:block;text-shadow:0 0 17px #a451ff77}
 .stat small{color:var(--muted)}
 .notice{font-size:12px;color:var(--muted);line-height:1.6}
 .modal{
- position:fixed;inset:0;background:#05030bcc;
- backdrop-filter:blur(9px);z-index:20;
- display:none;align-items:flex-end;
+ position:fixed;inset:0;background:#05030bcc;backdrop-filter:blur(9px);
+ z-index:20;display:none;align-items:flex-end;
 }
 .modal.open{display:flex}
 .modalbox{
- background:linear-gradient(145deg,#211832,#100e18);
- border:1px solid #694797;
- border-radius:24px 24px 0 0;
- padding:20px;width:100%;max-height:85vh;overflow:auto;
+ background:linear-gradient(145deg,#211832,#100e18);border:1px solid #694797;
+ border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:85vh;overflow:auto;
  box-shadow:0 -10px 45px #8b3bff25;
 }
-.modalhead{
- display:flex;justify-content:space-between;
- align-items:center;margin-bottom:15px;
-}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .modalhead h3{margin:0}
-.close{
- background:#292039;border:1px solid #624286;
- color:white;border-radius:10px;padding:9px 13px;
-}
+.close{background:#292039;border:1px solid #624286;color:white;border-radius:10px;padding:9px 13px}
 .toast{
- position:fixed;z-index:30;bottom:100px;
- left:16px;right:16px;
- background:linear-gradient(120deg,#35204e,#1a1426);
- border:1px solid #9c65d2;padding:14px;
- border-radius:13px;text-align:center;
- display:none;font-size:13px;
+ position:fixed;z-index:30;bottom:100px;left:16px;right:16px;
+ background:linear-gradient(120deg,#35204e,#1a1426);border:1px solid #9c65d2;
+ padding:14px;border-radius:13px;text-align:center;display:none;font-size:13px;
  box-shadow:0 8px 25px #0009,0 0 20px #963dff30;
 }
 hr{border:0;border-top:1px solid #392a4d;margin:17px 0}
+@media(max-width:360px){
+ .home-hero{padding:18px;min-height:370px}
+ .home-hero h1{font-size:28px}
+ .home-art{right:-28px;opacity:.85}
+ .home-hero-content{max-width:82%}
+ .brand{font-size:16px}
+}
 </style>
 </head>
+
 <body>
 <header class="top">
- <div><div class="brand">PRESTIGE <span>MARKET</span></div><div class="subbrand">DIGITAL GOODS • PREMIUM SERVICE</div></div>
+ <div>
+  <div class="brand">PRESTIGE <span>MARKET</span></div>
+  <div class="subbrand">DIGITAL GOODS • PREMIUM SERVICE</div>
+ </div>
  <div class="avatar">P</div>
 </header>
 
 <main>
 <section id="home" class="page active">
- <div class="hero">
-  <div class="eyebrow">PREMIUM DIGITAL MARKETPLACE</div>
-  <h1>Твой мир цифровых возможностей</h1>
-  <p>NFT-подарки, коллекции, Stars и Premium в одном месте.</p>
-  <button class="goldbtn" onclick="showPage('catalog')">Открыть каталог →</button>
- </div>
- <div class="search"><input id="searchHome" placeholder="⌕ Поиск товаров..." oninput="searchListings(this.value)"></div>
- <div class="section">
-  <div class="sectionhead"><h2>Категории</h2><span class="muted">PRESTIGE</span></div>
-  <div class="grid">
-   <div class="panel" onclick="selectCategory('gifts')">🎁 <b>NFT Gifts</b><div class="muted">Коллекционные подарки</div></div>
-   <div class="panel" onclick="selectCategory('usernames')">👤 <b>Usernames</b><div class="muted">Редкие юзернеймы</div></div>
-   <div class="panel" onclick="selectCategory('numbers')">📱 <b>Numbers</b><div class="muted">Коллекционные номера</div></div>
-   <div class="panel" onclick="selectCategory('stars')">⭐ <b>Stars</b><div class="muted">Пакеты Telegram Stars</div></div>
-   <div class="panel" onclick="selectCategory('premium')">💎 <b>Premium</b><div class="muted">Подписки Telegram</div></div>
-   <div class="panel" onclick="showPage('favorites')">♡ <b>Избранное</b><div class="muted">Сохранённые товары</div></div>
+ <div class="home-hero">
+  <div class="home-hero-head">
+   <div class="home-pill"><span class="home-live-dot"></span> PREMIUM MARKETPLACE</div>
+   <span class="home-index">PM / 001</span>
+  </div>
+
+  <div class="home-hero-content">
+   <div class="home-kicker">WELCOME TO PRESTIGE</div>
+   <h1>Твой доступ<br>к <span>цифровому</span><br>premium-миру</h1>
+   <p>NFT-подарки, коллекции и цифровые предложения в едином пространстве.</p>
+   <button class="home-primary" onclick="showPage('catalog')">Исследовать каталог <span>↗</span></button>
+  </div>
+
+  <div class="home-art">
+   <div class="home-orbit"></div>
+   <div class="home-orbit two"></div>
+   <div class="home-orbit-dot">✦</div>
+   <div class="home-core">P</div>
+   <div class="home-art-label">PRESTIGE</div>
+  </div>
+
+  <div class="home-hero-bottom">
+   <span>DIGITAL GOODS</span>
+   <span>FUTURE EXPERIENCE ✦</span>
   </div>
  </div>
- <div class="section">
-  <div class="sectionhead"><h2>Популярное</h2><span class="muted" onclick="showPage('catalog')">Все →</span></div>
+
+ <div class="search">
+  <input id="searchHome" placeholder="⌕ Поиск товаров..." oninput="searchListings(this.value)">
+ </div>
+
+ <div class="home-section">
+  <div class="home-section-title">
+   <h2>Категории</h2>
+   <span class="muted">01 — 05</span>
+  </div>
+  <div class="home-category-grid">
+   <button class="home-category" onclick="selectCategory('gifts')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">🎁</span>
+    <b>NFT Gifts</b><small>Коллекционные подарки</small>
+   </button>
+   <button class="home-category" onclick="selectCategory('usernames')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">👤</span>
+    <b>Usernames</b><small>Редкие юзернеймы</small>
+   </button>
+   <button class="home-category" onclick="selectCategory('numbers')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">📱</span>
+    <b>Numbers</b><small>Коллекционные номера</small>
+   </button>
+   <button class="home-category" onclick="selectCategory('stars')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">⭐</span>
+    <b>Telegram Stars</b><small>Доступные тарифы</small>
+   </button>
+   <button class="home-category" onclick="selectCategory('premium')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">💎</span>
+    <b>Telegram Premium</b><small>Тарифы подписки</small>
+   </button>
+   <button class="home-category" onclick="showPage('favorites')">
+    <span class="home-category-arrow">↗</span><span class="home-category-icon">♡</span>
+    <b>Избранное</b><small>Твои сохранённые товары</small>
+   </button>
+  </div>
+ </div>
+
+ <div class="home-note">
+  <div class="home-note-icon">✦</div>
+  <div>
+   <b>PRESTIGE SERVICE</b>
+   <small>Заявки подтверждаются отдельно. Все условия согласовываются с менеджером.</small>
+  </div>
+ </div>
+
+ <div class="home-section">
+  <div class="home-section-title">
+   <h2>Популярные предложения</h2>
+   <span class="home-link" onclick="showPage('catalog')">Весь каталог ↗</span>
+  </div>
   <div id="homeListings" class="grid"><div class="empty">Загружаем предложения…</div></div>
  </div>
 </section>
@@ -687,9 +418,20 @@ hr{border:0;border-top:1px solid #392a4d;margin:17px 0}
 <section id="profile" class="page">
  <div class="section">
   <div class="sectionhead"><h2>Профиль</h2></div>
-  <div class="panel"><div class="eyebrow">PRESTIGE MEMBER</div><h2 id="profileName">Пользователь</h2><div class="muted" id="profileUsername">Telegram Mini App</div></div>
-  <div class="panel"><div class="itemrow" onclick="showPage('orders')">📦 Мои заказы <span style="float:right">→</span></div><div class="itemrow" onclick="showPage('favorites')">♡ Избранное <span style="float:right">→</span></div><div class="itemrow" onclick="support()">✉ Поддержка <span style="float:right">→</span></div><div class="itemrow" onclick="rules()">📜 Правила <span style="float:right">→</span></div></div>
-  <div id="adminEntry" class="panel" style="display:none"><button class="full" onclick="showPage('admin')">⚙ Админ-панель</button></div>
+  <div class="panel">
+   <div class="eyebrow">PRESTIGE MEMBER</div>
+   <h2 id="profileName">Пользователь</h2>
+   <div class="muted" id="profileUsername">Telegram Mini App</div>
+  </div>
+  <div class="panel">
+   <div class="itemrow" onclick="showPage('orders')">📦 Мои заказы <span style="float:right">→</span></div>
+   <div class="itemrow" onclick="showPage('favorites')">♡ Избранное <span style="float:right">→</span></div>
+   <div class="itemrow" onclick="support()">✉ Поддержка <span style="float:right">→</span></div>
+   <div class="itemrow" onclick="rules()">📜 Правила <span style="float:right">→</span></div>
+  </div>
+  <div id="adminEntry" class="panel" style="display:none">
+   <button class="full" onclick="showPage('admin')">⚙ Админ-панель</button>
+  </div>
  </div>
 </section>
 
@@ -720,12 +462,19 @@ hr{border:0;border-top:1px solid #392a4d;margin:17px 0}
 </nav>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
- <div class="modalbox"><div class="modalhead"><h3 id="modalTitle">Prestige Market</h3><button class="close" onclick="closeModal()">✕</button></div><div id="modalContent"></div></div>
+ <div class="modalbox">
+  <div class="modalhead">
+   <h3 id="modalTitle">Prestige Market</h3>
+   <button class="close" onclick="closeModal()">✕</button>
+  </div>
+  <div id="modalContent"></div>
+ </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 const API = "https://prestige-markett.rtmzakarin.workers.dev";
+const SUPPORT = "PrestigeMarketSupport";
 const tg = window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();}
 
@@ -741,8 +490,10 @@ async function api(path,options={}){
  return data;
 }
 function toast(message){
- const el=document.getElementById("toast");el.textContent=message;el.style.display="block";
- clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",2600);
+ const el=document.getElementById("toast");
+ el.textContent=message;el.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>el.style.display="none",2600);
 }
 function showPage(page){
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
@@ -751,20 +502,28 @@ function showPage(page){
  if(page==="favorites")loadFavorites();
  if(page==="orders")loadOrders();
  if(page==="profile")loadProfile();
- if(page==="admin"){if(!isAdmin){toast("Нет доступа");return showPage("profile")}loadAdminStats();adminTab(currentAdminTab);}
+ if(page==="admin"){
+  if(!isAdmin){toast("Нет доступа");return showPage("profile")}
+  loadAdminStats();adminTab(currentAdminTab);
+ }
  window.scrollTo(0,0);
 }
 function selectCategory(category){
  currentCategory=category;
  showPage("catalog");
- document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.textContent.toLowerCase().includes(category==="all"?"все":category==="gifts"?"gifts":category)));
+ document.querySelectorAll(".chip").forEach(x=>{
+  const key=category==="all"?"все":category==="gifts"?"gifts":category;
+  x.classList.toggle("active",x.textContent.toLowerCase().includes(key));
+ });
  if(category==="stars")return loadPrices("stars");
  if(category==="premium")return loadPrices("premium");
  renderListings();
 }
 function searchListings(value){
  const id=document.activeElement?.id;
- ["searchHome","searchCatalog"].forEach(x=>{if(x!==id)document.getElementById(x).value=value});
+ ["searchHome","searchCatalog"].forEach(x=>{
+  if(x!==id)document.getElementById(x).value=value;
+ });
  renderListings(value);
 }
 function mediaFor(item){
@@ -776,23 +535,35 @@ function card(item){
  const media=mediaFor(item);
  const image=media?`<img src="${esc(media)}" onerror="this.parentElement.textContent='🎁'">`:"🎁";
  return `<article class="card">
- <div class="cover">${image}</div>
- <div class="cardbody">
- <div class="cardtitle">${esc(item.title)}</div>
- <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
- <div class="price">${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}</div>
- <div class="cardactions"><button class="smallbtn" onclick="createOrder(${Number(item.id)})">Заказать</button><button class="iconbtn" onclick="favorite(${Number(item.id)})">♡</button></div>
- </div></article>`;
+  <div class="cover">${image}</div>
+  <div class="cardbody">
+   <div class="cardtitle">${esc(item.title)}</div>
+   <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
+   <div class="price">${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}</div>
+   <div class="cardactions">
+    <button class="smallbtn" onclick="createOrder(${Number(item.id)})">Заказать</button>
+    <button class="iconbtn" onclick="favorite(${Number(item.id)})">♡</button>
+   </div>
+  </div>
+ </article>`;
 }
 function renderListings(search=""){
- let filtered=listings.filter(x=>(currentCategory==="all"||x.category_id===currentCategory||x.category===currentCategory)&&(!search||(`${x.title} ${x.description}`).toLowerCase().includes(search.toLowerCase())));
+ const filtered=listings.filter(x=>
+  (currentCategory==="all"||x.category_id===currentCategory||x.category===currentCategory)&&
+  (!search||(`${x.title} ${x.description||""}`).toLowerCase().includes(search.toLowerCase()))
+ );
  const html=filtered.length?filtered.map(card).join(""):`<div class="empty">Пока нет предложений в этой категории</div>`;
  document.getElementById("catalogContent").innerHTML=html;
  document.getElementById("homeListings").innerHTML=listings.slice(0,4).map(card).join("")||`<div class="empty">Новые предложения скоро появятся</div>`;
 }
 async function loadListings(){
- try{const d=await api("/api/listings");listings=d.listings||[];renderListings();}
- catch(e){document.getElementById("catalogContent").innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+ try{
+  const d=await api("/api/listings");
+  listings=d.listings||[];
+  renderListings();
+ }catch(e){
+  document.getElementById("catalogContent").innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
 async function loadPrices(type){
  const target=document.getElementById("catalogContent");
@@ -803,7 +574,10 @@ async function loadPrices(type){
   if(type==="stars")starsPrices=prices;else premiumPrices=prices;
   target.innerHTML=prices.length?prices.map(p=>`
    <div class="pricecard">
-    <div><strong>${type==="stars"?Number(p.stars_amount).toLocaleString("ru-RU")+" ⭐":p.duration_months+" месяца 💎"}</strong><small>${Number(p.price_usd).toFixed(2)} USD</small></div>
+    <div>
+     <strong>${type==="stars"?Number(p.stars_amount).toLocaleString("ru-RU")+" ⭐":p.duration_months+" месяца 💎"}</strong>
+     <small>${Number(p.price_usd).toFixed(2)} USD</small>
+    </div>
     <button onclick="priceRequest('${type}',${Number(p.id)})">Заявка</button>
    </div>`).join(""):`<div class="empty">Тарифы пока не добавлены</div>`;
  }catch(e){target.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
@@ -813,55 +587,84 @@ async function priceRequest(type,id){
  if(!item)return;
  const name=type==="stars"?`${item.stars_amount} Telegram Stars`:`Telegram Premium на ${item.duration_months} месяцев`;
  const price=Number(item.price_usd).toFixed(2);
- openModal("Оставить заявку",`<p>${esc(name)}</p><h2 style="color:var(--gold2)">${price} USD</h2><p class="notice">Это заявка, не оплата. Менеджер уточнит детали.</p><button class="full" onclick="sendSupportRequest('${esc(name)}','${price}')">Связаться с менеджером</button>`);
+ openModal("Оставить заявку",`
+  <p>${esc(name)}</p>
+  <h2 style="color:var(--purple2)">${price} USD</h2>
+  <p class="notice">Это заявка, не оплата. Менеджер уточнит детали.</p>
+  <button class="full" onclick="sendSupportRequest('${esc(name)}','${price}')">Связаться с менеджером</button>
+ `);
 }
 function sendSupportRequest(name,price){
- const text=`Здравствуйте! Хочу оформить заявку: ${name}, цена ${price} USD.`;
- const url="https://t.me/PrestigeMarkets_Bot?start="+encodeURIComponent("request");
- if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
- closeModal();toast("Откройте бота и отправьте заявку менеджеру");
+ const message=`Здравствуйте! Хочу уточнить условия заявки: ${name}, цена ${price} USD.`;
+ const url=`https://t.me/${SUPPORT}?text=${encodeURIComponent(message)}`;
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);
+ else window.open(url,"_blank");
+ closeModal();
+ toast("Открываем чат менеджера");
 }
 async function createOrder(id){
- const item=listings.find(x=>Number(x.id)===id);if(!item)return;
- openModal("Подтвердить заявку",`<p><b>${esc(item.title)}</b></p><p class="muted">${Number(item.price||0)} ${esc(item.currency||"USD")}</p><p class="notice">Оплата не списывается. Будет создана заявка для дальнейшего согласования.</p><button class="full" onclick="confirmOrder(${id})">Создать заявку</button>`);
+ const item=listings.find(x=>Number(x.id)===id);
+ if(!item)return;
+ openModal("Подтвердить заявку",`
+  <p><b>${esc(item.title)}</b></p>
+  <p class="muted">${Number(item.price||0)} ${esc(item.currency||"USD")}</p>
+  <p class="notice">Оплата не списывается. Будет создана заявка для дальнейшего согласования.</p>
+  <button class="full" onclick="confirmOrder(${id})">Создать заявку</button>
+ `);
 }
 async function confirmOrder(id){
- try{const d=await api("/api/orders",{method:"POST",body:JSON.stringify({listing_id:id,term_days:1})});closeModal();toast("Заявка "+d.public_id+" создана");}
- catch(e){toast(e.message);}
+ try{
+  const d=await api("/api/orders",{method:"POST",body:JSON.stringify({listing_id:id,term_days:1})});
+  closeModal();toast("Заявка "+d.public_id+" создана");
+ }catch(e){toast(e.message)}
 }
 async function favorite(id){
- try{await api("/api/favorites",{method:"POST",body:JSON.stringify({listing_id:id})});toast("Добавлено в избранное");}
- catch(e){toast(e.message);}
+ try{
+  await api("/api/favorites",{method:"POST",body:JSON.stringify({listing_id:id})});
+  toast("Добавлено в избранное");
+ }catch(e){toast(e.message)}
 }
 async function loadFavorites(){
  const el=document.getElementById("favoritesContent");
- try{const d=await api("/api/favorites");el.innerHTML=d.favorites?.length?d.favorites.map(card).join(""):`<div class="empty">В избранном пока пусто</div>`;}
- catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+ try{
+  const d=await api("/api/favorites");
+  el.innerHTML=d.favorites?.length?d.favorites.map(card).join(""):`<div class="empty">В избранном пока пусто</div>`;
+ }catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`}
 }
 async function loadOrders(){
  const el=document.getElementById("ordersContent");
  try{
- const d=await api("/api/orders");
- el.innerHTML=d.orders?.length?d.orders.map(o=>`<div class="panel"><b>${esc(o.listing_title||"Заказ")}</b><div class="muted">${esc(o.public_id||("#"+o.id))}</div><div class="price">${Number(o.amount||0)} ${esc(o.currency||"USD")}</div><span class="muted">Статус: ${esc(o.status)}</span></div>`).join(""):`<div class="empty">У вас пока нет заказов</div>`;
- }catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+  const d=await api("/api/orders");
+  el.innerHTML=d.orders?.length?d.orders.map(o=>`
+   <div class="panel">
+    <b>${esc(o.listing_title||"Заказ")}</b>
+    <div class="muted">${esc(o.public_id||("#"+o.id))}</div>
+    <div class="price">${Number(o.amount||0)} ${esc(o.currency||"USD")}</div>
+    <span class="muted">Статус: ${esc(o.status)}</span>
+   </div>`).join(""):`<div class="empty">У вас пока нет заказов</div>`;
+ }catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`}
 }
 async function loadProfile(){
  try{
- const d=await api("/api/me");const u=d.user||{};
- document.getElementById("profileName").textContent=u.first_name||"Пользователь";
- document.getElementById("profileUsername").textContent=u.username?"@"+u.username:"Telegram ID: "+u.telegram_id;
- isAdmin=!!u.is_admin;document.getElementById("adminEntry").style.display=isAdmin?"block":"none";
- }catch(e){document.getElementById("profileName").textContent="Откройте приложение через Telegram";}
+  const d=await api("/api/me");
+  const u=d.user||{};
+  document.getElementById("profileName").textContent=u.first_name||"Пользователь";
+  document.getElementById("profileUsername").textContent=u.username?"@"+u.username:"Telegram ID: "+u.telegram_id;
+  isAdmin=!!u.is_admin;
+  document.getElementById("adminEntry").style.display=isAdmin?"block":"none";
+ }catch(e){
+  document.getElementById("profileName").textContent="Откройте приложение через Telegram";
+ }
 }
 async function loadAdminStats(){
  try{
- const d=await api("/api/admin/stats"),s=d.stats;
- document.getElementById("adminStats").innerHTML=`
- <div class="stat"><strong>${s.users}</strong><small>Пользователи</small></div>
- <div class="stat"><strong>${s.listings}</strong><small>Товары</small></div>
- <div class="stat"><strong>${s.orders}</strong><small>Заказы</small></div>
- <div class="stat"><strong>${s.pending_orders}</strong><small>Ожидают</small></div>`;
- }catch(e){document.getElementById("adminStats").innerHTML=`<div class="empty">${esc(e.message)}</div>`;}
+  const d=await api("/api/admin/stats"),s=d.stats||{};
+  document.getElementById("adminStats").innerHTML=`
+   <div class="stat"><strong>${Number(s.users||0)}</strong><small>Пользователи</small></div>
+   <div class="stat"><strong>${Number(s.listings||0)}</strong><small>Товары</small></div>
+   <div class="stat"><strong>${Number(s.orders||0)}</strong><small>Заказы</small></div>
+   <div class="stat"><strong>${Number(s.pending_orders||0)}</strong><small>Ожидают</small></div>`;
+ }catch(e){document.getElementById("adminStats").innerHTML=`<div class="empty">${esc(e.message)}</div>`}
 }
 function adminTab(tab){
  currentAdminTab=tab;
@@ -872,62 +675,69 @@ function adminTab(tab){
  if(tab==="prices")adminPrices();
 }
 async function adminProducts(){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка товаров…";
+ const el=document.getElementById("adminContent");
+ el.innerHTML="Загрузка товаров…";
  try{
- const d=await api("/api/admin/listings");
- el.innerHTML=(d.listings||[]).map(x=>`<div class="itemrow"><b>${esc(x.title)}</b><div class="muted">${esc(x.category_id)} · ${x.price} ${esc(x.currency||"USD")} · ${x.status}</div><div class="row" style="margin-top:8px"><button class="smallbtn" onclick="editListing(${x.id})">Изменить</button><button class="smallbtn danger" onclick="deleteListing(${x.id})">Скрыть</button></div></div>`).join("")||`<div class="empty">Товаров пока нет</div>`;
- }catch(e){el.textContent=e.message;}
+  const d=await api("/api/admin/listings");
+  el.innerHTML=(d.listings||[]).map(x=>`
+   <div class="itemrow">
+    <b>${esc(x.title)}</b>
+    <div class="muted">${esc(x.category_id)} · ${x.price} ${esc(x.currency||"USD")} · ${esc(x.status)}</div>
+    <div class="row" style="margin-top:8px">
+     <button class="smallbtn" onclick="editListing(${Number(x.id)})">Изменить</button>
+     <button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Скрыть</button>
+    </div>
+   </div>`).join("")||`<div class="empty">Товаров пока нет</div>`;
+ }catch(e){el.textContent=e.message}
+}
+function editListing(id){
+ const item=listings.find(x=>Number(x.id)===Number(id));
+ if(!item){toast("Обновите список товаров");return}
+ openModal("Изменить товар",`
+  <label>Название</label>
+  <input class="field" id="eTitle" value="${attr(item.title)}">
+  <label>Описание</label>
+  <textarea class="field" id="eDescription">${esc(item.description||"")}</textarea>
+  <label>Цена</label>
+  <input class="field" id="ePrice" type="number" min="0" step="0.01" value="${Number(item.price||0)}">
+  <label>Ссылка на изображение (если есть)</label>
+  <input class="field" id="eImage" value="${attr(item.image_url||"")}" placeholder="https://...">
+  <button class="full" onclick="saveEdit(${Number(id)})">Сохранить изменения</button>
+ `);
 }
 function adminAdd(){
  document.getElementById("adminContent").innerHTML=`
- <h3>Новое предложение</h3>
-
- <label>Категория</label>
- <select class="field" id="aCategory">
-  <option value="gifts">NFT Gifts</option>
-  <option value="usernames">Usernames</option>
-  <option value="numbers">Numbers</option>
- </select>
-
- <label>Название</label>
- <input class="field" id="aTitle" placeholder="Название товара">
-
- <label>Описание</label>
- <textarea class="field" id="aDescription" placeholder="Описание"></textarea>
-
- <label>Цена</label>
- <input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
-
- <label>Валюта</label>
- <select class="field" id="aCurrency">
-  <option>USD</option>
-  <option>EUR</option>
-  <option>RUB</option>
- </select>
-
- <label>Фото, видео или GIF из галереи</label>
- <input class="field" id="aMedia" type="file" accept="image/*,video/*">
-
- <div id="mediaPreview" class="panel notice">Медиа пока не выбрано</div>
-
- <label>Коллекционный идентификатор</label>
- <input class="field" id="aIdentifier" placeholder="@username">
-
- <button class="full" onclick="saveNewListing()">Опубликовать товар</button>
+  <h3>Новое предложение</h3>
+  <label>Категория</label>
+  <select class="field" id="aCategory">
+   <option value="gifts">NFT Gifts</option>
+   <option value="usernames">Usernames</option>
+   <option value="numbers">Numbers</option>
+  </select>
+  <label>Название</label>
+  <input class="field" id="aTitle" placeholder="Название товара">
+  <label>Описание</label>
+  <textarea class="field" id="aDescription" placeholder="Описание"></textarea>
+  <label>Цена</label>
+  <input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
+  <label>Валюта</label>
+  <select class="field" id="aCurrency">
+   <option>USD</option><option>EUR</option><option>RUB</option>
+  </select>
+  <label>Фото, видео или GIF из галереи</label>
+  <input class="field" id="aMedia" type="file" accept="image/*,video/*">
+  <div id="mediaPreview" class="panel notice">Медиа пока не выбрано</div>
+  <label>Коллекционный идентификатор</label>
+  <input class="field" id="aIdentifier" placeholder="@username">
+  <button class="full" onclick="saveNewListing()">Опубликовать товар</button>
  `;
  document.getElementById("aMedia").addEventListener("change",previewAdminMedia);
 }
- function previewAdminMedia(){
+function previewAdminMedia(){
  const file=document.getElementById("aMedia").files[0];
  const preview=document.getElementById("mediaPreview");
-
- if(!file){
-  preview.textContent="Медиа пока не выбрано";
-  return;
- }
-
+ if(!file){preview.textContent="Медиа пока не выбрано";return}
  const url=URL.createObjectURL(file);
-
  if(file.type.startsWith("video/")){
   preview.innerHTML=`<video src="${url}" controls style="width:100%;border-radius:12px"></video>`;
  }else{
@@ -936,7 +746,6 @@ function adminAdd(){
 }
 async function saveNewListing(){
  const file=document.getElementById("aMedia").files[0];
-
  const body={
   category:document.getElementById("aCategory").value,
   title:document.getElementById("aTitle").value.trim(),
@@ -946,106 +755,126 @@ async function saveNewListing(){
   image_url:"",
   public_identifier:document.getElementById("aIdentifier").value.trim()
  };
-
  if(!body.title)return toast("Введите название");
  if(!file)return toast("Выберите фото, видео или GIF");
-
  try{
   const form=new FormData();
   form.append("file",file);
-
   const uploaded=await fetch(API+"/api/admin/upload",{
-   method:"POST",
-   headers:{"X-Telegram-Init-Data":initData},
-   body:form
+   method:"POST",headers:{"X-Telegram-Init-Data":initData},body:form
   });
-
   const mediaData=await uploaded.json();
-
-  if(!uploaded.ok||!mediaData.ok){
-   throw new Error(mediaData.error||"Ошибка загрузки файла");
-  }
-
+  if(!uploaded.ok||!mediaData.ok)throw new Error(mediaData.error||"Ошибка загрузки файла");
   body.media=[mediaData.media];
-
-  await api("/api/admin/listings",{
-   method:"POST",
-   body:JSON.stringify(body)
-  });
-
+  await api("/api/admin/listings",{method:"POST",body:JSON.stringify(body)});
   toast("Товар успешно опубликован");
-  adminProducts();
-  loadListings();
-  loadAdminStats();
-
- }catch(e){
-  toast(e.message);
- }
+  adminProducts();loadListings();loadAdminStats();
+ }catch(e){toast(e.message)}
 }
 async function saveEdit(id){
  try{
- await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({
- title:document.getElementById("eTitle").value,
- description:document.getElementById("eDescription").value,
- price:Number(document.getElementById("ePrice").value),
- image_url:document.getElementById("eImage").value
- })});
- closeModal();toast("Изменения сохранены");adminProducts();loadListings();
- }catch(e){toast(e.message);}
+  await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({
+   title:document.getElementById("eTitle").value,
+   description:document.getElementById("eDescription").value,
+   price:Number(document.getElementById("ePrice").value),
+   image_url:document.getElementById("eImage").value
+  })});
+  closeModal();toast("Изменения сохранены");adminProducts();loadListings();
+ }catch(e){toast(e.message)}
 }
 async function deleteListing(id){
  if(!confirm("Скрыть это предложение?"))return;
- try{await api("/api/admin/listings/"+id,{method:"DELETE"});toast("Товар скрыт");adminProducts();loadListings();loadAdminStats();}
- catch(e){toast(e.message);}
+ try{
+  await api("/api/admin/listings/"+id,{method:"DELETE"});
+  toast("Товар скрыт");adminProducts();loadListings();loadAdminStats();
+ }catch(e){toast(e.message)}
 }
 async function adminOrders(){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка заказов…";
+ const el=document.getElementById("adminContent");
+ el.innerHTML="Загрузка заказов…";
  try{
- const d=await api("/api/admin/orders");
- el.innerHTML=(d.orders||[]).map(o=>`<div class="panel"><b>${esc(o.listing_title||"Заказ")}</b><div class="muted">${esc(o.public_id||("#"+o.id))} · ${esc(o.username||o.telegram_id||"")}</div><div class="price">${o.amount} ${esc(o.currency||"USD")}</div><select class="field" id="status${o.id}"><option value="pending">Ожидает</option><option value="processing">В работе</option><option value="completed">Выполнен</option><option value="cancelled">Отменён</option></select><button class="full" onclick="updateOrder(${o.id})">Сохранить статус</button></div>`).join("")||`<div class="empty">Заказов пока нет</div>`;
- (d.orders||[]).forEach(o=>{const x=document.getElementById("status"+o.id);if(x)x.value=o.status;});
- }catch(e){el.textContent=e.message;}
+  const d=await api("/api/admin/orders");
+  el.innerHTML=(d.orders||[]).map(o=>`
+   <div class="panel">
+    <b>${esc(o.listing_title||"Заказ")}</b>
+    <div class="muted">${esc(o.public_id||("#"+o.id))} · ${esc(o.username||o.telegram_id||"")}</div>
+    <div class="price">${o.amount} ${esc(o.currency||"USD")}</div>
+    <select class="field" id="status${Number(o.id)}">
+     <option value="pending">Ожидает</option>
+     <option value="processing">В работе</option>
+     <option value="completed">Выполнен</option>
+     <option value="cancelled">Отменён</option>
+    </select>
+    <button class="full" onclick="updateOrder(${Number(o.id)})">Сохранить статус</button>
+   </div>`).join("")||`<div class="empty">Заказов пока нет</div>`;
+  (d.orders||[]).forEach(o=>{
+   const x=document.getElementById("status"+o.id);
+   if(x)x.value=o.status;
+  });
+ }catch(e){el.textContent=e.message}
 }
 async function updateOrder(id){
- try{await api("/api/admin/orders/"+id+"/status",{method:"PATCH",body:JSON.stringify({status:document.getElementById("status"+id).value})});toast("Статус обновлён");loadAdminStats();}
- catch(e){toast(e.message);}
+ try{
+  await api("/api/admin/orders/"+id+"/status",{method:"PATCH",body:JSON.stringify({status:document.getElementById("status"+id).value})});
+  toast("Статус обновлён");loadAdminStats();
+ }catch(e){toast(e.message)}
 }
 async function adminPrices(){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка тарифов…";
+ const el=document.getElementById("adminContent");
+ el.innerHTML="Загрузка тарифов…";
  try{
- const [s,p]=await Promise.all([api("/api/prices/stars"),api("/api/prices/premium")]);
- const stars=s.prices.map(x=>priceAdminRow("stars",x.id,x.stars_amount+" Stars",x.price_usd)).join("");
- const prem=p.prices.map(x=>priceAdminRow("premium",x.id,x.duration_months+" месяца Premium",x.price_usd)).join("");
- el.innerHTML="<h3>Telegram Stars</h3>"+stars+"<hr><h3>Telegram Premium</h3>"+prem;
- }catch(e){el.textContent=e.message;}
+  const [s,p]=await Promise.all([api("/api/prices/stars"),api("/api/prices/premium")]);
+  const stars=(s.prices||[]).map(x=>priceAdminRow("stars",x.id,x.stars_amount+" Stars",x.price_usd)).join("");
+  const prem=(p.prices||[]).map(x=>priceAdminRow("premium",x.id,x.duration_months+" месяца Premium",x.price_usd)).join("");
+  el.innerHTML="<h3>Telegram Stars</h3>"+stars+"<hr><h3>Telegram Premium</h3>"+prem;
+ }catch(e){el.textContent=e.message}
 }
 function priceAdminRow(type,id,title,price){
- return `<div class="itemrow"><b>${esc(title)}</b><div class="row"><input class="field" id="price${type}${id}" type="number" min="0" step="0.01" value="${Number(price)}"><button class="smallbtn" onclick="savePrice('${type}',${id})">Сохранить</button></div></div>`;
+ return `<div class="itemrow">
+  <b>${esc(title)}</b>
+  <div class="row">
+   <input class="field" id="price${type}${id}" type="number" min="0" step="0.01" value="${Number(price)}">
+   <button class="smallbtn" onclick="savePrice('${type}',${Number(id)})">Сохранить</button>
+  </div>
+ </div>`;
 }
 async function savePrice(type,id){
  const price=Number(document.getElementById("price"+type+id).value);
  if(!Number.isFinite(price)||price<0)return toast("Неверная цена");
- try{await api("/api/admin/prices/"+type+"/"+id,{method:"PATCH",body:JSON.stringify({price_usd:price})});toast("Цена обновлена");}
- catch(e){toast(e.message);}
+ try{
+  await api("/api/admin/prices/"+type+"/"+id,{method:"PATCH",body:JSON.stringify({price_usd:price})});
+  toast("Цена обновлена");
+ }catch(e){toast(e.message)}
 }
 function openModal(title,content){
  document.getElementById("modalTitle").textContent=title;
  document.getElementById("modalContent").innerHTML=content;
  document.getElementById("modal").classList.add("open");
 }
-function closeModal(){document.getElementById("modal").classList.remove("open");}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
 function support(){
- const url="https://t.me/PrestigeMarkets_Bot";
- if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+ const url="https://t.me/"+SUPPORT;
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);
+ else window.open(url,"_blank");
 }
-function rules(){openModal("Правила Prestige Market",`<p class="notice">Все заявки подтверждаются отдельно. Создание заявки не означает оплату или автоматическую передачу товара. Проверяйте описание и условия предложения перед оформлением. Не отправляйте пароли, коды входа и данные аккаунта.</p>`);}
-function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function attr(value){return esc(value).replace(/"/g,"&quot;");}
+function rules(){
+ openModal("Правила Prestige Market",`
+  <p class="notice">
+   Все заявки подтверждаются отдельно. Создание заявки не означает оплату или автоматическую передачу товара.
+   Проверяйте описание и условия предложения перед оформлением.
+   Не отправляйте пароли, коды входа и данные аккаунта.
+  </p>
+ `);
+}
+function esc(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function attr(value){return esc(value).replace(/"/g,"&quot;")}
 
 (async function init(){
  await loadListings();
- if(tg?.initData){await loadProfile();}
- else{document.getElementById("profileName").textContent="Откройте приложение через Telegram";}
+ if(tg?.initData){await loadProfile()}
+ else{document.getElementById("profileName").textContent="Откройте приложение через Telegram"}
 })();
 </script>
 </body>
