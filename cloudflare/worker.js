@@ -208,7 +208,7 @@ async function handle(request, env) {
   if (path === "/api/prices/premium" && method === "GET") {
     try {
       const result = await env.DB.prepare(
-        SELECT * FROM premium_prices ORDER BY duration_months ASC
+        SELECT * FROM premium_prices ORDER BY duration_months ASC"
       ).all();
 
       return json({ ok: true, prices: result.results || [] });
