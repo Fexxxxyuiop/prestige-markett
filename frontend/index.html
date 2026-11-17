@@ -298,6 +298,53 @@ hr{border:0;border-top:1px solid #392a4d;margin:17px 0}
  .home-hero-content{max-width:82%}
  .brand{font-size:16px}
 }
+ 
+.product-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  background: #100b1c;
+}
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg,#211333,#100b20);
+}
+
+.cover-empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: #bd83ff;
+  font-size: 52px;
+}
+
+.product-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 6px 10px;
+  border: 1px solid #a855f766;
+  border-radius: 20px;
+  background: #170d25dd;
+  color: #d9b5ff;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  pointer-events: none;
+}
+
+.cover-glow {
+  position: absolute;
+  inset: auto 0 0;
+  height: 35%;
+  background: linear-gradient(transparent,#100b2088);
+  pointer-events: none;
+}
 </style>
 </head>
 
@@ -526,27 +573,129 @@ function searchListings(value){
  });
  renderListings(value);
 }
-function mediaFor(item){
- let media=[];
- try{media=JSON.parse(item.media_json||"[]")}catch{}
- return media[0]?.url||item.image_url||"";
+
+function mediaFor(item) {
+  let media = [];
+
+  try {
+    media = JSON.parse(item.media_json || "[]");
+  } catch {}
+
+  if (!Array.isArray(media)) media = [];
+
+  const first = media[0] || {};
+
+  if (first.file_id) {
+    return `${API}/api/media?file_id=${encodeURIComponent(first.file_id)}`;
+  }
+
+  return first.url || item.image_url || "";
 }
-function card(item){
- const media=mediaFor(item);
- const image=media?`<img src="${esc(media)}" onerror="this.parentElement.textContent='🎁'">`:"🎁";
- return `<article class="card">
-  <div class="cover">${image}</div>
-  <div class="cardbody">
-   <div class="cardtitle">${esc(item.title)}</div>
-   <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
-   <div class="price">${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}</div>
-   <div class="cardactions">
-    <button class="smallbtn" onclick="createOrder(${Number(item.id)})">Заказать</button>
-    <button class="iconbtn" onclick="favorite(${Number(item.id)})">♡</button>
-   </div>
-  </div>
- </article>`;
+
+function mediaKindFor(item) {
+  let media = [];
+
+  try {
+    media = JSON.parse(item.media_json || "[]");
+  } catch {}
+
+  const first = Array.isArray(media) ? media[0] || {} : {};
+
+  if (first.kind) return first.kind;
+
+  const url = mediaFor(item);
+
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return "video";
+  if (/\.gif(\?|$)/i.test(url)) return "animation";
+
+  return "photo";
 }
+
+function mediaHTML(item) {
+  const src = mediaFor(item);
+
+  if (!src) {
+    return `<div class="product-media-empty">PRESTIGE MARKET</div>`;
+  }
+
+  const kind = mediaKindFor(item);
+
+  if (kind === "video") {
+    return `<video class="product-media" src="${attr(src)}" controls playsinline preload="metadata"></video>`;
+  }
+
+  return `<img class="product-media" src="${attr(src)}" alt="${attr(item.title || "Product")}" loading="lazy" onclick="window.open(this.src,'_blank')">`;
+}
+
+
+function card(item) {
+  const kind = mediaKindFor(item);
+  const src = mediaFor(item);
+
+  let media = `<div class="cover-empty">✦</div>`;
+
+  if (src && kind === "video") {
+    media = `
+      <video
+        class="product-media"
+        src="${attr(src)}"
+        controls
+        playsinline
+        preload="metadata">
+      </video>`;
+  } else if (src && kind === "animation") {
+    media = `
+      <img
+        class="product-media"
+        src="${attr(src)}"
+        alt="${attr(item.title || "Product")}"
+        loading="lazy"
+        onerror="this.style.display='none'">`;
+  } else if (src) {
+    media = `
+      <img
+        class="product-media"
+        src="${attr(src)}"
+        alt="${attr(item.title || "Product")}"
+        loading="lazy"
+        onerror="this.style.display='none'">`;
+  }
+
+  const price = Number(item.price || 0).toLocaleString("ru-RU");
+  const currency = esc(item.currency || "USD");
+
+  return `
+    <article class="card">
+      <div class="cover">
+        ${media}
+        <div class="cover-glow"></div>
+        <span class="product-tag">PRESTIGE</span>
+      </div>
+
+      <div class="cardbody">
+        <div class="cardtitle">${esc(item.title)}</div>
+
+        <div class="carddesc">
+          ${esc(item.description || "Цифровое предложение Prestige Market")}
+        </div>
+
+        <div class="price">${price} ${currency}</div>
+
+        <div class="cardactions">
+          <button class="smallbtn"
+            onclick="createOrder(${Number(item.id)})">
+            Заказать
+          </button>
+
+          <button class="iconbtn"
+            onclick="favorite(${Number(item.id)})">
+            ♡
+          </button>
+        </div>
+      </div>
+    </article>`;
+}
+
 function renderListings(search=""){
  const filtered=listings.filter(x=>
   (currentCategory==="all"||x.category_id===currentCategory||x.category===currentCategory)&&
