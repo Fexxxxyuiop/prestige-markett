@@ -199,6 +199,9 @@ async function handle(request, env) {
   if (path === "/telegram/webhook" && method === "POST") {
   return handleTelegramWebhook(request, env);
 }
+  if (path === "/telegram/webhook" && method === "POST") {
+  return handleTelegramWebhook(request, env);
+}
 
   if (!env.DB) return fail("D1 binding DB is missing", 500);
 
