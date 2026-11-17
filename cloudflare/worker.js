@@ -446,6 +446,50 @@ async function handle(request, env) {
       status: "pending"
     }, 201);
   }
+  
+// PUBLIC TELEGRAM MEDIA
+if (path === "/api/media" && method === "GET") {
+  if (!env.BOT_TOKEN) {
+    return fail("Media service unavailable", 500);
+  }
+
+  const fileId = url.searchParams.get("file_id");
+
+  if (!fileId || fileId.length > 2048) {
+    return fail("Invalid file_id", 400);
+  }
+
+  const tgResponse = await fetch(
+    `https://api.telegram.org/bot${env.BOT_TOKEN}/getFile?file_id=${encodeURIComponent(fileId)}`
+  );
+
+  const tg = await tgResponse.json();
+
+  if (!tg.ok || !tg.result?.file_path) {
+    return fail("Media not found", 404);
+  }
+
+  const fileResponse = await fetch(
+    `https://api.telegram.org/file/bot${env.BOT_TOKEN}/${tg.result.file_path}`
+  );
+
+  if (!fileResponse.ok) {
+    return fail("Cannot load media", 502);
+  }
+
+  const headers = new Headers(CORS);
+  headers.set(
+    "Content-Type",
+    fileResponse.headers.get("Content-Type") || "application/octet-stream"
+  );
+  headers.set("Cache-Control", "public, max-age=3600");
+  headers.set("Content-Disposition", "inline");
+
+  return new Response(fileResponse.body, {
+    status: 200,
+    headers
+  });
+}
 
   // ADMIN AUTHORIZATION
 
