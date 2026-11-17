@@ -29,6 +29,8 @@ This repository is designed for the Cloudflare free tiers, subject to current ac
 4. Copy the returned `database_id` into `wrangler.toml`.
 5. Apply schema:
    `npx wrangler d1 execute prestige-market-db --file=cloudflare/schema.sql`
+6. If the D1 database already exists, apply the price update once:
+   `npx wrangler d1 execute prestige-market-db --file=cloudflare/update_prices.sql`
 6. Set Worker secrets:
    - `BOT_TOKEN`
    - `BOT_USERNAME`
