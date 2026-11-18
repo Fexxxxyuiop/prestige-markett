@@ -823,37 +823,87 @@ function adminTab(tab){
  if(tab==="add")adminAdd();
  if(tab==="prices")adminPrices();
 }
+
+let adminListings = [];
+
+
 async function adminProducts(){
- const el=document.getElementById("adminContent");
- el.innerHTML="Загрузка товаров…";
- try{
-  const d=await api("/api/admin/listings");
-  el.innerHTML=(d.listings||[]).map(x=>`
-   <div class="itemrow">
-    <b>${esc(x.title)}</b>
-    <div class="muted">${esc(x.category_id)} · ${x.price} ${esc(x.currency||"USD")} · ${esc(x.status)}</div>
-    <div class="row" style="margin-top:8px">
-     <button class="smallbtn" onclick="editListing(${Number(x.id)})">Изменить</button>
-     <button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Скрыть</button>
+ const el = document.getElementById("adminContent");
+ el.innerHTML = "Загрузка товаров…";
+
+ try {
+  const d = await api("/api/admin/listings");
+  adminListings = Array.isArray(d.listings) ? d.listings : [];
+
+  el.innerHTML = adminListings.map(x => {
+   const deleted = Number(x.is_active) === 0 ||
+                   x.status === "deleted";
+
+   return `
+    <div class="itemrow">
+     <b>${esc(x.title || "Без названия")}</b>
+
+     <div class="muted">
+      ${esc(x.category_id || "")} ·
+      ${Number(x.price || 0)} ${esc(x.currency || "USD")} ·
+      ${deleted ? "Удалён" : "Активен"}
+     </div>
+
+     <div class="row" style="margin-top:8px">
+      <button class="smallbtn"
+       onclick="editListing(${Number(x.id)})">
+       Изменить
+      </button>
+
+      ${
+       deleted
+       ? `<button class="smallbtn" onclick="restoreListing(${Number(x.id)})">Восстановить</button>`
+       : `<button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Удалить</button>`
+      }
+     </div>
     </div>
-   </div>`).join("")||`<div class="empty">Товаров пока нет</div>`;
- }catch(e){el.textContent=e.message}
+   `;
+  }).join("") || `<div class="empty">Товаров пока нет</div>`;
+
+ } catch(e) {
+  el.textContent = e.message;
+ }
 }
+
 function editListing(id){
- const item=listings.find(x=>Number(x.id)===Number(id));
- if(!item){toast("Обновите список товаров");return}
- openModal("Изменить товар",`
+ const item = adminListings.find(
+  x => Number(x.id) === Number(id)
+ );
+
+ if(!item){
+  toast("Товар не найден. Обновите список.");
+  return;
+ }
+
+ openModal("Изменить товар", `
   <label>Название</label>
-  <input class="field" id="eTitle" value="${attr(item.title)}">
+  <input class="field" id="eTitle"
+   value="${attr(item.title || "")}">
+
   <label>Описание</label>
-  <textarea class="field" id="eDescription">${esc(item.description||"")}</textarea>
+  <textarea class="field" id="eDescription">${esc(item.description || "")}</textarea>
+
   <label>Цена</label>
-  <input class="field" id="ePrice" type="number" min="0" step="0.01" value="${Number(item.price||0)}">
-  <label>Ссылка на изображение (если есть)</label>
-  <input class="field" id="eImage" value="${attr(item.image_url||"")}" placeholder="https://...">
-  <button class="full" onclick="saveEdit(${Number(id)})">Сохранить изменения</button>
+  <input class="field" id="ePrice"
+   type="number" min="0" step="0.01"
+   value="${Number(item.price || 0)}">
+
+  <label>Ссылка на изображение</label>
+  <input class="field" id="eImage"
+   value="${attr(item.image_url || "")}"
+   placeholder="https://...">
+
+  <button class="full" onclick="saveEdit(${Number(id)})">
+   Сохранить изменения
+  </button>
  `);
 }
+
 function adminAdd(){
  document.getElementById("adminContent").innerHTML=`
   <h3>Новое предложение</h3>
@@ -920,24 +970,100 @@ async function saveNewListing(){
   adminProducts();loadListings();loadAdminStats();
  }catch(e){toast(e.message)}
 }
+
 async function saveEdit(id){
+ const title = document.getElementById("eTitle").value.trim();
+ const description = document.getElementById("eDescription").value;
+ const price = Number(document.getElementById("ePrice").value);
+ const image_url = document.getElementById("eImage").value.trim();
+
+ if(!title){
+  toast("Введите название товара");
+  return;
+ }
+
+ if(!Number.isFinite(price) || price < 0){
+  toast("Проверьте цену");
+  return;
+ }
+
  try{
-  await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({
-   title:document.getElementById("eTitle").value,
-   description:document.getElementById("eDescription").value,
-   price:Number(document.getElementById("ePrice").value),
-   image_url:document.getElementById("eImage").value
-  })});
-  closeModal();toast("Изменения сохранены");adminProducts();loadListings();
- }catch(e){toast(e.message)}
+  await api("/api/admin/listings/"+id,{
+   method:"PATCH",
+   body:JSON.stringify({
+    title,
+    description,
+    price,
+    image_url
+   })
+  });
+
+  closeModal();
+  toast("Изменения сохранены");
+
+  await Promise.all([
+   adminProducts(),
+   loadListings(),
+   loadAdminStats()
+  ]);
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function deleteListing(id){
- if(!confirm("Скрыть это предложение?"))return;
+ const item = adminListings.find(
+  x => Number(x.id) === Number(id)
+ );
+
+ const name = item?.title || "этот товар";
+
+ if(!confirm(`Удалить «${name}» из каталога?`)) return;
+
  try{
-  await api("/api/admin/listings/"+id,{method:"DELETE"});
-  toast("Товар скрыт");adminProducts();loadListings();loadAdminStats();
- }catch(e){toast(e.message)}
+  await api("/api/admin/listings/"+id,{
+   method:"DELETE"
+  });
+
+  toast("Товар удалён из каталога");
+
+  await Promise.all([
+   adminProducts(),
+   loadListings(),
+   loadAdminStats()
+  ]);
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
+async function restoreListing(id){
+ if(!confirm("Восстановить этот товар в каталоге?")) return;
+
+ try{
+  await api("/api/admin/listings/"+id,{
+   method:"PATCH",
+   body:JSON.stringify({
+    is_active:true,
+    status:"active"
+   })
+  });
+
+  toast("Товар восстановлен");
+
+  await Promise.all([
+   adminProducts(),
+   loadListings(),
+   loadAdminStats()
+  ]);
+
+ }catch(e){
+  toast(e.message);
+ }
+}
+
 async function adminOrders(){
  const el=document.getElementById("adminContent");
  el.innerHTML="Загрузка заказов…";
