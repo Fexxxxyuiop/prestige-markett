@@ -826,8 +826,7 @@ function adminTab(tab){
 
 let adminListings = [];
 
-
-async function adminProducts(){
+async function adminProducts(filter = "all"){
  const el = document.getElementById("adminContent");
  el.innerHTML = "Загрузка товаров…";
 
@@ -835,40 +834,95 @@ async function adminProducts(){
   const d = await api("/api/admin/listings");
   adminListings = Array.isArray(d.listings) ? d.listings : [];
 
-  el.innerHTML = adminListings.map(x => {
-   const deleted = Number(x.is_active) === 0 ||
-                   x.status === "deleted";
+  const activeCount = adminListings.filter(
+   x => Number(x.is_active) === 1 && x.status !== "deleted"
+  ).length;
 
-   return `
-    <div class="itemrow">
-     <b>${esc(x.title || "Без названия")}</b>
+  const deletedCount = adminListings.length - activeCount;
 
-     <div class="muted">
-      ${esc(x.category_id || "")} ·
-      ${Number(x.price || 0)} ${esc(x.currency || "USD")} ·
-      ${deleted ? "Удалён" : "Активен"}
-     </div>
+  const render = () => {
+   const search = (document.getElementById("listingSearch")?.value || "").toLowerCase();
 
-     <div class="row" style="margin-top:8px">
-      <button class="smallbtn"
-       onclick="editListing(${Number(x.id)})">
-       Изменить
-      </button>
+   const filtered = adminListings.filter(x => {
+    const deleted = Number(x.is_active) === 0 || x.status === "deleted";
+    const matchesFilter = filter === "all" ||
+     (filter === "active" && !deleted) ||
+     (filter === "deleted" && deleted);
 
-      ${
-       deleted
-       ? `<button class="smallbtn" onclick="restoreListing(${Number(x.id)})">Восстановить</button>`
-       : `<button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Удалить</button>`
-      }
-     </div>
-    </div>
-   `;
-  }).join("") || `<div class="empty">Товаров пока нет</div>`;
+    const matchesSearch =
+     String(x.title || "").toLowerCase().includes(search) ||
+     String(x.category_id || "").toLowerCase().includes(search) ||
+     String(x.public_identifier || "").toLowerCase().includes(search);
+
+    return matchesFilter && matchesSearch;
+   });
+
+   document.getElementById("listingResults").innerHTML =
+    filtered.map(x => {
+     const deleted = Number(x.is_active) === 0 || x.status === "deleted";
+
+     return `
+      <div class="itemrow">
+       <b>${esc(x.title || "Без названия")}</b>
+       <div class="muted">
+        ${esc(x.category_id || "")} ·
+        ${Number(x.price || 0)} ${esc(x.currency || "USD")}
+       </div>
+       <div class="muted">${deleted ? "Удалён" : "Активен"}</div>
+       <div class="row" style="margin-top:8px">
+        <button class="smallbtn" onclick="editListing(${Number(x.id)})">Изменить</button>
+        ${
+         deleted
+         ? `<button class="smallbtn" onclick="restoreListing(${Number(x.id)})">Восстановить</button>`
+         : `<button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Удалить</button>`
+        }
+       </div>
+      </div>
+     `;
+    }).join("") || `<div class="empty">Ничего не найдено</div>`;
+
+   document.getElementById("listingCount").textContent =
+    `Показано: ${filtered.length}`;
+  };
+
+  el.innerHTML = `
+   <h3>Управление товарами</h3>
+
+   <div class="muted">
+    Всего: ${adminListings.length} ·
+    Активных: ${activeCount} ·
+    Удалённых: ${deletedCount}
+   </div>
+
+   <input
+    class="field"
+    id="listingSearch"
+    placeholder="Поиск по названию, категории или ID…"
+   >
+
+   <div class="row" style="margin:10px 0">
+    <button class="smallbtn" id="filterAll">Все</button>
+    <button class="smallbtn" id="filterActive">Активные</button>
+    <button class="smallbtn" id="filterDeleted">Удалённые</button>
+   </div>
+
+   <div class="muted" id="listingCount"></div>
+   <div id="listingResults"></div>
+  `;
+
+  document.getElementById("listingSearch").addEventListener("input", render);
+
+  document.getElementById("filterAll").onclick = () => adminProducts("all");
+  document.getElementById("filterActive").onclick = () => adminProducts("active");
+  document.getElementById("filterDeleted").onclick = () => adminProducts("deleted");
+
+  render();
 
  } catch(e) {
   el.textContent = e.message;
  }
 }
+
 
 function editListing(id){
  const item = adminListings.find(
