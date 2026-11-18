@@ -962,31 +962,6 @@ if (path === "/api/admin/deposits" && method === "POST") {
   });
 }
 
-      // ADMIN TELEGRAM NOTIFICATION
-const sellerUsername = seller.username
-  ? "@" + seller.username
-  : seller.first_name || seller.display_name || "Не указан";
-
-await telegramCall(env, "sendMessage", {
-  chat_id: String(admin.telegram_id),
-  text:
-    "✦ PRESTIGE MARKET\n\n" +
-    "DEPOSIT RECORD UPDATED\n\n" +
-    "Продавец: " + sellerUsername + "\n" +
-    "Сумма: $" + amount.toFixed(2) + "\n" +
-    "Статус: Запись подтверждена\n" +
-    "Минимальный депозит: $100\n\n" +
-    "Примечание: " + (note || "Нет")
-});
-
-      return json({
-        ok: true,
-        status: "recorded",
-        recorded_amount_usd: amount,
-        accounting_only: true
-      });
-    }
-
     // DEPOSIT HISTORY
     if (path === "/api/admin/deposit-events" && method === "GET") {
       const sellerId = Number(url.searchParams.get("seller_id"));
