@@ -698,6 +698,7 @@ function mediaFor(item) {
   return first.url || item.image_url || "";
 }
 
+
 function mediaKindFor(item) {
   let media = [];
 
@@ -709,7 +710,9 @@ function mediaKindFor(item) {
 
   const first = Array.isArray(media) ? media[0] || {} : {};
 
-  if (first.kind) return first.kind;
+  if (first.kind === "animation") return "video";
+  if (first.kind === "video") return "video";
+  if (first.kind === "photo") return "photo";
 
   const url = mediaFor(item);
 
@@ -718,6 +721,7 @@ function mediaKindFor(item) {
 
   return "photo";
 }
+
 
 function mediaHTML(item) {
   const src = mediaFor(item);
