@@ -895,9 +895,17 @@ if (path === "/api/media" && method === "GET") {
         return fail("Укажите проверенную сумму не менее $100");
       }
 
-      const seller = await env.DB.prepare(
-        "SELECT id FROM seller_profiles WHERE id = ?"
-      ).bind(sellerId).first();
+      const seller = await env.DB.prepare(`
+  SELECT
+    s.id,
+    s.display_name,
+    u.telegram_id,
+    u.username,
+    u.first_name
+  FROM seller_profiles s
+  LEFT JOIN users u ON u.id = s.user_id
+  WHERE s.id = ?
+`).bind(sellerId).first();
 
       if (!seller) return fail("Seller not found", 404);
 
@@ -931,6 +939,23 @@ if (path === "/api/media" && method === "GET") {
         amount_usd: amount,
         note
       });
+      
+      // ADMIN TELEGRAM NOTIFICATION
+const sellerUsername = seller.username
+  ? "@" + seller.username
+  : seller.first_name || seller.display_name || "Не указан";
+
+await telegramCall(env, "sendMessage", {
+  chat_id: String(admin.telegram_id),
+  text:
+    "✦ PRESTIGE MARKET\n\n" +
+    "DEPOSIT RECORD UPDATED\n\n" +
+    "Продавец: " + sellerUsername + "\n" +
+    "Сумма: $" + amount.toFixed(2) + "\n" +
+    "Статус: Запись подтверждена\n" +
+    "Минимальный депозит: $100\n\n" +
+    "Примечание: " + (note || "Нет")
+});
 
       return json({
         ok: true,
