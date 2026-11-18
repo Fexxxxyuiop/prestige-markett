@@ -764,27 +764,19 @@ function card(item) {
 
   let media = `<div class="cover-empty">✦</div>`;
 
-  if (src && kind === "video") {
+  if (src && (kind === "video" || kind === "animation")) {
     media = `
       <video
-  class="product-media"
-  src="${attr(src)}"
-  autoplay
-  muted
-  loop
-  playsinline
-  preload="auto"
-  disablepictureinpicture
-  controlslist="nodownload noplaybackrate nofullscreen">
-</video>
-  } else if (src && kind === "animation") {
-    media = `
-      <img
         class="product-media"
         src="${attr(src)}"
-        alt="${attr(item.title || "Product")}"
-        loading="lazy"
-        onerror="this.style.display='none'">`;
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        controlslist="nodownload noplaybackrate nofullscreen">
+      </video>`;
   } else if (src) {
     media = `
       <img
@@ -829,6 +821,7 @@ function card(item) {
       </div>
     </article>`;
 }
+
 
 function renderListings(search=""){
  const filtered=listings.filter(x=>
