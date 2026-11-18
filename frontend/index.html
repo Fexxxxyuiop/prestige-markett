@@ -677,11 +677,14 @@ function searchListings(value){
  renderListings(value);
 }
 
+
 function mediaFor(item) {
   let media = [];
 
   try {
-    media = JSON.parse(item.media_json || "[]");
+    media = typeof item.media_json === "string"
+      ? JSON.parse(item.media_json || "[]")
+      : (item.media_json || []);
   } catch {}
 
   if (!Array.isArray(media)) media = [];
@@ -699,7 +702,9 @@ function mediaKindFor(item) {
   let media = [];
 
   try {
-    media = JSON.parse(item.media_json || "[]");
+    media = typeof item.media_json === "string"
+      ? JSON.parse(item.media_json || "[]")
+      : (item.media_json || []);
   } catch {}
 
   const first = Array.isArray(media) ? media[0] || {} : {};
@@ -724,10 +729,28 @@ function mediaHTML(item) {
   const kind = mediaKindFor(item);
 
   if (kind === "video") {
-    return `<video class="product-media" src="${attr(src)}" controls playsinline preload="metadata"></video>`;
+    return `
+      <video
+        class="product-media"
+        src="${attr(src)}"
+        controls
+        playsinline
+        preload="metadata"
+        onerror="this.outerHTML='<div class=&quot;product-media-empty&quot;>Видео недоступно</div>'"
+      ></video>
+    `;
   }
 
-  return `<img class="product-media" src="${attr(src)}" alt="${attr(item.title || "Product")}" loading="lazy" onclick="window.open(this.src,'_blank')">`;
+  return `
+    <img
+      class="product-media"
+      src="${attr(src)}"
+      alt="${attr(item.title || "Product")}"
+      loading="lazy"
+      onerror="this.outerHTML='<div class=&quot;product-media-empty&quot;>Медиа недоступно</div>'"
+      onclick="window.open(this.src,'_blank')"
+    >
+  `;
 }
 
 
