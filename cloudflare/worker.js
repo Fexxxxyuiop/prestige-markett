@@ -464,7 +464,12 @@ if (path === "/api/media" && method === "GET") {
   );
 
   const tg = await tgResponse.json();
-
+console.log("MEDIA DEBUG:", JSON.stringify({
+  ok: tg.ok,
+  description: tg.description,
+  file_path: tg.result?.file_path,
+  file_size: tg.result?.file_size
+}));
   if (!tg.ok || !tg.result?.file_path) {
     return fail("Media not found", 404);
   }
