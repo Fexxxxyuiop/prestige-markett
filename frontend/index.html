@@ -767,12 +767,14 @@ function card(item) {
   if (src && kind === "video") {
     media = `
       <video
-        class="product-media"
-        src="${attr(src)}"
-        controls
-        playsinline
-        preload="metadata">
-      </video>`;
+  class="product-media"
+  src="${attr(src)}"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="auto">
+</video>
   } else if (src && kind === "animation") {
     media = `
       <img
