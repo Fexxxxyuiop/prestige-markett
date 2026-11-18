@@ -448,6 +448,7 @@ async function handle(request, env) {
   }
   
 // PUBLIC TELEGRAM MEDIA
+
 if (path === "/api/media" && method === "GET") {
   if (!env.BOT_TOKEN) {
     return fail("Media service unavailable", 500);
@@ -464,18 +465,15 @@ if (path === "/api/media" && method === "GET") {
   );
 
   const tg = await tgResponse.json();
-console.log("MEDIA DEBUG:", JSON.stringify({
-  ok: tg.ok,
-  description: tg.description,
-  file_path: tg.result?.file_path,
-  file_size: tg.result?.file_size
-}));
+
   if (!tg.ok || !tg.result?.file_path) {
     return fail("Media not found", 404);
   }
 
+  const filePath = tg.result.file_path;
+
   const fileResponse = await fetch(
-    `https://api.telegram.org/file/bot${env.BOT_TOKEN}/${tg.result.file_path}`
+    `https://api.telegram.org/file/bot${env.BOT_TOKEN}/${filePath}`
   );
 
   if (!fileResponse.ok) {
@@ -483,18 +481,23 @@ console.log("MEDIA DEBUG:", JSON.stringify({
   }
 
   const headers = new Headers(CORS);
-  const mediaType = fileResponse.headers.get("Content-Type") || "";
 
-headers.set(
-  "Content-Type",
-  mediaType.includes("gif")
-    ? "image/gif"
-    : mediaType.startsWith("video/")
-      ? mediaType
-      : mediaType.startsWith("image/")
-        ? mediaType
-        : "application/octet-stream"
-);
+  let contentType = fileResponse.headers.get("Content-Type") || "";
+
+  if (filePath.toLowerCase().endsWith(".mp4")) {
+    contentType = "video/mp4";
+  } else if (filePath.toLowerCase().endsWith(".gif")) {
+    contentType = "image/gif";
+  } else if (filePath.toLowerCase().endsWith(".webp")) {
+    contentType = "image/webp";
+  } else if (filePath.toLowerCase().endsWith(".jpg") ||
+             filePath.toLowerCase().endsWith(".jpeg")) {
+    contentType = "image/jpeg";
+  } else if (filePath.toLowerCase().endsWith(".png")) {
+    contentType = "image/png";
+  }
+
+  headers.set("Content-Type", contentType || "application/octet-stream");
   headers.set("Cache-Control", "public, max-age=3600");
   headers.set("Content-Disposition", "inline");
 
