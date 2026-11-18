@@ -1,4 +1,3 @@
-
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,PATCH,DELETE,OPTIONS",
@@ -506,12 +505,600 @@ if (path === "/api/media" && method === "GET") {
     headers
   });
 }
+  // NFT MARKETPLACE — PUBLIC API
 
+  // GET MARKETPLACE LISTINGS
+  if (path === "/api/marketplace/listings" && method === "GET") {
+    const category = url.searchParams.get("category");
+    const search = url.searchParams.get("q");
+
+    let sql = `
+      SELECT
+        l.*,
+        s.display_name AS seller_name,
+        s.status AS seller_status
+      FROM nft_market_listings l
+      JOIN seller_profiles s ON s.id = l.seller_id
+      WHERE l.status = 'active'
+        AND s.status = 'approved'
+    `;
+
+    const values = [];
+
+    if (category) {
+      sql += " AND (l.collection = ? OR l.gift_model = ?)";
+      values.push(category, category);
+    }
+
+    if (search) {
+      sql += " AND (l.title LIKE ? OR l.description LIKE ? OR l.collection LIKE ?)";
+      values.push(`%${search}%`, `%${search}%`, `%${search}%`);
+    }
+
+    sql += " ORDER BY l.id DESC LIMIT 100";
+
+    const result = await env.DB.prepare(sql).bind(...values).all();
+
+    return json({ ok: true, listings: result.results || [] });
+  }
+
+  // SELLER APPLICATION
+  if (path === "/api/seller/apply" && method === "POST") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Telegram authorization required", 401);
+
+    const body = await request.json();
+
+    const displayName = String(body.display_name || "").trim();
+    const description = String(body.description || "").trim();
+    const contact = String(body.contact || "").trim();
+
+    if (!displayName || displayName.length > 80) {
+      return fail("Введите название профиля продавца");
+    }
+
+    if (description.length > 1000 || contact.length > 150) {
+      return fail("Слишком длинное описание или контакт");
+    }
+
+    await env.DB.prepare(`
+      INSERT INTO seller_profiles
+        (user_id, status, display_name, description, contact)
+      VALUES (?, 'pending', ?, ?, ?)
+      ON CONFLICT(user_id) DO UPDATE SET
+        display_name = excluded.display_name,
+        description = excluded.description,
+        contact = excluded.contact,
+        updated_at = CURRENT_TIMESTAMP
+    `).bind(user.id, displayName, description, contact).run();
+
+    return json({
+      ok: true,
+      status: "pending",
+      message: "Заявка продавца отправлена администрации"
+    }, 201);
+  }
+
+  // SELLER PROFILE
+  if (path === "/api/seller/me" && method === "GET") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const seller = await env.DB.prepare(`
+      SELECT * FROM seller_profiles WHERE user_id = ?
+    `).bind(user.id).first();
+
+    if (!seller) {
+      return json({ ok: true, seller: null });
+    }
+
+    const deposit = await env.DB.prepare(`
+      SELECT required_amount_usd, recorded_amount_usd, status, updated_at
+      FROM seller_deposits WHERE seller_id = ?
+    `).bind(seller.id).first();
+
+    return json({
+      ok: true,
+      seller,
+      deposit: deposit || {
+        required_amount_usd: 100,
+        recorded_amount_usd: 0,
+        status: "not_recorded"
+      }
+    });
+  }
+
+  // SELLER'S LISTINGS
+  if (path === "/api/seller/listings" && method === "GET") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const seller = await env.DB.prepare(`
+      SELECT id FROM seller_profiles WHERE user_id = ?
+    `).bind(user.id).first();
+
+    if (!seller) return fail("Seller profile not found", 404);
+
+    const result = await env.DB.prepare(`
+      SELECT * FROM nft_market_listings
+      WHERE seller_id = ?
+      ORDER BY id DESC
+    `).bind(seller.id).all();
+
+    return json({ ok: true, listings: result.results || [] });
+  }
+
+  // CREATE NFT LISTING
+  if (path === "/api/seller/listings" && method === "POST") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const seller = await env.DB.prepare(`
+      SELECT * FROM seller_profiles WHERE user_id = ?
+    `).bind(user.id).first();
+
+    if (!seller || seller.status !== "approved") {
+      return fail("Профиль продавца ещё не одобрен", 403);
+    }
+
+    const deposit = await env.DB.prepare(`
+      SELECT * FROM seller_deposits WHERE seller_id = ?
+    `).bind(seller.id).first();
+
+    if (
+      !deposit ||
+      deposit.status !== "recorded" ||
+      Number(deposit.recorded_amount_usd) < 100
+    ) {
+      return fail("Не пройдена административная проверка депозита от $100", 403);
+    }
+
+    const body = await request.json();
+    const title = String(body.title || "").trim();
+    const collection = String(body.collection || "").trim();
+    const giftModel = String(body.gift_model || "").trim();
+    const description = String(body.description || "").trim();
+    const price = Number(body.price);
+
+    if (!title || title.length > 150) return fail("Некорректное название");
+    if (!Number.isFinite(price) || price <= 0) return fail("Некорректная цена");
+    if (description.length > 2000) return fail("Описание слишком длинное");
+
+    const media = Array.isArray(body.media) ? body.media.slice(0, 10) : [];
+
+    const result = await env.DB.prepare(`
+      INSERT INTO nft_market_listings (
+        seller_id, title, collection, gift_model,
+        description, price, currency, media_json,
+        gift_link, status
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+    `).bind(
+      seller.id,
+      title,
+      collection,
+      giftModel,
+      description,
+      price,
+      String(body.currency || "USD"),
+      JSON.stringify(media),
+      String(body.gift_link || "").slice(0, 500)
+    ).run();
+
+    return json({
+      ok: true,
+      listing_id: result.meta?.last_row_id,
+      status: "pending",
+      message: "Объявление отправлено на проверку"
+    }, 201);
+  }
+
+  // CREATE PURCHASE REQUEST — NO PAYMENT
+  if (path === "/api/marketplace/orders" && method === "POST") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const body = await request.json();
+    const listingId = Number(body.listing_id);
+
+    if (!Number.isInteger(listingId) || listingId < 1) {
+      return fail("Некорректный товар");
+    }
+
+    const listing = await env.DB.prepare(`
+      SELECT l.*, s.user_id AS seller_user_id
+      FROM nft_market_listings l
+      JOIN seller_profiles s ON s.id = l.seller_id
+      WHERE l.id = ?
+        AND l.status = 'active'
+        AND s.status = 'approved'
+    `).bind(listingId).first();
+
+    if (!listing) return fail("Объявление недоступно", 404);
+
+    if (String(listing.seller_user_id) === String(user.id)) {
+      return fail("Нельзя заказать собственное объявление");
+    }
+
+    const publicId = makePublicId();
+
+    const result = await env.DB.prepare(`
+      INSERT INTO nft_market_orders (
+        public_id, listing_id, buyer_user_id,
+        seller_user_id, status, buyer_note
+      )
+      VALUES (?, ?, ?, ?, 'pending', ?)
+    `).bind(
+      publicId,
+      listingId,
+      user.id,
+      listing.seller_user_id,
+      String(body.note || "").slice(0, 1000)
+    ).run();
+
+    return json({
+      ok: true,
+      order_id: result.meta?.last_row_id,
+      public_id: publicId,
+      status: "pending",
+      message: "Запрос продавцу создан. Оплата через площадку не производится."
+    }, 201);
+  }
+
+  // USER MARKETPLACE ORDERS
+  if (path === "/api/marketplace/orders" && method === "GET") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const result = await env.DB.prepare(`
+      SELECT o.*, l.title AS listing_title,
+             l.price, l.currency, l.media_json
+      FROM nft_market_orders o
+      LEFT JOIN nft_market_listings l ON l.id = o.listing_id
+      WHERE o.buyer_user_id = ? OR o.seller_user_id = ?
+      ORDER BY o.id DESC
+    `).bind(user.id, user.id).all();
+
+    return json({ ok: true, orders: result.results || [] });
+  }
+
+  // OPEN DISPUTE
+  if (path === "/api/marketplace/disputes" && method === "POST") {
+    const user = await getUser(request, env);
+    if (!user) return fail("Unauthorized", 401);
+
+    const body = await request.json();
+    const orderId = Number(body.order_id);
+    const reason = String(body.reason || "").trim();
+    const description = String(body.description || "").trim();
+
+    if (!Number.isInteger(orderId) || orderId < 1) {
+      return fail("Некорректный номер заказа");
+    }
+
+    if (!reason || reason.length > 150 || description.length > 2000) {
+      return fail("Проверьте причину и описание обращения");
+    }
+
+    const order = await env.DB.prepare(`
+      SELECT * FROM nft_market_orders
+      WHERE id = ? AND (buyer_user_id = ? OR seller_user_id = ?)
+    `).bind(orderId, user.id, user.id).first();
+
+    if (!order) return fail("Заказ не найден", 404);
+
+    const existing = await env.DB.prepare(`
+      SELECT id FROM marketplace_disputes
+      WHERE order_id = ? AND status = 'open'
+    `).bind(orderId).first();
+
+    if (existing) return fail("По этому заказу уже открыт спор");
+
+    const result = await env.DB.prepare(`
+      INSERT INTO marketplace_disputes
+        (order_id, opened_by, reason, description)
+      VALUES (?, ?, ?, ?)
+    `).bind(orderId, user.id, reason, description).run();
+
+    return json({
+      ok: true,
+      dispute_id: result.meta?.last_row_id,
+      status: "open"
+    }, 201);
+  }
+  
   // ADMIN AUTHORIZATION
 
   if (path.startsWith("/api/admin/")) {
     const admin = await requireAdmin(request, env);
     if (!admin) return fail("Admin access required", 403);
+        // MARKETPLACE SELLERS
+    if (path === "/api/admin/sellers" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT
+          s.*,
+          u.telegram_id,
+          u.username,
+          u.first_name,
+          d.required_amount_usd,
+          d.recorded_amount_usd,
+          d.status AS deposit_status
+        FROM seller_profiles s
+        LEFT JOIN users u ON u.id = s.user_id
+        LEFT JOIN seller_deposits d ON d.seller_id = s.id
+        ORDER BY s.id DESC
+      `).all();
+
+      return json({ ok: true, sellers: result.results || [] });
+    }
+
+    // APPROVE OR REJECT SELLER
+    const sellerStatusMatch =
+      path.match(/^\/api\/admin\/sellers\/(\d+)\/status$/);
+
+    if (sellerStatusMatch && method === "PATCH") {
+      const id = Number(sellerStatusMatch[1]);
+      const body = await request.json();
+      const status = String(body.status || "");
+
+      if (!["approved", "rejected", "pending", "suspended"].includes(status)) {
+        return fail("Invalid seller status");
+      }
+
+      const seller = await env.DB.prepare(
+        "SELECT id FROM seller_profiles WHERE id = ?"
+      ).bind(id).first();
+
+      if (!seller) return fail("Seller not found", 404);
+
+      await env.DB.prepare(`
+        UPDATE seller_profiles
+        SET status = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).bind(status, id).run();
+
+      await audit(env, admin, "seller_status", "seller", id, { status });
+
+      return json({ ok: true, status });
+    }
+
+    // DEPOSIT ACCOUNTING — ADMINISTRATIVE RECORD ONLY
+    if (path === "/api/admin/deposits" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT
+          d.*,
+          s.display_name,
+          s.user_id,
+          u.telegram_id,
+          u.username
+        FROM seller_deposits d
+        JOIN seller_profiles s ON s.id = d.seller_id
+        JOIN users u ON u.id = s.user_id
+        ORDER BY d.id DESC
+      `).all();
+
+      return json({ ok: true, deposits: result.results || [] });
+    }
+
+    // RECORD DEPOSIT VERIFICATION
+    if (path === "/api/admin/deposits" && method === "POST") {
+      const body = await request.json();
+      const sellerId = Number(body.seller_id);
+      const amount = Number(body.amount_usd);
+      const note = String(body.note || "").trim();
+
+      if (!Number.isInteger(sellerId) || sellerId < 1) {
+        return fail("Invalid seller_id");
+      }
+
+      if (!Number.isFinite(amount) || amount < 100 || amount > 1000000) {
+        return fail("Укажите проверенную сумму не менее $100");
+      }
+
+      const seller = await env.DB.prepare(
+        "SELECT id FROM seller_profiles WHERE id = ?"
+      ).bind(sellerId).first();
+
+      if (!seller) return fail("Seller not found", 404);
+
+      await env.DB.prepare(`
+        INSERT INTO seller_deposits (
+          seller_id, required_amount_usd,
+          recorded_amount_usd, status, admin_note, updated_at
+        )
+        VALUES (?, 100, ?, 'recorded', ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(seller_id) DO UPDATE SET
+          required_amount_usd = 100,
+          recorded_amount_usd = excluded.recorded_amount_usd,
+          status = 'recorded',
+          admin_note = excluded.admin_note,
+          updated_at = CURRENT_TIMESTAMP
+      `).bind(sellerId, amount, note).run();
+
+      await env.DB.prepare(`
+        INSERT INTO seller_deposit_events (
+          seller_id, action, amount_usd, note, admin_telegram_id
+        )
+        VALUES (?, 'verification_recorded', ?, ?, ?)
+      `).bind(
+        sellerId,
+        amount,
+        note,
+        String(admin.telegram_id)
+      ).run();
+
+      await audit(env, admin, "deposit_verification", "seller", sellerId, {
+        amount_usd: amount,
+        note
+      });
+
+      return json({
+        ok: true,
+        status: "recorded",
+        recorded_amount_usd: amount,
+        accounting_only: true
+      });
+    }
+
+    // DEPOSIT HISTORY
+    if (path === "/api/admin/deposit-events" && method === "GET") {
+      const sellerId = Number(url.searchParams.get("seller_id"));
+
+      let sql = `
+        SELECT e.*, s.display_name
+        FROM seller_deposit_events e
+        LEFT JOIN seller_profiles s ON s.id = e.seller_id
+      `;
+
+      const values = [];
+
+      if (Number.isInteger(sellerId) && sellerId > 0) {
+        sql += " WHERE e.seller_id = ?";
+        values.push(sellerId);
+      }
+
+      sql += " ORDER BY e.id DESC LIMIT 500";
+
+      const result = await env.DB.prepare(sql).bind(...values).all();
+
+      return json({ ok: true, events: result.results || [] });
+    }
+
+    // ALL MARKETPLACE LISTINGS
+    if (path === "/api/admin/marketplace/listings" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT
+          l.*,
+          s.display_name AS seller_name,
+          u.telegram_id,
+          u.username
+        FROM nft_market_listings l
+        LEFT JOIN seller_profiles s ON s.id = l.seller_id
+        LEFT JOIN users u ON u.id = s.user_id
+        ORDER BY l.id DESC
+        LIMIT 300
+      `).all();
+
+      return json({ ok: true, listings: result.results || [] });
+    }
+
+    // MODERATE MARKETPLACE LISTING
+    const marketListingMatch =
+      path.match(/^\/api\/admin\/marketplace\/listings\/(\d+)$/);
+
+    if (marketListingMatch && method === "PATCH") {
+      const id = Number(marketListingMatch[1]);
+      const body = await request.json();
+      const status = String(body.status || "");
+
+      if (!["active", "rejected", "suspended"].includes(status)) {
+        return fail("Invalid listing status");
+      }
+
+      await env.DB.prepare(`
+        UPDATE nft_market_listings
+        SET status = ?, admin_note = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).bind(status, String(body.admin_note || ""), id).run();
+
+      await audit(env, admin, "market_listing_status", "market_listing", id, {
+        status,
+        admin_note: body.admin_note || ""
+      });
+
+      return json({ ok: true, status });
+    }
+
+    // MARKETPLACE ORDERS FOR ADMIN
+    if (path === "/api/admin/marketplace/orders" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT
+          o.*,
+          l.title AS listing_title,
+          b.username AS buyer_username,
+          b.telegram_id AS buyer_telegram_id,
+          s.username AS seller_username,
+          s.telegram_id AS seller_telegram_id
+        FROM nft_market_orders o
+        LEFT JOIN nft_market_listings l ON l.id = o.listing_id
+        LEFT JOIN users b ON b.id = o.buyer_user_id
+        LEFT JOIN users s ON s.id = o.seller_user_id
+        ORDER BY o.id DESC
+        LIMIT 300
+      `).all();
+
+      return json({ ok: true, orders: result.results || [] });
+    }
+
+    // UPDATE MARKETPLACE ORDER STATUS
+    const marketOrderMatch =
+      path.match(/^\/api\/admin\/marketplace\/orders\/(\d+)\/status$/);
+
+    if (marketOrderMatch && method === "PATCH") {
+      const id = Number(marketOrderMatch[1]);
+      const body = await request.json();
+      const status = String(body.status || "");
+
+      if (!["pending", "accepted", "rejected", "completed", "cancelled"].includes(status)) {
+        return fail("Invalid order status");
+      }
+
+      await env.DB.prepare(`
+        UPDATE nft_market_orders
+        SET status = ?, seller_note = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).bind(status, String(body.note || ""), id).run();
+
+      await audit(env, admin, "market_order_status", "market_order", id, {
+        status
+      });
+
+      return json({ ok: true, status });
+    }
+
+    // MARKETPLACE DISPUTES
+    if (path === "/api/admin/marketplace/disputes" && method === "GET") {
+      const result = await env.DB.prepare(`
+        SELECT
+          d.*,
+          o.public_id,
+          o.buyer_user_id,
+          o.seller_user_id
+        FROM marketplace_disputes d
+        JOIN nft_market_orders o ON o.id = d.order_id
+        ORDER BY d.id DESC
+        LIMIT 300
+      `).all();
+
+      return json({ ok: true, disputes: result.results || [] });
+    }
+
+    // RESOLVE DISPUTE
+    const disputeMatch =
+      path.match(/^\/api\/admin\/marketplace\/disputes\/(\d+)$/);
+
+    if (disputeMatch && method === "PATCH") {
+      const id = Number(disputeMatch[1]);
+      const body = await request.json();
+      const status = String(body.status || "");
+
+      if (!["resolved", "rejected", "open"].includes(status)) {
+        return fail("Invalid dispute status");
+      }
+
+      await env.DB.prepare(`
+        UPDATE marketplace_disputes
+        SET status = ?, admin_note = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).bind(status, String(body.admin_note || ""), id).run();
+
+      await audit(env, admin, "resolve_dispute", "dispute", id, {
+        status,
+        admin_note: body.admin_note || ""
+      });
+
+      return json({ ok: true, status });
+    }
     // ADMIN MEDIA UPLOAD
     if (path === "/api/admin/upload" && method === "POST") {
       if (!env.BOT_TOKEN) {
