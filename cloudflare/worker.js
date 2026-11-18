@@ -542,42 +542,71 @@ if (path === "/api/media" && method === "GET") {
     return json({ ok: true, listings: result.results || [] });
   }
 
-  // SELLER APPLICATION
-  if (path === "/api/seller/apply" && method === "POST") {
-    const user = await getUser(request, env);
-    if (!user) return fail("Telegram authorization required", 401);
+if (path === "/api/seller/apply" && method === "POST") {
+  const user = await getUser(request, env);
+  if (!user) return fail("Telegram authorization required", 401);
 
-    const body = await request.json();
+  const body = await request.json();
 
-    const displayName = String(body.display_name || "").trim();
-    const description = String(body.description || "").trim();
-    const contact = String(body.contact || "").trim();
+  const displayName = String(body.display_name || "").trim();
+  const description = String(body.description || "").trim();
+  const contact = String(body.contact || "").trim();
 
-    if (!displayName || displayName.length > 80) {
-      return fail("Введите название профиля продавца");
-    }
-
-    if (description.length > 1000 || contact.length > 150) {
-      return fail("Слишком длинное описание или контакт");
-    }
-
-    await env.DB.prepare(`
-      INSERT INTO seller_profiles
-        (user_id, status, display_name, description, contact)
-      VALUES (?, 'pending', ?, ?, ?)
-      ON CONFLICT(user_id) DO UPDATE SET
-        display_name = excluded.display_name,
-        description = excluded.description,
-        contact = excluded.contact,
-        updated_at = CURRENT_TIMESTAMP
-    `).bind(user.id, displayName, description, contact).run();
-
-    return json({
-      ok: true,
-      status: "pending",
-      message: "Заявка продавца отправлена администрации"
-    }, 201);
+  if (!displayName || displayName.length > 80) {
+    return fail("Введите название профиля продавца");
   }
+
+  if (description.length > 1000 || contact.length > 150) {
+    return fail("Слишком длинное описание или контакт");
+  }
+
+  await env.DB.prepare(`
+    INSERT INTO seller_profiles
+      (user_id, status, display_name, description, contact)
+    VALUES (?, 'pending', ?, ?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET
+      display_name = excluded.display_name,
+      description = excluded.description,
+      contact = excluded.contact,
+      updated_at = CURRENT_TIMESTAMP
+  `).bind(user.id, displayName, description, contact).run();
+
+  const seller = await env.DB.prepare(`
+    SELECT id FROM seller_profiles WHERE user_id = ?
+  `).bind(user.id).first();
+
+  if (!seller) return fail("Не удалось создать профиль продавца", 500);
+
+  const existingDeposit = await env.DB.prepare(`
+    SELECT id FROM seller_deposits
+    WHERE seller_id = ?
+    LIMIT 1
+  `).bind(seller.id).first();
+
+  if (!existingDeposit) {
+    await env.DB.prepare(`
+      INSERT INTO seller_deposits (
+        seller_id,
+        required_amount_usd,
+        recorded_amount_usd,
+        status
+      )
+      VALUES (?, 100, 0, 'not_recorded')
+    `).bind(seller.id).run();
+  }
+
+  return json({
+    ok: true,
+    seller_id: seller.id,
+    status: "pending",
+    deposit: {
+      required_amount_usd: 100,
+      recorded_amount_usd: 0,
+      status: "not_recorded"
+    },
+    message: "Заявка продавца отправлена администрации"
+  }, 201);
+}
 
   // SELLER PROFILE
   if (path === "/api/seller/me" && method === "GET") {
