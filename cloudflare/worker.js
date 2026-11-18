@@ -962,66 +962,6 @@ if (path === "/api/admin/deposits" && method === "POST") {
   });
 }
 
-    // RECORD DEPOSIT VERIFICATION
-    if (path === "/api/admin/deposits" && method === "POST") {
-      const body = await request.json();
-      const sellerId = Number(body.seller_id);
-      const amount = Number(body.amount_usd);
-      const note = String(body.note || "").trim();
-
-      if (!Number.isInteger(sellerId) || sellerId < 1) {
-        return fail("Invalid seller_id");
-      }
-
-      if (!Number.isFinite(amount) || amount < 100 || amount > 1000000) {
-        return fail("Укажите проверенную сумму не менее $100");
-      }
-
-      const seller = await env.DB.prepare(`
-  SELECT
-    s.id,
-    s.display_name,
-    u.telegram_id,
-    u.username,
-    u.first_name
-  FROM seller_profiles s
-  LEFT JOIN users u ON u.id = s.user_id
-  WHERE s.id = ?
-`).bind(sellerId).first();
-
-      if (!seller) return fail("Seller not found", 404);
-
-      await env.DB.prepare(`
-        INSERT INTO seller_deposits (
-          seller_id, required_amount_usd,
-          recorded_amount_usd, status, admin_note, updated_at
-        )
-        VALUES (?, 100, ?, 'recorded', ?, CURRENT_TIMESTAMP)
-        ON CONFLICT(seller_id) DO UPDATE SET
-          required_amount_usd = 100,
-          recorded_amount_usd = excluded.recorded_amount_usd,
-          status = 'recorded',
-          admin_note = excluded.admin_note,
-          updated_at = CURRENT_TIMESTAMP
-      `).bind(sellerId, amount, note).run();
-
-      await env.DB.prepare(`
-        INSERT INTO seller_deposit_events (
-          seller_id, action, amount_usd, note, admin_telegram_id
-        )
-        VALUES (?, 'verification_recorded', ?, ?, ?)
-      `).bind(
-        sellerId,
-        amount,
-        note,
-        String(admin.telegram_id)
-      ).run();
-
-      await audit(env, admin, "deposit_verification", "seller", sellerId, {
-        amount_usd: amount,
-        note
-      });
-      
       // ADMIN TELEGRAM NOTIFICATION
 const sellerUsername = seller.username
   ? "@" + seller.username
