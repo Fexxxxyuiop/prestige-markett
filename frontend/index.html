@@ -1100,32 +1100,74 @@ function previewAdminMedia(){
   preview.innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
  }
 }
+
 async function saveNewListing(){
- const file=document.getElementById("aMedia").files[0];
- const body={
-  category:document.getElementById("aCategory").value,
-  title:document.getElementById("aTitle").value.trim(),
-  description:document.getElementById("aDescription").value,
-  price:Number(document.getElementById("aPrice").value),
-  currency:document.getElementById("aCurrency").value,
-  image_url:"",
-  public_identifier:document.getElementById("aIdentifier").value.trim()
+ const button = document.querySelector(
+  '#adminContent button[onclick="saveNewListing()"]'
+ );
+
+ const file = document.getElementById("aMedia").files[0];
+
+ const body = {
+  category: document.getElementById("aCategory").value,
+  title: document.getElementById("aTitle").value.trim(),
+  description: document.getElementById("aDescription").value,
+  price: Number(document.getElementById("aPrice").value),
+  currency: document.getElementById("aCurrency").value,
+  image_url: "",
+  public_identifier: document.getElementById("aIdentifier").value.trim()
  };
- if(!body.title)return toast("Введите название");
- if(!file)return toast("Выберите фото, видео или GIF");
+
+ if(!body.title) return toast("Введите название");
+ if(!Number.isFinite(body.price) || body.price < 0)
+  return toast("Проверьте цену");
+ if(!file) return toast("Выберите фото, видео или GIF");
+
+ if(button){
+  button.disabled = true;
+  button.textContent = "Загрузка медиа…";
+ }
+
  try{
-  const form=new FormData();
-  form.append("file",file);
-  const uploaded=await fetch(API+"/api/admin/upload",{
-   method:"POST",headers:{"X-Telegram-Init-Data":initData},body:form
+  const form = new FormData();
+  form.append("file", file);
+
+  const uploaded = await fetch(API + "/api/admin/upload", {
+   method: "POST",
+   headers: {"X-Telegram-Init-Data": initData},
+   body: form
   });
-  const mediaData=await uploaded.json();
-  if(!uploaded.ok||!mediaData.ok)throw new Error(mediaData.error||"Ошибка загрузки файла");
-  body.media=[mediaData.media];
-  await api("/api/admin/listings",{method:"POST",body:JSON.stringify(body)});
+
+  const mediaData = await uploaded.json();
+
+  if(!uploaded.ok || !mediaData.ok)
+   throw new Error(mediaData.error || "Ошибка загрузки файла");
+
+  body.media = [mediaData.media];
+
+  if(button) button.textContent = "Публикация товара…";
+
+  await api("/api/admin/listings", {
+   method: "POST",
+   body: JSON.stringify(body)
+  });
+
   toast("Товар успешно опубликован");
-  adminProducts();loadListings();loadAdminStats();
- }catch(e){toast(e.message)}
+
+  await Promise.all([
+   adminProducts(),
+   loadListings(),
+   loadAdminStats()
+  ]);
+
+ }catch(e){
+  toast(e.message || "Не удалось опубликовать товар");
+ }finally{
+  if(button){
+   button.disabled = false;
+   button.textContent = "Опубликовать товар";
+  }
+ }
 }
 
 async function saveEdit(id){
