@@ -1332,7 +1332,19 @@ if (path === "/api/admin/deposits" && method === "POST") {
 
       return json({ ok: true, orders: result.results || [] });
     }
+if (path === "/api/admin/deposits" && method === "GET") {
+  const result = await env.DB.prepare(`
+    SELECT *
+    FROM deposits
+    ORDER BY id DESC
+    LIMIT 300
+  `).all();
 
+  return json({
+    ok: true,
+    deposits: result.results || []
+  });
+}
     const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)\/status$/);
 
     if (orderMatch && method === "PATCH") {
