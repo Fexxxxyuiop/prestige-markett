@@ -794,6 +794,47 @@ function adminTab(tab){
  if(tab==="orders")adminOrders();
  if(tab==="add")adminAdd();
  if(tab==="prices")adminPrices();
+ if(tab==="deposits")adminDeposits();
+}
+ 
+ async function adminDeposits(){
+  if(!isAdmin)return toast("Нет доступа");
+
+  const box=document.getElementById("adminContent");
+  if(!box)return;
+
+  box.innerHTML="<div class='card'>Загрузка записей...</div>";
+
+  try{
+    const d=await api("/api/admin/deposits");
+    const deposits=d.deposits||[];
+
+    if(!deposits.length){
+      box.innerHTML="<div class='card'>Записей пока нет.</div>";
+      return;
+    }
+
+    box.innerHTML=`
+      <div class="card">
+        <h3>Записи депозитов</h3>
+        ${deposits.map(x=>`
+          <div class="card" style="margin-top:10px">
+            <b>Продавец #${x.seller_id}</b>
+            <p>Сумма: ${x.amount_usd ?? "—"} USD</p>
+            <p>Статус: ${x.status ?? "—"}</p>
+            <p>Примечание: ${x.note || "—"}</p>
+            <small>${x.created_at || ""}</small>
+          </div>
+        `).join("")}
+        <p style="opacity:.65;font-size:12px">
+          Это административные записи, а не подтверждение получения средств.
+        </p>
+        <button class="full secondary" onclick="adminDeposits()">Обновить</button>
+      </div>
+    `;
+  }catch(e){
+    box.innerHTML="<div class='card'>Не удалось загрузить записи: "+e.message+"</div>";
+  }
 }
 
 async function adminProducts(filter="all"){
