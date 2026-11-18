@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -11,7 +12,6 @@
  --bg:#07111f;--panel:#0d1c30;--panel2:#102640;--line:#1e4267;
  --text:#f4f9ff;--muted:#8da7c2;--blue:#258cff;--blue2:#55b7ff;
  --cyan:#65e1ff;--green:#5de2b0;--red:#ff718b;
- --glow:0 0 28px #168bff35;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -22,19 +22,19 @@ body{
  padding-bottom:calc(94px + env(safe-area-inset-bottom));
 }
 button,input,textarea,select{font:inherit}
-button{cursor:pointer;transition:transform .2s,filter .2s,box-shadow .2s}
+button{cursor:pointer;transition:transform .2s,filter .2s}
 button:active{transform:scale(.97)}
 .top{padding:calc(17px + env(safe-area-inset-top)) 18px 15px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-size:18px;font-weight:950;letter-spacing:2px}
 .brand span{background:linear-gradient(110deg,#fff,#61c7ff,#258cff);-webkit-background-clip:text;color:transparent}
 .subbrand{font-size:9px;letter-spacing:2.2px;color:var(--muted);margin-top:5px}
-.avatar{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;font-size:21px;font-weight:950;color:white;background:linear-gradient(145deg,#69caff,#1674db 55%,#073b82);border:1px solid #8bd7ff88;box-shadow:0 7px 22px #087fff55,inset 0 2px 5px #ffffff55}
+.avatar{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;font-size:21px;font-weight:950;color:white;background:linear-gradient(145deg,#69caff,#1674db 55%,#073b82);border:1px solid #8bd7ff88;box-shadow:0 7px 22px #087fff55}
 .page{display:none}
 .page.active{display:block}
 
 /* HOME */
 .home-hero{position:relative;isolation:isolate;overflow:hidden;min-height:365px;margin:12px 16px 23px;padding:22px;border-radius:27px;border:1px solid #318edb88;background:radial-gradient(ellipse at 85% 30%,#147ed955,transparent 42%),radial-gradient(ellipse at 10% 100%,#07518b66,transparent 45%),linear-gradient(145deg,#123457,#0a1b30 65%,#07111f);box-shadow:0 18px 45px #0009,0 0 30px #168bff22,inset 0 1px #ffffff22}
-.home-hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.17;background-image:linear-gradient(#83cfff22 1px,transparent 1px),linear-gradient(90deg,#83cfff22 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(120deg,black,transparent 85%)}
+.home-hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.17;background-image:linear-gradient(#83cfff22 1px,transparent 1px),linear-gradient(90deg,#83cfff22 1px,transparent 1px);background-size:28px 28px}
 .home-hero-head{display:flex;align-items:center;justify-content:space-between}
 .home-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:30px;background:#168bff20;border:1px solid #56baff66;color:#bce8ff;font-size:9px;font-weight:900;letter-spacing:1.4px}
 .home-live-dot{width:7px;height:7px;border-radius:50%;background:#61d7ff;box-shadow:0 0 12px #61d7ff}
@@ -42,16 +42,15 @@ button:active{transform:scale(.97)}
 .home-hero-content{position:relative;z-index:2;margin-top:28px;max-width:78%}
 .home-kicker{color:#65caff;font-size:10px;font-weight:900;letter-spacing:2px}
 .home-hero h1{font-size:32px;line-height:1.12;letter-spacing:-1px;margin:13px 0;font-weight:950}
-.home-hero h1 span{background:linear-gradient(100deg,#fff,#80d8ff 45%,#258cff);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 13px #168bff55)}
+.home-hero h1 span{background:linear-gradient(100deg,#fff,#80d8ff 45%,#258cff);-webkit-background-clip:text;color:transparent}
 .home-hero-content p{color:#b0c8df;font-size:12px;line-height:1.65;max-width:235px;margin:0 0 20px}
-.home-primary{display:inline-flex;align-items:center;gap:15px;padding:14px 17px;border-radius:13px;color:white;font-size:12px;font-weight:900;border:1px solid #9bdcff99;background:linear-gradient(120deg,#50baff,#1679df 55%,#0752ae);box-shadow:0 6px 0 #063c80,0 12px 25px #087fff55,inset 0 1px #ffffff80}
+.home-primary{display:inline-flex;align-items:center;gap:15px;padding:14px 17px;border-radius:13px;color:white;font-size:12px;font-weight:900;border:1px solid #9bdcff99;background:linear-gradient(120deg,#50baff,#1679df 55%,#0752ae);box-shadow:0 6px 0 #063c80,0 12px 25px #087fff55}
 .home-primary span{font-size:17px}
-.home-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #063c80,0 6px 12px #087fff55}
 .home-art{position:absolute;width:165px;height:165px;right:-13px;top:115px;z-index:1;pointer-events:none}
-.home-orbit{position:absolute;inset:9px;border:1px solid #65caff77;border-radius:50%;transform:rotateX(65deg) rotate(-25deg);box-shadow:0 0 25px #168bff33}
+.home-orbit{position:absolute;inset:9px;border:1px solid #65caff77;border-radius:50%;transform:rotateX(65deg) rotate(-25deg)}
 .home-orbit.two{inset:23px -7px;transform:rotateX(65deg) rotate(55deg);border-color:#80dfff66}
-.home-orbit-dot{position:absolute;top:14px;right:20px;color:#d7f5ff;font-size:22px;text-shadow:0 0 18px #54caff}
-.home-core{position:absolute;left:43px;top:39px;width:80px;height:80px;display:grid;place-items:center;border-radius:24px;font-size:34px;font-weight:950;color:white;background:linear-gradient(145deg,#a4e7ff,#258cff 48%,#073e8a);border:1px solid #b9eaff;box-shadow:0 15px 30px #0008,0 0 35px #168bff88,inset 0 3px 9px #ffffff88;transform:rotate(-12deg)}
+.home-orbit-dot{position:absolute;top:14px;right:20px;color:#d7f5ff;font-size:22px}
+.home-core{position:absolute;left:43px;top:39px;width:80px;height:80px;display:grid;place-items:center;border-radius:24px;font-size:34px;font-weight:950;color:white;background:linear-gradient(145deg,#a4e7ff,#258cff 48%,#073e8a);border:1px solid #b9eaff;box-shadow:0 15px 30px #0008,0 0 35px #168bff88;transform:rotate(-12deg)}
 .home-core:after{content:"";position:absolute;inset:7px;border:1px solid #ffffff55;border-radius:18px}
 .home-art-label{position:absolute;bottom:8px;right:4px;padding:7px 10px;background:#0b2542dd;border:1px solid #56baff77;border-radius:9px;color:#c7efff;font-size:9px;font-weight:900;letter-spacing:1px}
 .home-hero-bottom{position:absolute;bottom:17px;left:22px;right:22px;padding-top:12px;border-top:1px solid #ffffff1b;display:flex;justify-content:space-between;color:#8caecb;font-size:9px;letter-spacing:1.3px}
@@ -60,15 +59,13 @@ button:active{transform:scale(.97)}
 .home-section-title h2{font-size:18px;margin:0;font-weight:900}
 .home-link{color:#63c7ff;font-size:11px;font-weight:800}
 .home-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.home-category{position:relative;min-width:0;min-height:105px;padding:14px;text-align:left;color:white;border-radius:17px;border:1px solid #285982;background:radial-gradient(circle at 100% 0%,#168bff25,transparent 55%),linear-gradient(145deg,#123252,#0b1b2e);box-shadow:0 6px 0 #050d17,0 11px 19px #0006,inset 0 1px #ffffff18;overflow:hidden}
-.home-category:after{content:"";position:absolute;width:65px;height:65px;right:-25px;bottom:-29px;border:1px solid #65caff33;border-radius:50%;box-shadow:0 0 0 9px #168bff0a,0 0 0 18px #168bff08}
-.home-category:active{transform:translateY(4px);box-shadow:0 2px 0 #050d17,0 5px 10px #0006}
-.home-category-icon{display:block;font-size:25px;margin-bottom:10px;filter:drop-shadow(0 0 9px #168bff77)}
+.home-category{position:relative;min-width:0;min-height:105px;padding:14px;text-align:left;color:white;border-radius:17px;border:1px solid #285982;background:radial-gradient(circle at 100% 0%,#168bff25,transparent 55%),linear-gradient(145deg,#123252,#0b1b2e);overflow:hidden}
+.home-category-icon{display:block;font-size:25px;margin-bottom:10px}
 .home-category b{display:block;font-size:13px;font-weight:900}
 .home-category small{display:block;color:#9bb5ce;font-size:10px;margin-top:5px}
 .home-category-arrow{position:absolute;right:13px;top:13px;color:#75ceff;font-size:15px}
-.home-note{display:flex;align-items:center;gap:12px;margin:22px 16px;padding:15px;border-radius:16px;background:linear-gradient(110deg,#12395d,#0c2036);border:1px solid #285982;box-shadow:0 7px 20px #0005}
-.home-note-icon{width:39px;height:39px;display:grid;place-items:center;flex-shrink:0;border-radius:12px;background:linear-gradient(145deg,#68caff,#126bce);box-shadow:0 4px 0 #08458c,0 0 15px #168bff55;font-size:19px}
+.home-note{display:flex;align-items:center;gap:12px;margin:22px 16px;padding:15px;border-radius:16px;background:linear-gradient(110deg,#12395d,#0c2036);border:1px solid #285982}
+.home-note-icon{width:39px;height:39px;display:grid;place-items:center;flex-shrink:0;border-radius:12px;background:linear-gradient(145deg,#68caff,#126bce);font-size:19px}
 .home-note b{display:block;font-size:12px}
 .home-note small{display:block;color:#9bb5ce;font-size:10px;margin-top:5px;line-height:1.5}
 
@@ -78,14 +75,13 @@ button:active{transform:scale(.97)}
 .sectionhead h2{font-size:18px;margin:0;font-weight:850}
 .muted{color:var(--muted);font-size:12px}
 .search{margin:0 16px 18px;display:flex;gap:9px}
-.search input{width:100%;background:#0d1d31;border:1px solid #244b70;border-radius:15px;padding:15px;color:white;outline:none;box-shadow:inset 0 3px 10px #0008,0 4px 16px #0003}
-.search input:focus,.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #258cff22,0 0 20px #168bff20}
+.search input{width:100%;background:#0d1d31;border:1px solid #244b70;border-radius:15px;padding:15px;color:white;outline:none}
+.search input:focus,.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #258cff22}
 .chips{display:flex;gap:9px;overflow:auto;padding:0 16px 10px;scrollbar-width:none}
-.chip{white-space:nowrap;background:linear-gradient(145deg,#12304e,#0b1a2c);border:1px solid #244b70;color:#b8cee2;padding:11px 15px;border-radius:13px;font-size:12px;box-shadow:0 4px 0 #050d17,0 7px 14px #0005}
-.chip.active{background:linear-gradient(120deg,#55baff,#126bd0);color:white;border-color:#9bdcff;box-shadow:0 4px 0 #08458c,0 0 20px #168bff55;font-weight:850}
+.chip{white-space:nowrap;background:linear-gradient(145deg,#12304e,#0b1a2c);border:1px solid #244b70;color:#b8cee2;padding:11px 15px;border-radius:13px;font-size:12px}
+.chip.active{background:linear-gradient(120deg,#55baff,#126bd0);color:white;border-color:#9bdcff;font-weight:850}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:linear-gradient(145deg,#102943,#0a192b);border:1px solid #244b70;border-radius:19px;overflow:hidden;min-width:0;box-shadow:0 9px 24px #0007,inset 0 1px #ffffff0b;transition:transform .2s,border-color .2s}
-.card:active{transform:scale(.98);border-color:#58baff}
+.card{background:linear-gradient(145deg,#102943,#0a192b);border:1px solid #244b70;border-radius:19px;overflow:hidden;min-width:0;box-shadow:0 9px 24px #0007}
 .cover{height:165px;position:relative;background:radial-gradient(circle,#164b79,#0b1b30 70%);overflow:hidden}
 .cover img,.cover video{width:100%;height:100%;object-fit:cover;display:block}
 .product-media{display:block;width:100%;height:100%;object-fit:cover;background:#0a1a2c;border-radius:inherit}
@@ -93,62 +89,62 @@ button:active{transform:scale(.97)}
 .cardbody{padding:12px}
 .cardtitle{font-weight:850;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
 .carddesc{font-size:11px;color:var(--muted);margin-top:7px;min-height:27px;line-height:1.45}
-.price{color:#79d2ff;font-weight:900;font-size:16px;margin:11px 0;text-shadow:0 0 15px #168bff55}
+.price{color:#79d2ff;font-weight:900;font-size:16px;margin:11px 0}
 .cardactions{display:flex;gap:8px}
-.smallbtn{border:1px solid #7acbff66;background:linear-gradient(120deg,#43b5ff,#126bd0);color:white;border-radius:10px;padding:10px 8px;font-size:11px;font-weight:850;flex:1;box-shadow:0 4px 0 #08458c,0 7px 13px #0005}
+.smallbtn{border:1px solid #7acbff66;background:linear-gradient(120deg,#43b5ff,#126bd0);color:white;border-radius:10px;padding:10px 8px;font-size:11px;font-weight:850;flex:1}
 .iconbtn{background:#102b46;border:1px solid #285982;color:#c8edff;border-radius:10px;padding:8px 11px}
 .product-tag{position:absolute;top:10px;left:10px;z-index:2;padding:6px 9px;border:1px solid #7acbff66;border-radius:20px;background:#071a2cdd;color:#bdeaff;font-size:9px;letter-spacing:1.2px;pointer-events:none}
 .cover-glow{position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(transparent,#071426aa);pointer-events:none}
 .empty{background:linear-gradient(145deg,#10243b,#0a192a);border:1px dashed #315d83;border-radius:17px;text-align:center;padding:29px 14px;color:var(--muted);font-size:13px;grid-column:1/-1}
-.pricecard{background:linear-gradient(145deg,#123252,#0b1c30);border:1px solid #285982;border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;box-shadow:0 7px 18px #0005}
+.pricecard{background:linear-gradient(145deg,#123252,#0b1c30);border:1px solid #285982;border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
 .pricecard strong{font-size:16px}
 .pricecard small{display:block;color:var(--muted);margin-top:5px}
 .pricecard button{background:linear-gradient(120deg,#55baff,#126bd0);color:white;border:0;border-radius:11px;padding:11px 14px;font-weight:850}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#08172aee;backdrop-filter:blur(20px);border-top:1px solid #244b70;display:flex;justify-content:space-around;padding:11px 5px calc(11px + env(safe-area-inset-bottom));z-index:10;box-shadow:0 -8px 30px #0008}
-.nav button{background:none;border:0;color:#819bb5;font-size:10px;display:flex;flex-direction:column;gap:5px;align-items:center;min-width:55px}
-.nav button b{font-size:21px;font-weight:400}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#08172aee;backdrop-filter:blur(20px);border-top:1px solid #244b70;display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));z-index:10;box-shadow:0 -8px 30px #0008}
+.nav button{background:none;border:0;color:#819bb5;font-size:9px;display:flex;flex-direction:column;gap:5px;align-items:center;min-width:0;flex:1}
+.nav button b{font-size:19px;font-weight:400}
 .nav button.active{color:#69caff;text-shadow:0 0 15px #168bff}
-.panel{background:linear-gradient(145deg,#102943,#0a192b);border:1px solid #244b70;border-radius:17px;padding:15px;margin-bottom:12px;box-shadow:0 8px 22px #0005}
+.panel{background:linear-gradient(145deg,#102943,#0a192b);border:1px solid #244b70;border-radius:17px;padding:15px;margin-bottom:12px}
 .field{display:block;width:100%;margin:8px 0 13px;padding:14px;background:#09182a;border:1px solid #244b70;border-radius:12px;color:white;outline:none}
 textarea.field{min-height:90px;resize:vertical}
 label{font-size:12px;color:#c3d9ee}
-.full{background:linear-gradient(115deg,#55baff,#1679df 48%,#0752ae);border:1px solid #9bdcff75;color:white;padding:14px 18px;border-radius:13px;font-weight:850;box-shadow:0 7px 0 #063c80,0 12px 25px #087fff55;text-shadow:0 1px 3px #07345e;width:100%}
-.full:active{transform:translateY(4px);box-shadow:0 3px 0 #063c80,0 7px 14px #087fff44}
-.secondary{background:linear-gradient(145deg,#183552,#0c2036);color:#d5edff;border:1px solid #315d83;box-shadow:0 4px 0 #050d17;text-shadow:none}
-.danger{background:linear-gradient(120deg,#a63860,#641e3c);color:white;border:1px solid #e879a0;box-shadow:0 4px 0 #391025}
+.full{background:linear-gradient(115deg,#55baff,#1679df 48%,#0752ae);border:1px solid #9bdcff75;color:white;padding:14px 18px;border-radius:13px;font-weight:850;width:100%}
+.secondary{background:linear-gradient(145deg,#183552,#0c2036);color:#d5edff;border:1px solid #315d83}
+.danger{background:linear-gradient(120deg,#a63860,#641e3c);color:white;border:1px solid #e879a0}
 .row{display:flex;gap:9px;align-items:center}
 .row>*{flex:1;min-width:0}
 .itemrow{padding:14px 0;border-bottom:1px solid #203b56}
 .itemrow:last-child{border:0}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.stat{background:linear-gradient(145deg,#123252,#0a1b2e);border:1px solid #315d83;border-radius:16px;padding:15px;box-shadow:0 7px 0 #050d17,0 12px 20px #0005}
-.stat strong{font-size:25px;color:#69caff;display:block;text-shadow:0 0 17px #168bff77}
+.stat{background:linear-gradient(145deg,#123252,#0a1b2e);border:1px solid #315d83;border-radius:16px;padding:15px}
+.stat strong{font-size:25px;color:#69caff;display:block}
 .stat small{color:var(--muted)}
 .notice{font-size:12px;color:var(--muted);line-height:1.6}
 .modal{position:fixed;inset:0;background:#020812cc;backdrop-filter:blur(9px);z-index:20;display:none;align-items:flex-end}
 .modal.open{display:flex}
-.modalbox{background:linear-gradient(145deg,#12304e,#09192c);border:1px solid #315d83;border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:85vh;overflow:auto;box-shadow:0 -10px 45px #087fff25}
+.modalbox{background:linear-gradient(145deg,#12304e,#09192c);border:1px solid #315d83;border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:85vh;overflow:auto}
 .modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .modalhead h3{margin:0}
 .close{background:#173653;border:1px solid #38688f;color:white;border-radius:10px;padding:9px 13px}
-.toast{position:fixed;z-index:30;bottom:100px;left:16px;right:16px;background:linear-gradient(120deg,#123b61,#0b2037);border:1px solid #55baff;padding:14px;border-radius:13px;text-align:center;display:none;font-size:13px;box-shadow:0 8px 25px #0009,0 0 20px #168bff30}
+.toast{position:fixed;z-index:30;bottom:100px;left:16px;right:16px;background:linear-gradient(120deg,#123b61,#0b2037);border:1px solid #55baff;padding:14px;border-radius:13px;text-align:center;display:none;font-size:13px;box-shadow:0 8px 25px #0009}
 hr{border:0;border-top:1px solid #24415e;margin:17px 0}
+.eyebrow{font-size:10px;letter-spacing:1.8px;color:#70caff;font-weight:900}
 
-/* ADMIN */
-#admin .panel,#admin .itemrow{background:#0e2034;border:1px solid #24435f;border-radius:13px;padding:15px;margin-bottom:11px;box-shadow:none}
-#admin h2,#admin h3{color:#f5faff;font-weight:750}
-#admin .muted{color:#91abc4;line-height:1.6}
-#admin .field{background:#09182a;border:1px solid #294b6b;box-shadow:none}
-#admin .smallbtn{background:#173653;border:1px solid #38688f;color:#e8f5ff;border-radius:9px;box-shadow:none;padding:10px 12px}
-#admin .smallbtn.danger{background:#301c27;border-color:#653447;color:#ff9db4}
-#admin .itemrow{display:block;padding:15px}
-#admin .itemrow b{display:block;color:#f4faff;font-size:14px;margin-bottom:7px}
-#admin .full{background:#1679cf;border:1px solid #55baff;border-radius:10px;box-shadow:none}
-#admin .stat{background:#10243a;border:1px solid #294b6b;box-shadow:none}
-#admin .stat strong{color:#69caff;text-shadow:none}
-#admin hr{border-color:#29445e}
-#admin .empty{background:#10243a;border-color:#385c7b;box-shadow:none}
-#admin button:disabled{opacity:.55;cursor:wait}
+/* NFT MARKETPLACE */
+.market-hero{margin:12px 16px 18px;padding:20px;border-radius:20px;background:radial-gradient(circle at 100% 0%,#168bff35,transparent 55%),linear-gradient(145deg,#123252,#09192c);border:1px solid #315d83}
+.market-hero h2{margin:14px 0 8px;font-size:22px}
+.market-hero p{margin:0;color:#a8c1d9;font-size:12px;line-height:1.6}
+.market-info{padding:13px;border-radius:13px;background:#102943;border:1px solid #285982;margin:12px 16px;color:#a8c1d9;font-size:11px;line-height:1.6}
+.market-seller{margin:18px 16px;padding:17px;border-radius:18px;background:linear-gradient(145deg,#102943,#0a192b);border:1px solid #244b70}
+.market-seller h3{margin:13px 0 8px}
+.market-status{display:inline-block;padding:7px 10px;border-radius:9px;background:#12395d;color:#8ed5ff;font-size:11px;margin:8px 0}
+.market-card-meta{font-size:10px;color:#8da7c2;margin-top:7px;line-height:1.7}
+.market-card .cover{height:175px}
+.market-subtitle{font-size:11px;color:#8da7c2;line-height:1.5;margin:7px 0 13px}
+.market-list{padding:14px;border:1px solid #244b70;border-radius:14px;background:#10243a;margin-bottom:10px}
+.market-list b{display:block;margin-bottom:7px}
+.status-label{color:#80d6ff;font-size:11px;margin-top:8px}
+button:disabled{opacity:.55;cursor:wait}
 
 @media(max-width:360px){
  .home-hero{padding:18px;min-height:370px}
@@ -157,10 +153,12 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
  .home-hero-content{max-width:82%}
  .brand{font-size:16px}
  .cover{height:145px}
+ .nav button{font-size:8px}
 }
 </style>
 </head>
 <body>
+
 <header class="top">
  <div>
   <div class="brand">PRESTIGE <span>MARKET</span></div>
@@ -170,6 +168,7 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
 </header>
 
 <main>
+
 <section id="home" class="page active">
  <div class="home-hero">
   <div class="home-hero-head">
@@ -189,7 +188,9 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
   </div>
   <div class="home-hero-bottom"><span>DIGITAL GOODS</span><span>FUTURE EXPERIENCE ✦</span></div>
  </div>
+
  <div class="search"><input id="searchHome" placeholder="⌕ Поиск товаров..." oninput="searchListings(this.value)"></div>
+
  <div class="home-section">
   <div class="home-section-title"><h2>Категории</h2><span class="muted">01 — 05</span></div>
   <div class="home-category-grid">
@@ -201,7 +202,9 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
    <button class="home-category" onclick="showPage('favorites')"><span class="home-category-arrow">↗</span><span class="home-category-icon">♡</span><b>Избранное</b><small>Твои сохранённые товары</small></button>
   </div>
  </div>
+
  <div class="home-note"><div class="home-note-icon">✦</div><div><b>PRESTIGE SERVICE</b><small>Заявки подтверждаются отдельно. Все условия согласовываются с менеджером.</small></div></div>
+
  <div class="home-section">
   <div class="home-section-title"><h2>Популярные предложения</h2><span class="home-link" onclick="showPage('catalog')">Весь каталог ↗</span></div>
   <div id="homeListings" class="grid"><div class="empty">Загружаем предложения…</div></div>
@@ -222,18 +225,77 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
  <div class="section"><div id="catalogContent" class="grid"><div class="empty">Загружаем каталог…</div></div></div>
 </section>
 
+<!-- NFT MARKETPLACE -->
+<section id="marketplace" class="page">
+ <div class="market-hero">
+  <div class="home-pill">✦ NFT COLLECTIONS</div>
+  <h2>NFT Marketplace</h2>
+  <p>Коллекционные подарки и цифровые предложения от продавцов Prestige Market.</p>
+ </div>
+
+ <div class="search">
+  <input id="marketSearch" placeholder="⌕ Поиск NFT, коллекции или модели..." oninput="filterMarketplace(this.value)">
+ </div>
+
+ <div class="section">
+  <div class="sectionhead">
+   <h2>Объявления</h2>
+   <span class="muted" id="marketCount">0</span>
+  </div>
+  <div id="marketplaceContent" class="grid">
+   <div class="empty">Загружаем Marketplace…</div>
+  </div>
+ </div>
+
+ <div class="market-info">
+  Запрос продавцу не является покупкой или оплатой. Условия обсуждаются отдельно. Не передавайте пароли и коды входа.
+ </div>
+
+ <div class="market-seller">
+  <div class="home-pill">SELLER PROGRAM</div>
+  <h3>Стать продавцом</h3>
+  <p class="market-subtitle">Оставьте заявку. После рассмотрения администратор сообщит о её статусе.</p>
+
+  <div id="sellerStatus" class="market-status">Проверяем статус…</div>
+
+  <label>Название профиля</label>
+  <input class="field" id="sellerName" maxlength="60" placeholder="Например, Prestige Gifts">
+
+  <label>Описание</label>
+  <textarea class="field" id="sellerDescription" maxlength="500" placeholder="Расскажите о своих объявлениях"></textarea>
+
+  <label>Контакт для связи</label>
+  <input class="field" id="sellerContact" maxlength="100" placeholder="@username">
+
+  <button class="full" id="sellerApplyButton" onclick="applySeller()">Отправить заявку</button>
+ </div>
+
+ <div class="section">
+  <div class="sectionhead"><h2>Мои объявления</h2></div>
+  <div id="myMarketplaceListings"><div class="empty">Загрузка…</div></div>
+ </div>
+
+ <div class="section">
+  <div class="sectionhead"><h2>Мои запросы</h2></div>
+  <div id="myMarketplaceOrders"><div class="empty">Загрузка…</div></div>
+ </div>
+</section>
+
 <section id="favorites" class="page">
  <div class="section"><div class="sectionhead"><h2>Избранное</h2></div><div id="favoritesContent" class="grid"><div class="empty">Загрузка…</div></div></div>
 </section>
+
 <section id="orders" class="page">
  <div class="section"><div class="sectionhead"><h2>Мои заказы</h2></div><div id="ordersContent"><div class="empty">Загрузка…</div></div></div>
 </section>
+
 <section id="profile" class="page">
  <div class="section">
   <div class="sectionhead"><h2>Профиль</h2></div>
   <div class="panel"><div class="eyebrow">PRESTIGE MEMBER</div><h2 id="profileName">Пользователь</h2><div class="muted" id="profileUsername">Telegram Mini App</div></div>
   <div class="panel">
    <div class="itemrow" onclick="showPage('orders')">📦 Мои заказы <span style="float:right">→</span></div>
+   <div class="itemrow" onclick="showPage('marketplace')">✧ NFT Marketplace <span style="float:right">→</span></div>
    <div class="itemrow" onclick="showPage('favorites')">♡ Избранное <span style="float:right">→</span></div>
    <div class="itemrow" onclick="support()">✉ Поддержка <span style="float:right">→</span></div>
    <div class="itemrow" onclick="rules()">📜 Правила <span style="float:right">→</span></div>
@@ -255,17 +317,16 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
    <button class="full secondary" onclick="adminTab('prices')">Цены</button>
    <button class="full secondary" onclick="adminTab('add')">+ Добавить</button>
   </div>
-  <div style="margin-top:8px">
-   <button class="full secondary" onclick="adminTab('deposits')">💳 Депозиты продавцов</button>
-  </div>
   <div id="adminContent" style="margin-top:16px"></div>
  </div>
 </section>
+
 </main>
 
 <nav class="nav">
  <button class="active" data-page="home" onclick="showPage('home')"><b>⌂</b>Главная</button>
  <button data-page="catalog" onclick="showPage('catalog')"><b>▦</b>Каталог</button>
+ <button data-page="marketplace" onclick="showPage('marketplace')"><b>✧</b>NFT Market</button>
  <button data-page="favorites" onclick="showPage('favorites')"><b>♡</b>Избранное</button>
  <button data-page="orders" onclick="showPage('orders')"><b>▤</b>Заказы</button>
  <button data-page="profile" onclick="showPage('profile')"><b>◉</b>Профиль</button>
@@ -280,177 +341,322 @@ hr{border:0;border-top:1px solid #24415e;margin:17px 0}
 <div class="toast" id="toast"></div>
 
 <script>
-const API = "https://prestige-markett.rtmzakarin.workers.dev";
-const SUPPORT = "PrestigeMarketSupport";
-const tg = window.Telegram?.WebApp;
+const API="https://prestige-markett.rtmzakarin.workers.dev";
+const SUPPORT="PrestigeMarketSupport";
+const tg=window.Telegram?.WebApp;
+
 if(tg){tg.ready();tg.expand();}
 
-let listings=[],starsPrices=[],premiumPrices=[],currentCategory="all",isAdmin=false;
+let listings=[];
+let starsPrices=[];
+let premiumPrices=[];
+let currentCategory="all";
+let isAdmin=false;
 let currentAdminTab="products";
-const initData = tg?.initData || "";
-const headers = {"Content-Type":"application/json","X-Telegram-Init-Data":initData};
+let adminListings=[];
+
+let marketplaceListings=[];
+let marketplaceSearchValue="";
+
+const initData=tg?.initData||"";
+const headers={"Content-Type":"application/json","X-Telegram-Init-Data":initData};
 
 async function api(path,options={}){
- const response=await fetch(API+path,{...options,headers:{...headers,...(options.headers||{})}});
+ const response=await fetch(API+path,{
+  ...options,
+  headers:{...headers,...(options.headers||{})}
+ });
  const data=await response.json().catch(()=>({ok:false,error:"Ошибка ответа сервера"}));
  if(!response.ok||data.ok===false)throw new Error(data.error||"Ошибка запроса");
  return data;
 }
+
 function toast(message){
- const el=document.getElementById("toast");el.textContent=message;el.style.display="block";
- clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",2600);
+ const el=document.getElementById("toast");
+ el.textContent=message;
+ el.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>el.style.display="none",2600);
 }
+
 function showPage(page){
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
  document.getElementById(page)?.classList.add("active");
- document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+
+ document.querySelectorAll(".nav button").forEach(x=>{
+  x.classList.toggle("active",x.dataset.page===page);
+ });
+
  if(page==="favorites")loadFavorites();
  if(page==="orders")loadOrders();
  if(page==="profile")loadProfile();
+
+ if(page==="marketplace")loadMarketplace();
+
  if(page==="admin"){
-  if(!isAdmin){toast("Нет доступа");return showPage("profile")}
-  loadAdminStats();adminTab(currentAdminTab);
+  if(!isAdmin){
+   toast("Нет доступа");
+   return showPage("profile");
+  }
+  loadAdminStats();
+  adminTab(currentAdminTab);
  }
+
  window.scrollTo(0,0);
 }
+
 function selectCategory(category){
- currentCategory=category;showPage("catalog");
+ currentCategory=category;
+ showPage("catalog");
+
  document.querySelectorAll(".chip").forEach(x=>{
   const key=category==="all"?"все":category;
   x.classList.toggle("active",x.textContent.toLowerCase().includes(key));
  });
+
  if(category==="stars")return loadPrices("stars");
  if(category==="premium")return loadPrices("premium");
+
  renderListings();
 }
+
 function searchListings(value){
  const id=document.activeElement?.id;
- ["searchHome","searchCatalog"].forEach(x=>{if(x!==id)document.getElementById(x).value=value});
+
+ ["searchHome","searchCatalog"].forEach(x=>{
+  if(x!==id)document.getElementById(x).value=value;
+ });
+
  renderListings(value);
 }
+
 function mediaFor(item){
  let media=[];
- try{media=typeof item.media_json==="string"?JSON.parse(item.media_json||"[]"):(item.media_json||[])}catch{}
+
+ try{
+  media=typeof item.media_json==="string"
+   ?JSON.parse(item.media_json||"[]")
+   :(item.media_json||[]);
+ }catch{}
+
  if(!Array.isArray(media))media=[];
+
  const first=media[0]||{};
- if(first.file_id)return `${API}/api/media?file_id=${encodeURIComponent(first.file_id)}`;
+
+ if(first.file_id){
+  return `${API}/api/media?file_id=${encodeURIComponent(first.file_id)}`;
+ }
+
  return first.url||item.image_url||"";
 }
+
 function mediaKindFor(item){
  let media=[];
- try{media=typeof item.media_json==="string"?JSON.parse(item.media_json||"[]"):(item.media_json||[])}catch{}
+
+ try{
+  media=typeof item.media_json==="string"
+   ?JSON.parse(item.media_json||"[]")
+   :(item.media_json||[]);
+ }catch{}
+
  const first=Array.isArray(media)?media[0]||{}:{};
+
  if(first.kind==="animation"||first.kind==="video")return "video";
  if(first.kind==="photo")return "photo";
+
  const url=mediaFor(item);
+
  if(/\.(mp4|webm|mov)(\?|$)/i.test(url))return "video";
  if(/\.gif(\?|$)/i.test(url))return "animation";
+
  return "photo";
 }
+
 function activateVideos(root=document){
  const videos=root.querySelectorAll("video.product-media");
+
  videos.forEach(video=>{
-  video.muted=true;video.defaultMuted=true;video.loop=true;video.playsInline=true;
-  video.setAttribute("muted","");video.setAttribute("playsinline","");
-  video.setAttribute("webkit-playsinline","");video.setAttribute("autoplay","");
+  video.muted=true;
+  video.defaultMuted=true;
+  video.loop=true;
+  video.playsInline=true;
+
+  video.setAttribute("muted","");
+  video.setAttribute("playsinline","");
+  video.setAttribute("webkit-playsinline","");
+
   const start=()=>{
    if(video.dataset.started==="1")return;
    video.dataset.started="1";
+
    const promise=video.play();
-   if(promise&&promise.catch)promise.catch(()=>{video.dataset.started="0"});
+
+   if(promise&&promise.catch){
+    promise.catch(()=>{video.dataset.started="0"});
+   }
   };
+
   video.addEventListener("loadeddata",start,{once:true});
   video.addEventListener("canplay",start,{once:true});
+
   if(video.readyState>=2)start();
+
   if("IntersectionObserver" in window){
    const observer=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
-     if(entry.isIntersecting){start();observer.unobserve(video)}
-     else video.pause();
+     if(entry.isIntersecting){
+      start();
+      observer.unobserve(video);
+     }else{
+      video.pause();
+     }
     });
    },{threshold:.15});
+
    observer.observe(video);
-  }else start();
+  }else{
+   start();
+  }
  });
 }
+
 function card(item){
- const kind=mediaKindFor(item),src=mediaFor(item);
- let media=`<div class="cover-empty">✦</div>`;
+ const kind=mediaKindFor(item);
+ const src=mediaFor(item);
+
+ let media='<div class="cover-empty">✦</div>';
+
  if(src&&kind==="video"){
   media=`<video class="product-media" src="${attr(src)}" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>`;
  }else if(src){
   media=`<img class="product-media" src="${attr(src)}" alt="${attr(item.title||"Product")}" loading="lazy">`;
  }
+
  const price=Number(item.price||0).toLocaleString("ru-RU");
  const currency=esc(item.currency||"USD");
- return `<article class="card" onclick="openListing(${Number(item.id)})">
-  <div class="cover">${media}<div class="cover-glow"></div><span class="product-tag">PRESTIGE</span></div>
-  <div class="cardbody">
-   <div class="cardtitle">${esc(item.title)}</div>
-   <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
-   <div class="price">${price} ${currency}</div>
-   <div class="cardactions">
-    <button class="smallbtn" onclick="event.stopPropagation();createOrder(${Number(item.id)})">Заказать</button>
-    <button class="iconbtn" onclick="event.stopPropagation();favorite(${Number(item.id)})">♡</button>
+
+ return `
+  <article class="card" onclick="openListing(${Number(item.id)})">
+   <div class="cover">
+    ${media}
+    <div class="cover-glow"></div>
+    <span class="product-tag">PRESTIGE</span>
    </div>
-  </div>
- </article>`;
+   <div class="cardbody">
+    <div class="cardtitle">${esc(item.title)}</div>
+    <div class="carddesc">${esc(item.description||"Цифровое предложение Prestige Market")}</div>
+    <div class="price">${price} ${currency}</div>
+    <div class="cardactions">
+     <button class="smallbtn" onclick="event.stopPropagation();createOrder(${Number(item.id)})">Заказать</button>
+     <button class="iconbtn" onclick="event.stopPropagation();favorite(${Number(item.id)})">♡</button>
+    </div>
+   </div>
+  </article>
+ `;
 }
+
 function renderListings(search=""){
  const filtered=listings.filter(x=>
   (currentCategory==="all"||x.category_id===currentCategory||x.category===currentCategory)&&
   (!search||(`${x.title} ${x.description||""}`).toLowerCase().includes(search.toLowerCase()))
  );
- document.getElementById("catalogContent").innerHTML=filtered.length?filtered.map(card).join(""):`<div class="empty">Пока нет предложений в этой категории</div>`;
- document.getElementById("homeListings").innerHTML=listings.slice(0,4).map(card).join("")||`<div class="empty">Новые предложения скоро появятся</div>`;
+
+ document.getElementById("catalogContent").innerHTML=filtered.length
+  ?filtered.map(card).join("")
+  :'<div class="empty">Пока нет предложений в этой категории</div>';
+
+ document.getElementById("homeListings").innerHTML=
+  listings.slice(0,4).map(card).join("")||
+  '<div class="empty">Новые предложения скоро появятся</div>';
+
  activateVideos(document.getElementById("catalogContent"));
  activateVideos(document.getElementById("homeListings"));
 }
+
 async function loadListings(){
- try{const d=await api("/api/listings");listings=d.listings||[];renderListings()}
- catch(e){document.getElementById("catalogContent").innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+ try{
+  const d=await api("/api/listings");
+  listings=d.listings||[];
+  renderListings();
+ }catch(e){
+  document.getElementById("catalogContent").innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
+
 async function loadPrices(type){
- const target=document.getElementById("catalogContent");target.innerHTML=`<div class="empty">Загружаем цены…</div>`;
+ const target=document.getElementById("catalogContent");
+ target.innerHTML='<div class="empty">Загружаем цены…</div>';
+
  try{
   const d=await api(type==="stars"?"/api/prices/stars":"/api/prices/premium");
   const prices=d.prices||[];
-  if(type==="stars")starsPrices=prices;else premiumPrices=prices;
+
+  if(type==="stars")starsPrices=prices;
+  else premiumPrices=prices;
+
   target.innerHTML=prices.length?prices.map(p=>`
-   <div class="pricecard"><div>
-    <strong>${type==="stars"?Number(p.stars_amount).toLocaleString("ru-RU")+" ⭐":p.duration_months+" месяца 💎"}</strong>
-    <small>${Number(p.price_usd).toFixed(2)} USD</small>
-   </div><button onclick="priceRequest('${type}',${Number(p.id)})">Заявка</button></div>
-  `).join(""):`<div class="empty">Тарифы пока не добавлены</div>`;
- }catch(e){target.innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+   <div class="pricecard">
+    <div>
+     <strong>${type==="stars"?Number(p.stars_amount).toLocaleString("ru-RU")+" ⭐":p.duration_months+" месяца 💎"}</strong>
+     <small>${Number(p.price_usd).toFixed(2)} USD</small>
+    </div>
+    <button onclick="priceRequest('${type}',${Number(p.id)})">Заявка</button>
+   </div>
+  `).join(""):'<div class="empty">Тарифы пока не добавлены</div>';
+
+ }catch(e){
+  target.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
-async function priceRequest(type,id){
+
+function priceRequest(type,id){
  const item=(type==="stars"?starsPrices:premiumPrices).find(x=>Number(x.id)===id);
  if(!item)return;
- const name=type==="stars"?`${item.stars_amount} Telegram Stars`:`Telegram Premium на ${item.duration_months} месяцев`;
+
+ const name=type==="stars"
+  ?`${item.stars_amount} Telegram Stars`
+  :`Telegram Premium на ${item.duration_months} месяцев`;
+
  const price=Number(item.price_usd).toFixed(2);
+
  openModal("Оставить заявку",`
-  <p>${esc(name)}</p><h2 style="color:var(--blue2)">${price} USD</h2>
+  <p>${esc(name)}</p>
+  <h2 style="color:var(--blue2)">${price} USD</h2>
   <p class="notice">Это заявка, не оплата. Менеджер уточнит детали.</p>
   <button class="full" onclick="sendSupportRequest('${esc(name)}','${price}')">Связаться с менеджером</button>
  `);
 }
+
 function sendSupportRequest(name,price){
  const message=`Здравствуйте! Хочу уточнить условия заявки: ${name}, цена ${price} USD.`;
  const url=`https://t.me/${SUPPORT}?text=${encodeURIComponent(message)}`;
- if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
- closeModal();toast("Открываем чат менеджера");
+
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);
+ else window.open(url,"_blank");
+
+ closeModal();
+ toast("Открываем чат менеджера");
 }
+
 function openListing(id){
- const item=listings.find(x=>Number(x.id)===Number(id));if(!item)return;
- const src=mediaFor(item),kind=mediaKindFor(item);
- let media=`<div class="cover-empty" style="height:260px;border-radius:16px">✦</div>`;
+ const item=listings.find(x=>Number(x.id)===Number(id));
+ if(!item)return;
+
+ const src=mediaFor(item);
+ const kind=mediaKindFor(item);
+
+ let media='<div class="cover-empty" style="height:260px;border-radius:16px">✦</div>';
+
  if(src&&kind==="video"){
-  media=`<video class="product-media" src="${attr(src)}" autoplay muted loop playsinline webkit-playsinline preload="auto" style="height:260px;border-radius:16px"></video>`;
+  media=`<video class="product-media" src="${attr(src)}" autoplay muted loop playsinline webkit-playsinline style="height:260px;border-radius:16px"></video>`;
  }else if(src){
   media=`<img class="product-media" src="${attr(src)}" alt="${attr(item.title||"Product")}" style="height:260px;border-radius:16px">`;
  }
- const identifier=item.public_identifier?`<div class="panel"><div class="muted">Идентификатор</div><b>${esc(item.public_identifier)}</b></div>`:"";
+
+ const identifier=item.public_identifier
+  ?`<div class="panel"><div class="muted">Идентификатор</div><b>${esc(item.public_identifier)}</b></div>`
+  :"";
+
  openModal("Предложение Prestige",`
   <div style="margin-bottom:16px">${media}</div>
   <div class="eyebrow">PRESTIGE COLLECTION</div>
@@ -462,10 +668,14 @@ function openListing(id){
   <button class="full secondary" style="margin-top:12px" onclick="favorite(${Number(item.id)})">♡ Добавить в избранное</button>
   <button class="full secondary" style="margin-top:12px" onclick="support()">Связаться с поддержкой</button>
  `);
+
  activateVideos(document.getElementById("modalContent"));
 }
-async function createOrder(id){
- const item=listings.find(x=>Number(x.id)===id);if(!item)return;
+
+function createOrder(id){
+ const item=listings.find(x=>Number(x.id)===id);
+ if(!item)return;
+
  openModal("Подтвердить заявку",`
   <p><b>${esc(item.title)}</b></p>
   <p class="muted">${Number(item.price||0)} ${esc(item.currency||"USD")}</p>
@@ -473,87 +683,162 @@ async function createOrder(id){
   <button class="full" onclick="confirmOrder(${id})">Создать заявку</button>
  `);
 }
+
 async function confirmOrder(id){
- try{const d=await api("/api/orders",{method:"POST",body:JSON.stringify({listing_id:id,term_days:1})});closeModal();toast("Заявка "+d.public_id+" создана")}
- catch(e){toast(e.message)}
+ try{
+  const d=await api("/api/orders",{
+   method:"POST",
+   body:JSON.stringify({listing_id:id,term_days:1})
+  });
+
+  closeModal();
+  toast("Заявка "+d.public_id+" создана");
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function favorite(id){
- try{await api("/api/favorites",{method:"POST",body:JSON.stringify({listing_id:id})});toast("Добавлено в избранное")}
- catch(e){toast(e.message)}
+ try{
+  await api("/api/favorites",{
+   method:"POST",
+   body:JSON.stringify({listing_id:id})
+  });
+
+  toast("Добавлено в избранное");
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function loadFavorites(){
  const el=document.getElementById("favoritesContent");
- try{const d=await api("/api/favorites");el.innerHTML=d.favorites?.length?d.favorites.map(card).join(""):`<div class="empty">В избранном пока пусто</div>`;activateVideos(el)}
- catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+
+ try{
+  const d=await api("/api/favorites");
+  el.innerHTML=d.favorites?.length
+   ?d.favorites.map(card).join("")
+   :'<div class="empty">В избранном пока пусто</div>';
+
+  activateVideos(el);
+ }catch(e){
+  el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
+
 async function loadOrders(){
  const el=document.getElementById("ordersContent");
+
  try{
   const d=await api("/api/orders");
+
   el.innerHTML=d.orders?.length?d.orders.map(o=>`
-   <div class="panel"><b>${esc(o.listing_title||"Заказ")}</b>
+   <div class="panel">
+    <b>${esc(o.listing_title||"Заказ")}</b>
     <div class="muted">${esc(o.public_id||("#"+o.id))}</div>
     <div class="price">${Number(o.amount||0)} ${esc(o.currency||"USD")}</div>
     <span class="muted">Статус: ${esc(o.status)}</span>
-   </div>`).join(""):`<div class="empty">У вас пока нет заказов</div>`;
- }catch(e){el.innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+   </div>
+  `).join(""):'<div class="empty">У вас пока нет заказов</div>';
+
+ }catch(e){
+  el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
+
 async function loadProfile(){
  try{
-  const d=await api("/api/me"),u=d.user||{};
+  const d=await api("/api/me");
+  const u=d.user||{};
+
   document.getElementById("profileName").textContent=u.first_name||"Пользователь";
-  document.getElementById("profileUsername").textContent=u.username?"@"+u.username:"Telegram ID: "+u.telegram_id;
-  isAdmin=!!u.is_admin;document.getElementById("adminEntry").style.display=isAdmin?"block":"none";
- }catch(e){document.getElementById("profileName").textContent="Откройте приложение через Telegram"}
+  document.getElementById("profileUsername").textContent=
+   u.username?"@"+u.username:"Telegram ID: "+(u.telegram_id||"");
+
+  isAdmin=!!u.is_admin;
+  document.getElementById("adminEntry").style.display=isAdmin?"block":"none";
+
+ }catch(e){
+  document.getElementById("profileName").textContent="Откройте приложение через Telegram";
+ }
 }
+
+/* ADMIN */
+
 async function loadAdminStats(){
  try{
-  const d=await api("/api/admin/stats"),s=d.stats||{};
+  const d=await api("/api/admin/stats");
+  const s=d.stats||{};
+
   document.getElementById("adminStats").innerHTML=`
    <div class="stat"><strong>${Number(s.users||0)}</strong><small>Пользователи</small></div>
    <div class="stat"><strong>${Number(s.listings||0)}</strong><small>Товары</small></div>
    <div class="stat"><strong>${Number(s.orders||0)}</strong><small>Заказы</small></div>
-   <div class="stat"><strong>${Number(s.pending_orders||0)}</strong><small>Ожидают</small></div>`;
- }catch(e){document.getElementById("adminStats").innerHTML=`<div class="empty">${esc(e.message)}</div>`}
+   <div class="stat"><strong>${Number(s.pending_orders||0)}</strong><small>Ожидают</small></div>
+  `;
+ }catch(e){
+  document.getElementById("adminStats").innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
 }
+
 function adminTab(tab){
- currentAdminTab=tab;if(!isAdmin)return toast("Нет доступа");
+ currentAdminTab=tab;
+ if(!isAdmin)return toast("Нет доступа");
+
  if(tab==="products")adminProducts();
  if(tab==="orders")adminOrders();
  if(tab==="add")adminAdd();
  if(tab==="prices")adminPrices();
- if(tab==="deposits")adminDeposits();
 }
 
-let adminListings=[];
 async function adminProducts(filter="all"){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка товаров…";
+ const el=document.getElementById("adminContent");
+ el.innerHTML="Загрузка товаров…";
+
  try{
   const d=await api("/api/admin/listings");
   adminListings=Array.isArray(d.listings)?d.listings:[];
+
   const activeCount=adminListings.filter(x=>Number(x.is_active)===1&&x.status!=="deleted").length;
   const deletedCount=adminListings.length-activeCount;
+
   const render=()=>{
    const search=(document.getElementById("listingSearch")?.value||"").toLowerCase();
+
    const filtered=adminListings.filter(x=>{
     const deleted=Number(x.is_active)===0||x.status==="deleted";
     const matchesFilter=filter==="all"||(filter==="active"&&!deleted)||(filter==="deleted"&&deleted);
-    const matchesSearch=String(x.title||"").toLowerCase().includes(search)||String(x.category_id||"").toLowerCase().includes(search)||String(x.public_identifier||"").toLowerCase().includes(search);
+    const matchesSearch=String(x.title||"").toLowerCase().includes(search)||
+     String(x.category_id||"").toLowerCase().includes(search)||
+     String(x.public_identifier||"").toLowerCase().includes(search);
+
     return matchesFilter&&matchesSearch;
    });
+
    document.getElementById("listingResults").innerHTML=filtered.map(x=>{
     const deleted=Number(x.is_active)===0||x.status==="deleted";
-    return `<div class="itemrow"><b>${esc(x.title||"Без названия")}</b>
-     <div class="muted">${esc(x.category_id||"")} · ${Number(x.price||0)} ${esc(x.currency||"USD")}</div>
-     <div class="muted">${deleted?"Удалён":"Активен"}</div>
-     <div class="row" style="margin-top:8px">
-      <button class="smallbtn" onclick="editListing(${Number(x.id)})">Изменить</button>
-      ${deleted?`<button class="smallbtn" onclick="restoreListing(${Number(x.id)})">Восстановить</button>`:`<button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Удалить</button>`}
-     </div></div>`;
-   }).join("")||`<div class="empty">Ничего не найдено</div>`;
+
+    return `
+     <div class="itemrow">
+      <b>${esc(x.title||"Без названия")}</b>
+      <div class="muted">${esc(x.category_id||"")} · ${Number(x.price||0)} ${esc(x.currency||"USD")}</div>
+      <div class="muted">${deleted?"Удалён":"Активен"}</div>
+      <div class="row" style="margin-top:8px">
+       <button class="smallbtn" onclick="editListing(${Number(x.id)})">Изменить</button>
+       ${deleted
+        ?`<button class="smallbtn" onclick="restoreListing(${Number(x.id)})">Восстановить</button>`
+        :`<button class="smallbtn danger" onclick="deleteListing(${Number(x.id)})">Удалить</button>`}
+      </div>
+     </div>
+    `;
+   }).join("")||'<div class="empty">Ничего не найдено</div>';
+
    document.getElementById("listingCount").textContent=`Показано: ${filtered.length}`;
   };
-  el.innerHTML=`<h3>Управление товарами</h3>
+
+  el.innerHTML=`
+   <h3>Управление товарами</h3>
    <div class="muted">Всего: ${adminListings.length} · Активных: ${activeCount} · Удалённых: ${deletedCount}</div>
    <input class="field" id="listingSearch" placeholder="Поиск по названию, категории или ID…">
    <div class="row" style="margin:10px 0">
@@ -561,51 +846,95 @@ async function adminProducts(filter="all"){
     <button class="smallbtn" id="filterActive">Активные</button>
     <button class="smallbtn" id="filterDeleted">Удалённые</button>
    </div>
-   <div class="muted" id="listingCount"></div><div id="listingResults"></div>`;
+   <div class="muted" id="listingCount"></div>
+   <div id="listingResults"></div>
+  `;
+
   document.getElementById("listingSearch").addEventListener("input",render);
   document.getElementById("filterAll").onclick=()=>adminProducts("all");
   document.getElementById("filterActive").onclick=()=>adminProducts("active");
   document.getElementById("filterDeleted").onclick=()=>adminProducts("deleted");
+
   render();
- }catch(e){el.textContent=e.message}
+
+ }catch(e){
+  el.textContent=e.message;
+ }
 }
+
 function editListing(id){
  const item=adminListings.find(x=>Number(x.id)===Number(id));
- if(!item){toast("Товар не найден. Обновите список.");return}
+
+ if(!item){
+  toast("Товар не найден. Обновите список.");
+  return;
+ }
+
  openModal("Изменить товар",`
-  <label>Название</label><input class="field" id="eTitle" value="${attr(item.title||"")}">
-  <label>Описание</label><textarea class="field" id="eDescription">${esc(item.description||"")}</textarea>
-  <label>Цена</label><input class="field" id="ePrice" type="number" min="0" step="0.01" value="${Number(item.price||0)}">
-  <label>Ссылка на изображение</label><input class="field" id="eImage" value="${attr(item.image_url||"")}" placeholder="https://...">
+  <label>Название</label>
+  <input class="field" id="eTitle" value="${attr(item.title||"")}">
+  <label>Описание</label>
+  <textarea class="field" id="eDescription">${esc(item.description||"")}</textarea>
+  <label>Цена</label>
+  <input class="field" id="ePrice" type="number" min="0" step="0.01" value="${Number(item.price||0)}">
+  <label>Ссылка на изображение</label>
+  <input class="field" id="eImage" value="${attr(item.image_url||"")}" placeholder="https://...">
   <button class="full" onclick="saveEdit(${Number(id)})">Сохранить изменения</button>
  `);
 }
+
 function adminAdd(){
  document.getElementById("adminContent").innerHTML=`
   <h3>Новое предложение</h3>
-  <label>Категория</label><select class="field" id="aCategory">
-   <option value="gifts">NFT Gifts</option><option value="usernames">Usernames</option><option value="numbers">Numbers</option>
+  <label>Категория</label>
+  <select class="field" id="aCategory">
+   <option value="gifts">NFT Gifts</option>
+   <option value="usernames">Usernames</option>
+   <option value="numbers">Numbers</option>
   </select>
-  <label>Название</label><input class="field" id="aTitle" placeholder="Название товара">
-  <label>Описание</label><textarea class="field" id="aDescription" placeholder="Описание"></textarea>
-  <label>Цена</label><input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
-  <label>Валюта</label><select class="field" id="aCurrency"><option>USD</option><option>EUR</option><option>RUB</option></select>
-  <label>Фото, видео или GIF из галереи</label><input class="field" id="aMedia" type="file" accept="image/*,video/*">
+  <label>Название</label>
+  <input class="field" id="aTitle" placeholder="Название товара">
+  <label>Описание</label>
+  <textarea class="field" id="aDescription" placeholder="Описание"></textarea>
+  <label>Цена</label>
+  <input class="field" id="aPrice" type="number" min="0" step="0.01" placeholder="0">
+  <label>Валюта</label>
+  <select class="field" id="aCurrency">
+   <option>USD</option><option>EUR</option><option>RUB</option>
+  </select>
+  <label>Фото, видео или GIF</label>
+  <input class="field" id="aMedia" type="file" accept="image/*,video/*">
   <div id="mediaPreview" class="panel notice">Медиа пока не выбрано</div>
-  <label>Коллекционный идентификатор</label><input class="field" id="aIdentifier" placeholder="@username">
-  <button class="full" onclick="saveNewListing()">Опубликовать товар</button>`;
+  <label>Коллекционный идентификатор</label>
+  <input class="field" id="aIdentifier" placeholder="@username">
+  <button class="full" onclick="saveNewListing()">Опубликовать товар</button>
+ `;
+
  document.getElementById("aMedia").addEventListener("change",previewAdminMedia);
 }
+
 function previewAdminMedia(){
- const file=document.getElementById("aMedia").files[0],preview=document.getElementById("mediaPreview");
- if(!file){preview.textContent="Медиа пока не выбрано";return}
+ const file=document.getElementById("aMedia").files[0];
+ const preview=document.getElementById("mediaPreview");
+
+ if(!file){
+  preview.textContent="Медиа пока не выбрано";
+  return;
+ }
+
  const url=URL.createObjectURL(file);
- if(file.type.startsWith("video/"))preview.innerHTML=`<video src="${url}" muted autoplay loop playsinline style="width:100%;border-radius:12px"></video>`;
- else preview.innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
+
+ if(file.type.startsWith("video/")){
+  preview.innerHTML=`<video src="${url}" muted autoplay loop playsinline style="width:100%;border-radius:12px"></video>`;
+ }else{
+  preview.innerHTML=`<img src="${url}" style="width:100%;border-radius:12px">`;
+ }
 }
+
 async function saveNewListing(){
  const button=document.querySelector('#adminContent button[onclick="saveNewListing()"]');
  const file=document.getElementById("aMedia").files[0];
+
  const body={
   category:document.getElementById("aCategory").value,
   title:document.getElementById("aTitle").value.trim(),
@@ -615,228 +944,551 @@ async function saveNewListing(){
   image_url:"",
   public_identifier:document.getElementById("aIdentifier").value.trim()
  };
+
  if(!body.title)return toast("Введите название");
  if(!Number.isFinite(body.price)||body.price<0)return toast("Проверьте цену");
  if(!file)return toast("Выберите фото, видео или GIF");
- if(button){button.disabled=true;button.textContent="Загрузка медиа…"}
+
+ if(button){
+  button.disabled=true;
+  button.textContent="Загрузка медиа…";
+ }
+
  try{
-  const form=new FormData();form.append("file",file);
-  const uploaded=await fetch(API+"/api/admin/upload",{method:"POST",headers:{"X-Telegram-Init-Data":initData},body:form});
+  const form=new FormData();
+  form.append("file",file);
+
+  const uploaded=await fetch(API+"/api/admin/upload",{
+   method:"POST",
+   headers:{"X-Telegram-Init-Data":initData},
+   body:form
+  });
+
   const mediaData=await uploaded.json();
-  if(!uploaded.ok||!mediaData.ok)throw new Error(mediaData.error||"Ошибка загрузки файла");
+
+  if(!uploaded.ok||!mediaData.ok){
+   throw new Error(mediaData.error||"Ошибка загрузки файла");
+  }
+
   body.media=[mediaData.media];
+
   if(button)button.textContent="Публикация товара…";
-  await api("/api/admin/listings",{method:"POST",body:JSON.stringify(body)});
+
+  await api("/api/admin/listings",{
+   method:"POST",
+   body:JSON.stringify(body)
+  });
+
   toast("Товар успешно опубликован");
+
   await Promise.all([adminProducts(),loadListings(),loadAdminStats()]);
- }catch(e){toast(e.message||"Не удалось опубликовать товар")}
- finally{if(button){button.disabled=false;button.textContent="Опубликовать товар"}}
+
+ }catch(e){
+  toast(e.message||"Не удалось опубликовать товар");
+ }finally{
+  if(button){
+   button.disabled=false;
+   button.textContent="Опубликовать товар";
+  }
+ }
 }
+
 async function saveEdit(id){
  const title=document.getElementById("eTitle").value.trim();
  const description=document.getElementById("eDescription").value;
  const price=Number(document.getElementById("ePrice").value);
  const image_url=document.getElementById("eImage").value.trim();
+
  if(!title)return toast("Введите название товара");
  if(!Number.isFinite(price)||price<0)return toast("Проверьте цену");
+
  try{
-  await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({title,description,price,image_url})});
-  closeModal();toast("Изменения сохранены");
+  await api("/api/admin/listings/"+id,{
+   method:"PATCH",
+   body:JSON.stringify({title,description,price,image_url})
+  });
+
+  closeModal();
+  toast("Изменения сохранены");
+
   await Promise.all([adminProducts(),loadListings(),loadAdminStats()]);
- }catch(e){toast(e.message)}
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function deleteListing(id){
  const item=adminListings.find(x=>Number(x.id)===Number(id));
+
  if(!confirm(`Удалить «${item?.title||"этот товар"}» из каталога?`))return;
+
  try{
   await api("/api/admin/listings/"+id,{method:"DELETE"});
   toast("Товар удалён из каталога");
   await Promise.all([adminProducts(),loadListings(),loadAdminStats()]);
- }catch(e){toast(e.message)}
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function restoreListing(id){
  if(!confirm("Восстановить этот товар в каталоге?"))return;
+
  try{
-  await api("/api/admin/listings/"+id,{method:"PATCH",body:JSON.stringify({is_active:true,status:"active"})});
+  await api("/api/admin/listings/"+id,{
+   method:"PATCH",
+   body:JSON.stringify({is_active:true,status:"active"})
+  });
+
   toast("Товар восстановлен");
   await Promise.all([adminProducts(),loadListings(),loadAdminStats()]);
- }catch(e){toast(e.message)}
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function adminOrders(){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка заказов…";
+ const el=document.getElementById("adminContent");
+ el.innerHTML="Загрузка заказов…";
+
  try{
   const d=await api("/api/admin/orders");
+
   el.innerHTML=(d.orders||[]).map(o=>`
-   <div class="panel"><b>${esc(o.listing_title||"Заказ")}</b>
+   <div class="panel">
+    <b>${esc(o.listing_title||"Заказ")}</b>
     <div class="muted">${esc(o.public_id||("#"+o.id))} · ${esc(o.username||o.telegram_id||"")}</div>
     <div class="price">${o.amount} ${esc(o.currency||"USD")}</div>
     <select class="field" id="status${Number(o.id)}">
-     <option value="pending">Ожидает</option><option value="processing">В работе</option>
-     <option value="completed">Выполнен</option><option value="cancelled">Отменён</option>
+     <option value="pending">Ожидает</option>
+     <option value="processing">В работе</option>
+     <option value="completed">Выполнен</option>
+     <option value="cancelled">Отменён</option>
     </select>
     <button class="full" onclick="updateOrder(${Number(o.id)})">Сохранить статус</button>
-   </div>`).join("")||`<div class="empty">Заказов пока нет</div>`;
-  (d.orders||[]).forEach(o=>{const x=document.getElementById("status"+o.id);if(x)x.value=o.status});
- }catch(e){el.textContent=e.message}
+   </div>
+  `).join("")||'<div class="empty">Заказов пока нет</div>';
+
+  (d.orders||[]).forEach(o=>{
+   const x=document.getElementById("status"+o.id);
+   if(x)x.value=o.status;
+  });
+
+ }catch(e){
+  el.textContent=e.message;
+ }
 }
+
 async function updateOrder(id){
  try{
-  await api("/api/admin/orders/"+id+"/status",{method:"PATCH",body:JSON.stringify({status:document.getElementById("status"+id).value})});
-  toast("Статус обновлён");loadAdminStats();
- }catch(e){toast(e.message)}
+  await api("/api/admin/orders/"+id+"/status",{
+   method:"PATCH",
+   body:JSON.stringify({status:document.getElementById("status"+id).value})
+  });
+
+  toast("Статус обновлён");
+  loadAdminStats();
+
+ }catch(e){
+  toast(e.message);
+ }
 }
+
 async function adminPrices(){
- const el=document.getElementById("adminContent");el.innerHTML="Загрузка тарифов…";
- try{
-  const [s,p]=await Promise.all([api("/api/prices/stars"),api("/api/prices/premium")]);
-  const stars=(s.prices||[]).map(x=>priceAdminRow("stars",x.id,x.stars_amount+" Stars",x.price_usd)).join("");
-  const prem=(p.prices||[]).map(x=>priceAdminRow("premium",x.id,x.duration_months+" месяца Premium",x.price_usd)).join("");
-  el.innerHTML="<h3>Telegram Stars</h3>"+stars+"<hr><h3>Telegram Premium</h3>"+prem;
- }catch(e){el.textContent=e.message}
-}
-
-/* SELLER DEPOSIT ADMINISTRATION */
-let adminSellers=[];
-let adminDepositsList=[];
-
-async function adminDeposits(){
  const el=document.getElementById("adminContent");
- el.innerHTML='<div class="empty">Загружаем продавцов и записи…</div>';
+ el.innerHTML="Загрузка тарифов…";
 
  try{
-  const [sellersData,depositsData]=await Promise.all([
-   api("/api/admin/sellers"),
-   api("/api/admin/deposits")
+  const [s,p]=await Promise.all([
+   api("/api/prices/stars"),
+   api("/api/prices/premium")
   ]);
 
-  adminSellers=sellersData.sellers||[];
-  adminDepositsList=depositsData.deposits||[];
-  renderAdminDeposits();
+  const stars=(s.prices||[]).map(x=>
+   priceAdminRow("stars",x.id,x.stars_amount+" Stars",x.price_usd)
+  ).join("");
+
+  const prem=(p.prices||[]).map(x=>
+   priceAdminRow("premium",x.id,x.duration_months+" месяца Premium",x.price_usd)
+  ).join("");
+
+  el.innerHTML="<h3>Telegram Stars</h3>"+stars+"<hr><h3>Telegram Premium</h3>"+prem;
+
+ }catch(e){
+  el.textContent=e.message;
+ }
+}
+
+function priceAdminRow(type,id,title,price){
+ return `
+  <div class="itemrow">
+   <b>${esc(title)}</b>
+   <div class="row">
+    <input class="field" id="price${type}${id}" type="number" min="0" step="0.01" value="${Number(price)}">
+    <button class="smallbtn" onclick="savePrice('${type}',${Number(id)})">Сохранить</button>
+   </div>
+  </div>
+ `;
+}
+
+async function savePrice(type,id){
+ const price=Number(document.getElementById("price"+type+id).value);
+
+ if(!Number.isFinite(price)||price<0)return toast("Неверная цена");
+
+ try{
+  await api("/api/admin/prices/"+type+"/"+id,{
+   method:"PATCH",
+   body:JSON.stringify({price_usd:price})
+  });
+
+  toast("Цена обновлена");
+
+ }catch(e){
+  toast(e.message);
+ }
+}
+
+/* NFT MARKETPLACE */
+
+async function loadMarketplace(){
+ const el=document.getElementById("marketplaceContent");
+ el.innerHTML='<div class="empty">Загружаем объявления…</div>';
+
+ try{
+  const d=await api("/api/marketplace/listings");
+  marketplaceListings=d.listings||[];
+
+  renderMarketplace();
+
+  loadSellerStatus();
+  loadMyMarketplaceListings();
+  loadMyMarketplaceOrders();
 
  }catch(e){
   el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
  }
 }
 
-function renderAdminDeposits(){
- const el=document.getElementById("adminContent");
-
- const sellerOptions=adminSellers.map(s=>{
-  const name=s.display_name||s.username||("Продавец #"+s.id);
-  const username=s.username?" @"+s.username:"";
-  return `<option value="${Number(s.id)}">${esc(name+username)} · ID ${Number(s.id)}</option>`;
- }).join("");
-
- const history=adminDepositsList.map(d=>`
-  <div class="itemrow">
-   <b>${esc(d.display_name||d.username||("Продавец #"+d.seller_id))}</b>
-   <div class="muted">Telegram: ${esc(d.username?"@"+d.username:(d.telegram_id||"не указан"))}</div>
-   <div class="price">$${Number(d.recorded_amount_usd||0).toFixed(2)}</div>
-   <div class="muted">Статус: ${esc(d.status||"не указан")}</div>
-   <div class="muted">Примечание: ${esc(d.admin_note||"Нет")}</div>
-   <div class="muted">Обновлено: ${esc(d.updated_at||"")}</div>
-  </div>
- `).join("");
-
- el.innerHTML=`
-  <h3>Депозиты продавцов</h3>
-  <div class="panel">
-   <div class="eyebrow">SELLER VERIFICATION</div>
-   <h3>Записать подтверждение</h3>
-   <label>Продавец</label>
-   <select class="field" id="depositSeller">
-    <option value="">Выберите продавца</option>
-    ${sellerOptions}
-   </select>
-   <label>Подтверждённая сумма (USD)</label>
-   <input class="field" id="depositAmount" type="number" min="100" max="1000000" step="0.01" placeholder="Например, 100">
-   <label>Примечание администратора</label>
-   <textarea class="field" id="depositNote" placeholder="Комментарий к записи"></textarea>
-   <div class="notice">
-    Минимальная сумма для допуска продавца к публикации — $100.
-    Эта форма сохраняет административную запись и не проверяет поступление средств.
-   </div>
-   <button class="full" id="recordDepositButton" onclick="recordSellerDeposit()">Записать подтверждение</button>
-  </div>
-  <div class="panel">
-   <div class="row">
-    <h3 style="margin:0">История записей</h3>
-    <button class="smallbtn" onclick="adminDeposits()">Обновить</button>
-   </div>
-   <div class="muted">Всего записей: ${adminDepositsList.length}</div>
-  </div>
-  ${history||'<div class="empty">Записей пока нет</div>'}
- `;
+function filterMarketplace(value){
+ marketplaceSearchValue=String(value||"").toLowerCase().trim();
+ renderMarketplace();
 }
 
-async function recordSellerDeposit(){
- const sellerId=Number(document.getElementById("depositSeller").value);
- const amount=Number(document.getElementById("depositAmount").value);
- const note=document.getElementById("depositNote").value.trim();
+function renderMarketplace(){
+ const el=document.getElementById("marketplaceContent");
+ const count=document.getElementById("marketCount");
 
- if(!Number.isInteger(sellerId)||sellerId<1)return toast("Выберите продавца");
- if(!Number.isFinite(amount)||amount<100||amount>1000000)return toast("Минимальная сумма — $100");
+ const filtered=marketplaceListings.filter(item=>{
+  const text=[
+   item.title,
+   item.description,
+   item.collection,
+   item.gift_model,
+   item.seller_name,
+   item.display_name
+  ].join(" ").toLowerCase();
 
- if(!confirm("Сохранить административную запись на $"+amount.toFixed(2)+"?"))return;
+  return !marketplaceSearchValue||text.includes(marketplaceSearchValue);
+ });
 
- const button=document.getElementById("recordDepositButton");
- if(button){button.disabled=true;button.textContent="Сохранение…"}
+ count.textContent=filtered.length+" шт.";
+
+ if(!filtered.length){
+  el.innerHTML='<div class="empty">Объявлений пока нет. Загляните позже.</div>';
+  return;
+ }
+
+ el.innerHTML=filtered.map(item=>{
+  const src=mediaFor(item);
+  const kind=mediaKindFor(item);
+
+  let media='<div class="cover-empty">✦</div>';
+
+  if(src&&kind==="video"){
+   media=`<video class="product-media" src="${attr(src)}" muted loop playsinline preload="metadata"></video>`;
+  }else if(src){
+   media=`<img class="product-media" src="${attr(src)}" alt="${attr(item.title||"NFT")}" loading="lazy">`;
+  }
+
+  const price=Number(item.price||0).toLocaleString("ru-RU");
+  const currency=esc(item.currency||"USD");
+
+  return `
+   <article class="card market-card">
+    <div class="cover">
+     ${media}
+     <div class="cover-glow"></div>
+     <span class="product-tag">NFT MARKET</span>
+    </div>
+    <div class="cardbody">
+     <div class="cardtitle">${esc(item.title||"NFT Gift")}</div>
+     <div class="carddesc">${esc(item.description||"Коллекционное предложение")}</div>
+     <div class="market-card-meta">
+      ${item.collection?`Коллекция: ${esc(item.collection)}<br>`:""}
+      ${item.gift_model?`Модель: ${esc(item.gift_model)}<br>`:""}
+      Продавец: ${esc(item.seller_name||item.display_name||"Участник Marketplace")}
+     </div>
+     <div class="price">${price} ${currency}</div>
+     <button class="smallbtn" style="width:100%" onclick="openMarketplaceListing(${Number(item.id)})">Подробнее</button>
+    </div>
+   </article>
+  `;
+ }).join("");
+
+ activateVideos(el);
+}
+
+function openMarketplaceListing(id){
+ const item=marketplaceListings.find(x=>Number(x.id)===Number(id));
+ if(!item)return;
+
+ const src=mediaFor(item);
+ const kind=mediaKindFor(item);
+
+ let media='<div class="cover-empty" style="height:250px;border-radius:15px">✦</div>';
+
+ if(src&&kind==="video"){
+  media=`<video class="product-media" src="${attr(src)}" muted loop autoplay playsinline style="height:250px;border-radius:15px"></video>`;
+ }else if(src){
+  media=`<img class="product-media" src="${attr(src)}" alt="${attr(item.title||"NFT")}" style="height:250px;border-radius:15px">`;
+ }
+
+ openModal("NFT Marketplace",`
+  <div style="margin-bottom:15px">${media}</div>
+  <div class="home-pill">PRESTIGE COLLECTION</div>
+  <h2>${esc(item.title||"NFT Gift")}</h2>
+  <p class="notice">${esc(item.description||"Описание не указано")}</p>
+
+  <div class="panel">
+   <div class="itemrow">
+    <span class="muted">Коллекция</span>
+    <b>${esc(item.collection||"Не указана")}</b>
+   </div>
+   <div class="itemrow">
+    <span class="muted">Модель</span>
+    <b>${esc(item.gift_model||"Не указана")}</b>
+   </div>
+   <div class="itemrow">
+    <span class="muted">Продавец</span>
+    <b>${esc(item.seller_name||item.display_name||"Участник Marketplace")}</b>
+   </div>
+  </div>
+
+  <div class="price" style="font-size:25px">
+   ${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}
+  </div>
+
+  <p class="notice">Это информационный запрос продавцу. Оплата через приложение не производится.</p>
+
+  <button class="full" onclick="createMarketplaceInquiry(${Number(item.id)})">
+   Отправить запрос продавцу
+  </button>
+ `);
+
+ activateVideos(document.getElementById("modalContent"));
+}
+
+function createMarketplaceInquiry(id){
+ const item=marketplaceListings.find(x=>Number(x.id)===Number(id));
+ if(!item)return;
+
+ openModal("Запрос продавцу",`
+  <p><b>${esc(item.title||"NFT Gift")}</b></p>
+  <p class="notice">Напишите, что хотите уточнить. Запрос не является оплатой или подтверждением сделки.</p>
+  <label>Сообщение</label>
+  <textarea class="field" id="marketInquiryNote" maxlength="500" placeholder="Здравствуйте! Хочу уточнить информацию об объявлении."></textarea>
+  <button class="full" onclick="submitMarketplaceInquiry(${Number(id)})">Отправить запрос</button>
+ `);
+}
+
+async function submitMarketplaceInquiry(id){
+ const note=document.getElementById("marketInquiryNote")?.value.trim()||"";
 
  try{
-  await api("/api/admin/deposits",{
+  const d=await api("/api/marketplace/orders",{
    method:"POST",
-   body:JSON.stringify({seller_id:sellerId,amount_usd:amount,note})
+   body:JSON.stringify({listing_id:id,note})
   });
 
-  toast("Запись подтверждения сохранена");
-  await adminDeposits();
+  closeModal();
+  toast(d.message||"Запрос отправлен");
+  loadMyMarketplaceOrders();
 
  }catch(e){
-  toast(e.message||"Не удалось сохранить запись");
-  if(button){button.disabled=false;button.textContent="Записать подтверждение"}
+  toast(e.message||"Не удалось отправить запрос");
  }
 }
 
-function priceAdminRow(type,id,title,price){
- return `<div class="itemrow"><b>${esc(title)}</b><div class="row">
-  <input class="field" id="price${type}${id}" type="number" min="0" step="0.01" value="${Number(price)}">
-  <button class="smallbtn" onclick="savePrice('${type}',${Number(id)})">Сохранить</button>
- </div></div>`;
-}
-async function savePrice(type,id){
- const price=Number(document.getElementById("price"+type+id).value);
- if(!Number.isFinite(price)||price<0)return toast("Неверная цена");
+async function loadSellerStatus(){
+ const el=document.getElementById("sellerStatus");
+
  try{
-  await api("/api/admin/prices/"+type+"/"+id,{method:"PATCH",body:JSON.stringify({price_usd:price})});
-  toast("Цена обновлена");
- }catch(e){toast(e.message)}
+  const d=await api("/api/seller/me");
+  const seller=d.seller||d.profile||null;
+
+  if(!seller){
+   el.textContent="Статус: заявка ещё не отправлена";
+   return;
+  }
+
+  const labels={
+   pending:"Заявка ожидает рассмотрения",
+   approved:"Профиль продавца одобрен",
+   rejected:"Заявка отклонена",
+   suspended:"Профиль временно приостановлен"
+  };
+
+  el.textContent=labels[seller.status]||("Статус: "+(seller.status||"не указан"));
+
+  if(seller.display_name)document.getElementById("sellerName").value=seller.display_name;
+  if(seller.description)document.getElementById("sellerDescription").value=seller.description;
+  if(seller.contact)document.getElementById("sellerContact").value=seller.contact;
+
+ }catch(e){
+  el.textContent="Откройте приложение через Telegram";
+ }
 }
+
+async function applySeller(){
+ const display_name=document.getElementById("sellerName").value.trim();
+ const description=document.getElementById("sellerDescription").value.trim();
+ const contact=document.getElementById("sellerContact").value.trim();
+
+ if(!display_name)return toast("Введите название профиля");
+ if(!contact)return toast("Укажите контакт для связи");
+
+ const button=document.getElementById("sellerApplyButton");
+
+ if(button){
+  button.disabled=true;
+  button.textContent="Отправка заявки…";
+ }
+
+ try{
+  const d=await api("/api/seller/apply",{
+   method:"POST",
+   body:JSON.stringify({display_name,description,contact})
+  });
+
+  toast(d.message||"Заявка отправлена");
+  await loadSellerStatus();
+
+ }catch(e){
+  toast(e.message||"Не удалось отправить заявку");
+ }finally{
+  if(button){
+   button.disabled=false;
+   button.textContent="Отправить заявку";
+  }
+ }
+}
+
+async function loadMyMarketplaceListings(){
+ const el=document.getElementById("myMarketplaceListings");
+
+ try{
+  const d=await api("/api/seller/listings");
+  const items=d.listings||[];
+
+  if(!items.length){
+   el.innerHTML='<div class="empty">У вас пока нет объявлений</div>';
+   return;
+  }
+
+  el.innerHTML=items.map(item=>`
+   <div class="market-list">
+    <b>${esc(item.title||"NFT")}</b>
+    <div class="muted">${esc(item.collection||item.gift_model||"NFT Marketplace")}</div>
+    <div class="price">${Number(item.price||0).toLocaleString("ru-RU")} ${esc(item.currency||"USD")}</div>
+    <div class="status-label">Статус: ${esc(item.status||"На рассмотрении")}</div>
+   </div>
+  `).join("");
+
+ }catch(e){
+  el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
+}
+
+async function loadMyMarketplaceOrders(){
+ const el=document.getElementById("myMarketplaceOrders");
+
+ try{
+  const d=await api("/api/marketplace/orders");
+  const items=d.orders||[];
+
+  if(!items.length){
+   el.innerHTML='<div class="empty">Запросов пока нет</div>';
+   return;
+  }
+
+  el.innerHTML=items.map(item=>`
+   <div class="market-list">
+    <b>${esc(item.listing_title||"Запрос Marketplace")}</b>
+    <div class="muted">${esc(item.public_id||("#"+item.id))}</div>
+    <div class="status-label">Статус: ${esc(item.status||"Ожидает ответа")}</div>
+    ${item.note?`<div class="market-subtitle">${esc(item.note)}</div>`:""}
+   </div>
+  `).join("");
+
+ }catch(e){
+  el.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+ }
+
+/* GENERAL */
+}
+
 function openModal(title,content){
  document.getElementById("modalTitle").textContent=title;
  document.getElementById("modalContent").innerHTML=content;
  document.getElementById("modal").classList.add("open");
 }
-function closeModal(){document.getElementById("modal").classList.remove("open")}
+
+function closeModal(){
+ document.getElementById("modal").classList.remove("open");
+}
+
 function support(){
  const url="https://t.me/"+SUPPORT;
- if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);
+ else window.open(url,"_blank");
 }
+
 function rules(){
  openModal("Правила Prestige Market",`
-  <p class="notice">Все заявки подтверждаются отдельно. Создание заявки не означает оплату или автоматическую передачу товара.
-  Проверяйте описание и условия предложения перед оформлением.
-  Не отправляйте пароли, коды входа и данные аккаунта.</p>
+  <p class="notice">
+   Все заявки подтверждаются отдельно. Создание заявки не означает оплату или автоматическую передачу товара.
+   Проверяйте описание и условия предложения перед оформлением.
+   Не отправляйте пароли, коды входа и данные аккаунта.
+  </p>
  `);
 }
+
 function esc(value){
- return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
 }
-function attr(value){return esc(value).replace(/"/g,"&quot;")}
+
+function attr(value){
+ return esc(value).replace(/"/g,"&quot;");
+}
 
 (async function init(){
  await loadListings();
- if(tg?.initData)await loadProfile();
- else document.getElementById("profileName").textContent="Откройте приложение через Telegram";
+
+ if(tg?.initData){
+  await loadProfile();
+ }else{
+  document.getElementById("profileName").textContent="Откройте приложение через Telegram";
+ }
 })();
 </script>
 </body>
