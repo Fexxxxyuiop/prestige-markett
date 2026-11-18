@@ -891,23 +891,76 @@ if (path === "/api/seller/apply" && method === "POST") {
       return json({ ok: true, status });
     }
 
-    // DEPOSIT ACCOUNTING — ADMINISTRATIVE RECORD ONLY
-    if (path === "/api/admin/deposits" && method === "GET") {
-      const result = await env.DB.prepare(`
-        SELECT
-          d.*,
-          s.display_name,
-          s.user_id,
-          u.telegram_id,
-          u.username
-        FROM seller_deposits d
-        JOIN seller_profiles s ON s.id = d.seller_id
-        JOIN users u ON u.id = s.user_id
-        ORDER BY d.id DESC
-      `).all();
+    
+// RECORD DEPOSIT — ADMINISTRATIVE RECORD ONLY
+if (path === "/api/admin/deposits" && method === "POST") {
+  const body = await request.json();
+  const sellerId = Number(body.seller_id);
+  const amount = Number(body.amount_usd);
+  const note = String(body.note || "").trim();
 
-      return json({ ok: true, deposits: result.results || [] });
-    }
+  if (!Number.isInteger(sellerId) || sellerId < 1) {
+    return fail("Invalid seller_id");
+  }
+
+  if (!Number.isFinite(amount) || amount < 100 || amount > 1000000) {
+    return fail("Укажите сумму не менее $100");
+  }
+
+  const seller = await env.DB.prepare(`
+    SELECT s.id, s.display_name, u.telegram_id,
+           u.username, u.first_name
+    FROM seller_profiles s
+    LEFT JOIN users u ON u.id = s.user_id
+    WHERE s.id = ?
+  `).bind(sellerId).first();
+
+  if (!seller) return fail("Seller not found", 404);
+
+  const existing = await env.DB.prepare(`
+    SELECT id FROM seller_deposits
+    WHERE seller_id = ?
+    ORDER BY id DESC LIMIT 1
+  `).bind(sellerId).first();
+
+  if (existing) {
+    await env.DB.prepare(`
+      UPDATE seller_deposits
+      SET required_amount_usd = 100,
+          recorded_amount_usd = ?,
+          status = 'recorded',
+          admin_note = ?,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(amount, note, existing.id).run();
+  } else {
+    await env.DB.prepare(`
+      INSERT INTO seller_deposits (
+        seller_id, required_amount_usd,
+        recorded_amount_usd, status, admin_note, updated_at
+      )
+      VALUES (?, 100, ?, 'recorded', ?, CURRENT_TIMESTAMP)
+    `).bind(sellerId, amount, note).run();
+  }
+
+  await env.DB.prepare(`
+    INSERT INTO seller_deposit_events
+      (seller_id, action, amount_usd, note)
+    VALUES (?, 'verification_recorded', ?, ?)
+  `).bind(sellerId, amount, note).run();
+
+  await audit(env, admin, "deposit_verification", "seller", sellerId, {
+    amount_usd: amount,
+    note
+  });
+
+  return json({
+    ok: true,
+    status: "recorded",
+    recorded_amount_usd: amount,
+    accounting_only: true
+  });
+}
 
     // RECORD DEPOSIT VERIFICATION
     if (path === "/api/admin/deposits" && method === "POST") {
