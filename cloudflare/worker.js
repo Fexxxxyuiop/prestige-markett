@@ -1332,10 +1332,17 @@ if (path === "/api/admin/deposits" && method === "POST") {
 
       return json({ ok: true, orders: result.results || [] });
     }
-if (path === "/api/admin/deposits" && method === "GET") {
+   if (path === "/api/admin/deposits" && method === "GET") {
   const result = await env.DB.prepare(`
-    SELECT *
-    FROM deposits
+    SELECT
+      id,
+      seller_id,
+      required_amount_usd,
+      recorded_amount_usd AS amount_usd,
+      status,
+      admin_note AS note,
+      updated_at AS created_at
+    FROM seller_deposits
     ORDER BY id DESC
     LIMIT 300
   `).all();
@@ -1345,33 +1352,6 @@ if (path === "/api/admin/deposits" && method === "GET") {
     deposits: result.results || []
   });
 }
-    const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)\/status$/);
-
-    if (orderMatch && method === "PATCH") {
-      const id = Number(orderMatch[1]);
-      const body = await request.json();
-
-      if (!ADMIN_STATUSES.includes(body.status)) {
-        return fail("Invalid status");
-      }
-
-      await env.DB.prepare(`
-        UPDATE orders
-        SET status = ?, admin_note = ?, updated_at = CURRENT_TIMESTAMP
-        WHERE id = ?
-      `).bind(
-        body.status,
-        String(body.admin_note || ""),
-        id
-      ).run();
-
-      await audit(env, admin, "update_status", "order", id, {
-        status: body.status
-      });
-
-      return json({ ok: true });
-    }
-
     // UPDATE STARS PRICE
 
     const starsMatch = path.match(/^\/api\/admin\/prices\/stars\/(\d+)$/);
