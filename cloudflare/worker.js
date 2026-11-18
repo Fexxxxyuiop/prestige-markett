@@ -478,10 +478,18 @@ if (path === "/api/media" && method === "GET") {
   }
 
   const headers = new Headers(CORS);
-  headers.set(
-    "Content-Type",
-    fileResponse.headers.get("Content-Type") || "application/octet-stream"
-  );
+  const mediaType = fileResponse.headers.get("Content-Type") || "";
+
+headers.set(
+  "Content-Type",
+  mediaType.includes("gif")
+    ? "image/gif"
+    : mediaType.startsWith("video/")
+      ? mediaType
+      : mediaType.startsWith("image/")
+        ? mediaType
+        : "application/octet-stream"
+);
   headers.set("Cache-Control", "public, max-age=3600");
   headers.set("Content-Disposition", "inline");
 
